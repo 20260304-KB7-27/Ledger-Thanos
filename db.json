@@ -1,0 +1,13 @@
+{
+  "example": [],
+  "locations": [
+    {
+      "id": 1,
+      "name": "강남역 맛집",
+      "lat": 37.4979,
+      "lng": 127.0276,
+      "category": "식당",
+      "visitedAt": "2024-03-20"
+    }
+  ]
+}
