@@ -5,6 +5,7 @@
   </div>
 </template>
 
+<!-- 바 크기 조절 시 데이터 바와 배경바 함께 조절 필요! -->
 <script setup>
 import { Chart, registerables } from 'chart.js';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
@@ -28,7 +29,7 @@ const chartData = {
     {
       label: '만족 지수',
       data: [props.value],
-      backgroundColor: '#4ade80',
+      backgroundColor: '#FFE99A',
       borderRadius: 20,
       borderSkipped: false,
       barThickness: 40,
@@ -100,8 +101,9 @@ onBeforeUnmount(() => {
   top: 50%;
   left: 0;
   width: 100%;
-  height: 40px;
-  background: #e5e7eb;
+  height: 39px;
+  background: white;
+  border: 1px solid #D9D9D9;
   border-radius: 20px;
   transform: translateY(-50%);
   z-index: 0;
