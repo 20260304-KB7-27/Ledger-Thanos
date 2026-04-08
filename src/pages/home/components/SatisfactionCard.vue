@@ -8,11 +8,11 @@
     </div>
 
     <div class="progress-bar">
-      <ProgressBarChart :value="score" bar-color="#FFD400"/>
-      <div
-          class="progress-fill"
-          :style="{ width: score + '%' }"
-      ></div>
+      <ProgressBarChart
+        :key="score"
+        :value="score"
+        bar-color="#FFD400"
+      />
     </div>
   </section>
 </template>
@@ -59,13 +59,5 @@ defineProps({
 
 .progress-bar {
   height: 28px;
-  background: #f8f8f8;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: #f2d977;
 }
 </style>
