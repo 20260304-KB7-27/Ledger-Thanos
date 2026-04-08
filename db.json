@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "id": "1",
+      "id": 1,
       "nickname": "testUser",
       "userId": "test",
       "userPassword": "1234",
@@ -11,8 +11,8 @@
   ],
   "locations": [
     {
-      "id": "1",
-      "user_id": "1",
+      "id": 1,
+      "user_id": 1,
       "name": "친구들과 점심",
       "lat": 37.4979,
       "lng": 127.0276,
@@ -21,8 +21,8 @@
   ],
   "transactions": [
     {
-      "id": "1",
-      "user_id": "1",
+      "id": 1,
+      "user_id": 1,
       "type": "expense",
       "amount": 45000,
       "category": "restaurant",
