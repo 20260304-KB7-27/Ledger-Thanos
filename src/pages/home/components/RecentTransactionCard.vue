@@ -10,7 +10,7 @@
     <section class="card">
       <h3>최근 거래</h3>
 
-      <div class="list">
+      <div v-if="list.length > 0" class="list">
         <Box
           v-for="item in list"
           :key="item.id"
@@ -55,6 +55,8 @@
           </div>
         </Box>
       </div>
+
+      <p v-else class="empty-text">최근 거래가 없어요.</p>
     </section>
   </Box>
 </template>
@@ -93,6 +95,12 @@ h3 {
 
 .list :deep(.common-box) {
   border-radius: 999px;
+}
+
+.empty-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #555;
 }
 
 /* 한 줄 */
