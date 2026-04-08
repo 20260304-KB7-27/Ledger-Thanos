@@ -47,7 +47,12 @@
         <RecentTransactionCard class="recent" :list="recentTransactions" />
 
         <!-- 이번달 요약 -->
-        <MonthlySummaryCard :total-count="12" :satisfied-count="8" />
+        <MonthlySummaryCard
+            :total-count="monthlySummary.totalCount"
+            :satisfied-count="monthlySummary.happyCount"
+            :top-category="monthlySummary.topCategory.label"
+            :top-category-count="monthlySummary.topCategory.count"
+        />
 
       </section>
     </main>
@@ -76,7 +81,13 @@ import { useUserStore } from '@/stores/user';
 // 홈 진입 시 현재 로그인한 유저의 거래 목록을 조회
 import { getUserTransactions } from '@/service/user/userApi.js';
 // 홈 화면에서 사용하는 계산 로직
-import {getMonthlyExpense, getMonthlyIncome, getNetProfit, getRecentTransactions} from "@/pages/home/home.js";
+import {
+  getMonthlyExpense,
+  getMonthlyIncome,
+  getMonthlySummary,
+  getNetProfit,
+  getRecentTransactions
+} from "@/pages/home/home.js";
 
 /*
 * 변수
@@ -115,6 +126,10 @@ const monthlyIncome = computed(() => getMonthlyIncome(transactions.value));
 const monthlyExpense = computed(() => getMonthlyExpense(transactions.value));
 // 순수익은 수입 합계에서 지출 합계를 뺀 값으로... 후추 문의..?
 const netProfit = computed(() => getNetProfit(monthlyIncome.value, monthlyExpense.value));
+/*
+  거래 목록이 바뀔 때마다 요약 카드에 필요한 총 거래 수, happy 건수, 최다 카테고리 정보
+*/
+const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 </script>
 
 

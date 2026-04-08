@@ -12,6 +12,11 @@
         <span class="label">만족한 소비</span>
         <span class="value highlight">{{ satisfiedCount }}건</span>
       </div>
+
+      <div class="summary-row">
+        <span class="label">최다 카테고리</span>
+        <span class="value">{{ topCategory }} {{ topCategoryCount }}건</span>
+      </div>
     </div>
   </section>
 </template>
@@ -20,11 +25,19 @@
 defineProps({
   totalCount: {
     type: Number,
-    default: 12,
+    default: 0,
   },
   satisfiedCount: {
     type: Number,
-    default: 8,
+    default: 0,
+  },
+  topCategory: {
+    type: String,
+    default: '',
+  },
+  topCategoryCount: {
+    type: Number,
+    default: 0,
   },
 });
 </script>
@@ -56,6 +69,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
 .label {
@@ -68,6 +82,7 @@ h3 {
   font-size: 22px;
   font-weight: 800;
   color: #111;
+  text-align: right;
 }
 
 .highlight {
