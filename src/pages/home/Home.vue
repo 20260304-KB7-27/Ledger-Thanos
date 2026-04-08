@@ -46,9 +46,19 @@
         </div>
 
         <!-- 오른쪽: 거래 추가 버튼 -->
-        <button class="add-transaction-card" @click="goToAddTransaction">
-          새로운 거래 추가
-        </button>
+        <Box
+          class="add-transaction-box"
+          width="custom"
+          custom-width="100%"
+          margin-y="0"
+          border="1px solid #d8d8d8"
+          bg-color="#ffd400"
+          :shadow="false"
+        >
+          <button class="add-transaction-card" @click="goToAddTransaction">
+            새로운 거래 추가
+          </button>
+        </Box>
 
         <!-- 3행: 최근 거래 -->
         <RecentTransactionCard class="recent" :list="recentTransactions" />
@@ -72,6 +82,7 @@
 * */
 // 공통 네비게이션과 페이지 이동에 필요한 라우터
 import Nav from "@/components/Nav.vue";
+import Box from "@/components/Box.vue";
 import {useRouter} from "vue-router";
 
 // 홈 대시보드에 배치되는 카드 컴포넌트
@@ -203,13 +214,23 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 ========================= */
 .add-transaction-card {
   width: 100%;
+  height: 100%;
   min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  border-radius: 36px;
-  background: #FFD400;
+  border-radius: 0;
+  background: transparent;
   font-size: 22px;
   font-weight: 800;
   cursor: pointer;
+  padding: 0;
+}
+
+.add-transaction-box :deep(.common-box),
+.add-transaction-box :deep(.box-content) {
+  height: 100%;
 }
 
 /* =========================

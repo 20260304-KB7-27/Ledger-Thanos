@@ -1,49 +1,66 @@
 <template>
-  <section class="card">
-    <h3>최근 거래</h3>
+  <Box
+    width="custom"
+    custom-width="100%"
+    margin-y="0"
+    border="1px solid #d8d8d8"
+    bg-color="#f3f3f3"
+    :shadow="false"
+  >
+    <section class="card">
+      <h3>최근 거래</h3>
 
-    <div class="list">
-      <div
+      <div class="list">
+        <Box
           v-for="item in list"
           :key="item.id"
-          class="item"
-      >
-        <!-- 왼쪽 -->
-        <div class="left">
-          <div
-              class="thumb"
-              :style="{
-              backgroundColor: getCategoryMeta(item.category).backgroundColor,
-              color: getCategoryMeta(item.category).textColor,
-            }"
-          >
-            <span class="thumb-icon">{{ getCategoryMeta(item.category).icon }}</span>
-          </div>
+          width="custom"
+          custom-width="100%"
+          margin-y="0"
+          border="1px solid #d8d8d8"
+          bg-color="#f8f8f8"
+          :shadow="false"
+        >
+          <div class="item">
+            <!-- 왼쪽 -->
+            <div class="left">
+              <div
+                class="thumb"
+                :style="{
+                backgroundColor: getCategoryMeta(item.category).backgroundColor,
+                color: getCategoryMeta(item.category).textColor,
+              }"
+              >
+                <span class="thumb-icon">{{ getCategoryMeta(item.category).icon }}</span>
+              </div>
 
-          <div class="info">
-            <div class="date">
-              <span>{{ item.date }}</span>
+              <div class="info">
+                <div class="date">
+                  <span>{{ item.date }}</span>
+                </div>
+
+                <strong class="name">{{ item.memo }}</strong>
+
+                <div class="location">
+                  <img :src="locationIcon" alt="위치 아이콘" class="location-icon" />
+                  <span>{{ item.location }} </span>
+                </div>
+              </div>
             </div>
 
-            <strong class="name">{{ item.memo }}</strong>
-
-            <div class="location">
-              <img :src="locationIcon" alt="위치 아이콘" class="location-icon" />
-              <span>{{ item.location }} </span>
-            </div>
+            <!-- 오른쪽 금액 -->
+            <strong class="price">
+              {{ item.type === 'expense' ? '-' : '+' }}{{ item.amount.toLocaleString() }}원
+            </strong>
           </div>
-        </div>
-
-        <!-- 오른쪽 금액 -->
-        <strong class="price">
-          {{ item.type === 'expense' ? '-' : '+' }}{{ item.amount.toLocaleString() }}원
-        </strong>
+        </Box>
       </div>
-    </div>
-  </section>
+    </section>
+  </Box>
 </template>
 
 <script setup>
+import Box from "@/components/Box.vue";
 import locationIcon from '@/assets/icon/ico_location_black.svg';
 import { getCategoryMeta } from '@/pages/home/home.js';
 
@@ -57,10 +74,7 @@ defineProps({
 
 <style scoped>
 .card {
-  background: #f3f3f3;
-  border: 1px solid #d8d8d8;
-  border-radius: 48px;
-  padding: 48px 56px;
+  padding: 48px 40px;
 }
 
 /* 제목 */
@@ -77,16 +91,16 @@ h3 {
   gap: 20px;
 }
 
+.list :deep(.common-box) {
+  border-radius: 999px;
+}
+
 /* 한 줄 */
 .item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 28px 36px;
-  border-radius: 999px;
-  background: #f8f8f8;
-  border: 1px solid #d8d8d8;
 }
 
 /* 왼쪽 */
@@ -144,7 +158,7 @@ h3 {
 
 /* 금액 */
 .price {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 900;
 }
 </style>

@@ -1,27 +1,38 @@
 <template>
-  <section class="card">
-    <h3>이번달 요약</h3>
+  <Box
+    width="custom"
+    custom-width="100%"
+    margin-y="0"
+    border="1px solid #d8d8d8"
+    bg-color="#f3f3f3"
+    :shadow="false"
+  >
+    <section class="card">
+      <h3>이번달 요약</h3>
 
-    <div class="summary-list">
-      <div class="summary-row">
-        <span class="label">총 거래</span>
-        <span class="value">{{ totalCount }}건</span>
-      </div>
+      <div class="summary-list">
+        <div class="summary-row">
+          <span class="label">총 거래</span>
+          <span class="value">{{ totalCount }}건</span>
+        </div>
 
-      <div class="summary-row">
-        <span class="label">만족한 소비</span>
-        <span class="value highlight">{{ satisfiedCount }}건</span>
-      </div>
+        <div class="summary-row">
+          <span class="label">만족한 소비</span>
+          <span class="value highlight">{{ satisfiedCount }}건</span>
+        </div>
 
-      <div class="summary-row">
-        <span class="label">최다 카테고리</span>
-        <span class="value">{{ topCategory }} {{ topCategoryCount }}건</span>
+        <div class="summary-row">
+          <span class="label">최다 카테고리</span>
+          <span class="value">{{ topCategory }} {{ topCategoryCount }}건</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </Box>
 </template>
 
 <script setup>
+import Box from "@/components/Box.vue";
+
 defineProps({
   totalCount: {
     type: Number,
@@ -44,10 +55,7 @@ defineProps({
 
 <style scoped>
 .card {
-  background: #f3f3f3;
-  border: 1px solid #d8d8d8;
-  border-radius: 36px;
-  padding: 40px 48px;
+  padding: 40px 32px;
   min-height: 220px;
   box-sizing: border-box;
 }

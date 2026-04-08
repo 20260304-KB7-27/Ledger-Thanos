@@ -1,23 +1,37 @@
 <template>
-  <section
-      class="card"
-      :style="{ borderColor: color }"
+  <Box
+      width="custom"
+      custom-width="100%"
+      margin-y="0"
+      :border="`2px solid ${color}`"
+      bg-color="#f3f3f3"
+      :shadow="false"
   >
-    <p class="title">{{ title }}</p>
+    <section class="card">
+      <p class="title">{{ title }}</p>
 
-    <strong
-        class="amount"
-        :style="{ color: color }"
-    >
-      {{ props.sign }}{{ amount }}
-    </strong>
-  </section>
+      <strong
+          class="amount"
+          :style="{ color: color }"
+      >
+        {{ props.sign }}{{ amount }}
+      </strong>
+    </section>
+  </Box>
 </template>
 
 <script setup>
+import Box from "@/components/Box.vue";
+
 const props = defineProps({
-  title: String,
-  amount: String,
+  title: {
+    type: String,
+    default: '',
+  },
+  amount: {
+    type: String,
+    default: '0원',
+  },
   sign: {
     type: String,
     default: '+',
@@ -34,20 +48,20 @@ const props = defineProps({
 
 <style scoped>
 .card {
-  background: #f3f3f3;
-  border: 2px solid;
-  border-radius: 32px;
-  padding: 24px;
+  padding: 24px 16px;
   min-height: 140px;
 }
 
 .title {
-  font-size: 18px;
-  margin-bottom: 32px;
+  margin: 0 0 28px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
 }
 
 .amount {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
 }
 </style>

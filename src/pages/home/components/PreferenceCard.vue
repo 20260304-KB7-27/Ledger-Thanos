@@ -1,28 +1,38 @@
 <template>
-  <section class="card">
-    <h3>나의 칭호</h3>
+  <Box
+    width="custom"
+    custom-width="100%"
+    margin-y="0"
+    border="1px solid #d8d8d8"
+    bg-color="#f3f3f3"
+    :shadow="false"
+  >
+    <section class="card">
+      <h3>나의 칭호</h3>
 
-    <div v-if="titles.length > 0" class="title-list">
-      <div
-        v-for="title in titles"
-        :key="title"
-        class="title-item"
-      >
-        <img
-          v-if="getDisplayImage('title', title)"
-          :src="getDisplayImage('title', title)"
-          alt="획득한 칭호 이미지"
-          class="title-image"
-        />
-        <p v-else class="title-text">{{ title }}</p>
+      <div v-if="titles.length > 0" class="title-list">
+        <div
+          v-for="title in titles"
+          :key="title"
+          class="title-item"
+        >
+          <img
+            v-if="getDisplayImage('title', title)"
+            :src="getDisplayImage('title', title)"
+            alt="획득한 칭호 이미지"
+            class="title-image"
+          />
+          <p v-else class="title-text">{{ title }}</p>
+        </div>
       </div>
-    </div>
 
-    <p v-else class="empty-text">{{ emptyText }}</p>
-  </section>
+      <p v-else class="empty-text">{{ emptyText }}</p>
+    </section>
+  </Box>
 </template>
 
 <script setup>
+import Box from "@/components/Box.vue";
 import { getDisplayImage } from '@/pages/home/home.js';
 
 defineProps({
@@ -39,10 +49,7 @@ defineProps({
 
 <style scoped>
 .card {
-  background: #f3f3f3;
-  border: 1px solid #d8d8d8;
-  border-radius: 36px;
-  padding: 32px;
+  padding: 32px 16px;
   min-height: 220px;
 }
 
