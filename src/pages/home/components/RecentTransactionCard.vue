@@ -10,7 +10,15 @@
       >
         <!-- 왼쪽 -->
         <div class="left">
-          <div class="thumb"></div>
+          <div
+              class="thumb"
+              :style="{
+              backgroundColor: getCategoryMeta(item.category).backgroundColor,
+              color: getCategoryMeta(item.category).textColor,
+            }"
+          >
+            <span class="thumb-icon">{{ getCategoryMeta(item.category).icon }}</span>
+          </div>
 
           <div class="info">
             <div class="date">
@@ -20,14 +28,15 @@
             <strong class="name">{{ item.memo }}</strong>
 
             <div class="location">
-              📍 <span>{{ item.location }} </span>
+              <img :src="locationIcon" alt="위치 아이콘" class="location-icon" />
+              <span>{{ item.location }} </span>
             </div>
           </div>
         </div>
 
         <!-- 오른쪽 금액 -->
         <strong class="price">
-          {{ item.amount.toLocaleString() }}원
+          {{ item.type === 'expense' ? '-' : '+' }}{{ item.amount.toLocaleString() }}원
         </strong>
       </div>
     </div>
@@ -35,6 +44,9 @@
 </template>
 
 <script setup>
+import locationIcon from '@/assets/icon/ico_location_black.svg';
+import { getCategoryMeta } from '@/pages/home/home.js';
+
 defineProps({
   list: {
     type: Array,
@@ -89,7 +101,14 @@ h3 {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: #cfcfcf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb-icon {
+  font-size: 30px;
+  line-height: 1;
 }
 
 /* 텍스트 영역 */
@@ -105,8 +124,17 @@ h3 {
 }
 
 .location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 20px;
   color: #333;
+}
+
+.location-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .date {

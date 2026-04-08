@@ -132,3 +132,86 @@ export const getDisplayImage = (type, key) => {
 
     return '';
 };
+
+
+/*
+  카테고리 메타데이터는 key 하나만 저장하고,
+  화면에서 필요한 라벨/색상/아이콘은 여기에서 꺼내 쓴다.
+*/
+export const categoryMetaMap = {
+    shopping: {
+        key: 'shopping',
+        label: '쇼핑',
+        icon: '🛍️',
+        backgroundColor: '#fce7f3',
+        textColor: '#db2777',
+    },
+    delivery: {
+        key: 'delivery',
+        label: '배달',
+        icon: '🛵',
+        backgroundColor: '#ffedd5',
+        textColor: '#ea580c',
+    },
+    restaurant: {
+        key: 'restaurant',
+        label: '식당',
+        icon: '🍽️',
+        backgroundColor: '#fee2e2',
+        textColor: '#dc2626',
+    },
+    convenience: {
+        key: 'convenience',
+        label: '편의점',
+        icon: '🏪',
+        backgroundColor: '#dbeafe',
+        textColor: '#2563eb',
+    },
+    cafe: {
+        key: 'cafe',
+        label: '카페',
+        icon: '☕',
+        backgroundColor: '#fef3c7',
+        textColor: '#b45309',
+    },
+    bar: {
+        key: 'bar',
+        label: '술집',
+        icon: '🍷',
+        backgroundColor: '#f3e8ff',
+        textColor: '#7e22ce',
+    },
+    necessities: {
+        key: 'necessities',
+        label: '생필품',
+        icon: '📦',
+        backgroundColor: '#ccfbf1',
+        textColor: '#0f766e',
+    },
+    transport: {
+        key: 'transport',
+        label: '교통',
+        icon: '🚌',
+        backgroundColor: '#e0f2fe',
+        textColor: '#0369a1',
+    },
+    hospital: {
+        key: 'hospital',
+        label: '병원',
+        icon: '🏥',
+        backgroundColor: '#dcfce7',
+        textColor: '#16a34a',
+    },
+    other: {
+        key: 'other',
+        label: '기타',
+        icon: '•',
+        backgroundColor: '#f3f4f6',
+        textColor: '#4b5563',
+    },
+};
+
+/* 카테고리 key 에 해당하는 메타 정보를 반환한다. */
+export const getCategoryMeta = (key) => {
+    return categoryMetaMap[key] ?? categoryMetaMap.other;
+};
