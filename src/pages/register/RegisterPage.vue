@@ -64,8 +64,16 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">위치</p>
-            <input type="text" v-model="transaction.location" placeholder="예) 강남구, 구로구, ..."
-              class="transparent-input" />
+            <div class="select-wrapper">
+              <select v-model="transaction.location" class="transparent-input select-input">
+                <option disabled value="">서울 자치구를 선택해주세요</option>
+                <option v-for="district in seoulDistricts" :key="district" :value="district">
+                  {{ district }}
+                </option>
+              </select>
+              <ChevronDown :size="18" class="select-chevron" />
+            </div>
+            <p class="select-caption">서울특별시 25개 자치구 중에서 선택</p>
           </Box>
 
           <Box width="custom" customWidth="100%">
@@ -87,6 +95,7 @@ import {
   Beer,
   Bike,
   Bus,
+  ChevronDown,
   Coffee,
   Cross,
   Ellipsis,
@@ -128,6 +137,34 @@ const categoryList = ref([
   { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
 ]);
 
+const seoulDistricts = [
+  '종로구',
+  '중구',
+  '용산구',
+  '성동구',
+  '광진구',
+  '동대문구',
+  '중랑구',
+  '성북구',
+  '강북구',
+  '도봉구',
+  '노원구',
+  '은평구',
+  '서대문구',
+  '마포구',
+  '양천구',
+  '강서구',
+  '구로구',
+  '금천구',
+  '영등포구',
+  '동작구',
+  '관악구',
+  '서초구',
+  '강남구',
+  '송파구',
+  '강동구',
+];
+
 // ==========================================
 // 3. 서버 전송 로직 (json-server 연동)
 // ==========================================
@@ -135,6 +172,11 @@ const saveTransaction = async () => {
   // 유효성 검사
   if (!transaction.value.amount || transaction.value.amount <= 0) {
     alert("금액을 정확히 입력해주세요!");
+    return;
+  }
+
+  if (!transaction.value.location) {
+    alert("서울 자치구를 선택해주세요!");
     return;
   }
 
@@ -226,6 +268,47 @@ const saveTransaction = async () => {
 .date-input {
   font-family: inherit;
   color: #333;
+}
+
+.select-input {
+  appearance: none;
+  cursor: pointer;
+  color: #333;
+  width: 100%;
+  padding: 14px 44px 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #d8c9a0;
+  background: #fff8de;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.select-input:invalid {
+  color: #9a865d;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper:focus-within .select-input {
+  border-color: #c89a2b;
+  box-shadow: 0 0 0 3px rgba(244, 208, 63, 0.2);
+}
+
+.select-chevron {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  color: #8c7441;
+  pointer-events: none;
+}
+
+.select-caption {
+  margin: 8px 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a774e;
 }
 
 .clickable {
