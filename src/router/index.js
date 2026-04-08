@@ -16,7 +16,7 @@ const router = createRouter({
     {
       path: '/stats',
       name: 'stats',
-      component: () => {},
+      component: () => import('@/pages/stats/Stats.vue'),
     },
     {
       path: '/map',

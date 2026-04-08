@@ -121,8 +121,8 @@ const menus = [
       :nav-bg="textColor"
     />
     <main class="content">
-      <section class="page-card">
-        <div style="padding: 2rem; font-family: monospace">
+      <section>
+        <!-- <div style="padding: 2rem; font-family: monospace">
           <h1>API 테스트</h1>
 
           <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem">
@@ -139,11 +139,11 @@ const menus = [
             style="background: #f4f4f4; padding: 1rem; border-radius: 6px"
             >{{ JSON.stringify(result, null, 2) }}</pre
           >
-        </div>
+        </div> -->
+        <RouterView></RouterView>
       </section>
     </main>
   </div>
-  <RouterView></RouterView>
 </template>
 
 <style scoped>
@@ -156,7 +156,7 @@ button {
 }
 
 .content {
-  padding-left: 30%;
+  padding-left: 25%;
 }
 
 .page-card {
