@@ -153,6 +153,7 @@ button {
 }
 .layout {
   min-height: 100vh;
+  background-color: #FFF8DD;
 }
 
 .content {
