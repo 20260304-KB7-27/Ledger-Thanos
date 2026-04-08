@@ -110,7 +110,7 @@ import Box from '@/components/Box.vue';
 import api from '@/service/api';
 
 // ==========================================
-// 2. 가계부 폼 상태 template
+// 가계부 폼 상태 생성 및 관리
 // ==========================================
 const getTodayKST = () => { // UTC -> KST로 변환
   const now = new Date();
@@ -119,17 +119,22 @@ const getTodayKST = () => { // UTC -> KST로 변환
   return dateOffset.toISOString().split('T')[0];
 };
 
-
-const transaction = ref({
-  user_id: "1", // 임시 유저 ID
-  type: "expense", // 'expense' 또는 'income'
+const createInitialTransaction = () => ({
+  user_id: '1', // 임시 유저 ID
+  type: 'expense', // 'expense' 또는 'income'
   amount: null,
-  category: "shopping",
-  memo: "",
-  emotion: "happy", // 'happy' 또는 'regret'
-  location: "",
+  category: 'shopping',
+  memo: '',
+  emotion: 'happy', // 'happy' 또는 'regret'
+  location: '',
   date: getTodayKST(), // 오늘 날짜로 세팅
-});
+})
+
+const transaction = ref(createInitialTransaction())
+
+const resetTransaction = () => {
+  transaction.value = createInitialTransaction()
+}
 
 // UI에 뿌려질 카테고리 임시 데이터
 const categoryList = ref([
@@ -174,7 +179,7 @@ const seoulDistricts = [
 ];
 
 // ==========================================
-// 3. 서버 전송 로직 (json-server 연동)
+// 서버 전송 로직 (json-server 연동)
 // ==========================================
 const saveTransaction = async () => {
   // 유효성 검사
@@ -196,9 +201,7 @@ const saveTransaction = async () => {
 
     alert("성공적으로 저장되었습니다!");
     // 저장 완료 후 폼 초기화
-    transaction.value.amount = null;
-    transaction.value.memo = "";
-    transaction.value.location = "";
+    resetTransaction();
   } catch (error) {
     console.error("통신 에러:", error);
     alert("서버와 연결할 수 없습니다. json-server가 실행 중인지 확인해주세요.");
