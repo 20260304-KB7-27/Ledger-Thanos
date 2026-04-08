@@ -39,7 +39,7 @@ const props = defineProps({
 
 // 가로 길이 규격에 따른 클래스 부여
 const widthClass = computed(
-  () => (props.width !== 'custom' ? `w-${props.width}` : ''), // custom일 경우 style 바인딩에서 처리
+  () => (props.width !== 'custom' ? `w-${props.width}` : '') // custom일 경우 style 바인딩에서 처리
 );
 
 // 그림자 클래스

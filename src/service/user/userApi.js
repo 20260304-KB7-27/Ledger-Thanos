@@ -9,7 +9,7 @@ export const loginUser = async (userId, userPassword) => {
   const result = await api.get('/users');
   const users = Array.isArray(result) ? result : (result.data ?? []);
   const user = users.find(
-    (u) => u.userId === userId && u.userPassword === userPassword,
+    (u) => u.userId === userId && u.userPassword === userPassword
   );
   if (!user) throw new Error('아이디 또는 비밀번호가 올바르지 않습니다.');
   return user;

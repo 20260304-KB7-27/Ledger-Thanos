@@ -1,85 +1,90 @@
 <template>
-    <!-- PC -->
-    <aside class="sidebar desktop-only">
-      <div v-if="logoSrc" class="logo-box">
-        <img :src="logoSrc" class="logo" alt="logo" />
-      </div>
+  <!-- PC -->
+  <aside class="sidebar desktop-only">
+    <div v-if="logoSrc" class="logo-box">
+      <img :src="logoSrc" class="logo" alt="logo" />
+    </div>
 
-      <nav class="menu vertical">
+    <nav class="menu vertical">
+      <router-link
+        v-for="item in menus"
+        :key="item.key"
+        :to="item.path"
+        class="menu-item"
+        :class="{ active: isActive(item.path) }"
+      >
+        <img
+          v-if="getMenuIcon(item)"
+          :src="getMenuIcon(item)"
+          :alt="item.label"
+          class="menu-icon"
+        />
+        <span class="menu-label">{{ item.label }}</span>
+      </router-link>
+    </nav>
+  </aside>
+
+  <!-- 태블릿 -->
+  <header class="topbar tablet-only">
+    <img v-if="logoSrc" :src="logoSrc" class="topbar-logo" alt="logo" />
+
+    <nav class="menu horizontal">
+      <router-link
+        v-for="item in menus"
+        :key="item.key"
+        :to="item.path"
+        class="menu-item horizontal"
+        :class="{ active: isActive(item.path) }"
+      >
+        <img
+          v-if="getMenuIcon(item)"
+          :src="getMenuIcon(item)"
+          :alt="item.label"
+          class="menu-icon"
+        />
+        <span class="menu-label">{{ item.label }}</span>
+      </router-link>
+    </nav>
+  </header>
+
+  <!-- 모바일 -->
+  <header class="mobile-header mobile-only">
+    <div class="mobile-header-inner">
+      <img
+        v-if="logoSrc"
+        :src="logoSrc"
+        class="topbar-logo mobile-logo"
+        alt="logo"
+      />
+      <button class="hamburger" type="button" @click="toggleMenu">☰</button>
+    </div>
+
+    <transition name="dropdown">
+      <nav v-if="isMenuOpen" class="mobile-dropdown-menu">
         <router-link
-            v-for="item in menus"
-            :key="item.key"
-            :to="item.path"
-            class="menu-item"
-            :class="{ active: isActive(item.path) }"
+          v-for="item in menus"
+          :key="item.key"
+          :to="item.path"
+          class="menu-item"
+          :class="{ active: isActive(item.path) }"
+          @click="closeMenu"
         >
           <img
-              v-if="getMenuIcon(item)"
-              :src="getMenuIcon(item)"
-              :alt="item.label"
-              class="menu-icon"
+            v-if="getMenuIcon(item)"
+            :src="getMenuIcon(item)"
+            :alt="item.label"
+            class="menu-icon"
           />
           <span class="menu-label">{{ item.label }}</span>
         </router-link>
       </nav>
-    </aside>
-
-    <!-- 태블릿 -->
-    <header class="topbar tablet-only">
-      <img v-if="logoSrc" :src="logoSrc" class="topbar-logo" alt="logo" />
-
-      <nav class="menu horizontal">
-        <router-link
-            v-for="item in menus"
-            :key="item.key"
-            :to="item.path"
-            class="menu-item horizontal"
-            :class="{ active: isActive(item.path) }"
-        >
-          <img
-              v-if="getMenuIcon(item)"
-              :src="getMenuIcon(item)"
-              :alt="item.label"
-              class="menu-icon"
-          />
-          <span class="menu-label">{{ item.label }}</span>
-        </router-link>
-      </nav>
-    </header>
-
-    <!-- 모바일 -->
-    <header class="mobile-header mobile-only">
-      <div class="mobile-header-inner">
-        <img v-if="logoSrc" :src="logoSrc" class="topbar-logo mobile-logo" alt="logo" />
-        <button class="hamburger" type="button" @click="toggleMenu">☰</button>
-      </div>
-
-      <transition name="dropdown">
-        <nav v-if="isMenuOpen" class="mobile-dropdown-menu">
-          <router-link
-              v-for="item in menus"
-              :key="item.key"
-              :to="item.path"
-              class="menu-item"
-              :class="{ active: isActive(item.path) }"
-              @click="closeMenu"
-          >
-            <img
-                v-if="getMenuIcon(item)"
-                :src="getMenuIcon(item)"
-                :alt="item.label"
-                class="menu-icon"
-            />
-            <span class="menu-label">{{ item.label }}</span>
-          </router-link>
-        </nav>
-      </transition>
-    </header>
+    </transition>
+  </header>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
   logoSrc: {
@@ -119,41 +124,44 @@ const props = defineProps({
     type: String,
     default: '#fff7cc',
   },
-})
+});
 
-const route = useRoute()
-const isMenuOpen = ref(false)
+const route = useRoute();
+const isMenuOpen = ref(false);
 
 // 현재 라우트 기준 페이지 제목
 const currentTitle = computed(() => {
-  return props.menus.find(menu => menu.path === route.path)?.label || props.defaultTitle
-})
+  return (
+    props.menus.find((menu) => menu.path === route.path)?.label ||
+    props.defaultTitle
+  );
+});
 
 // 현재 메뉴 active 여부
-const isActive = (path) => route.path === path
+const isActive = (path) => route.path === path;
 
 // active 상태면 activeIcon 우선, 없으면 기본 icon
 const getMenuIcon = (item) => {
-  if (isActive(item.path) && item.activeIcon) return item.activeIcon
-  return item.icon || ''
-}
+  if (isActive(item.path) && item.activeIcon) return item.activeIcon;
+  return item.icon || '';
+};
 
 // 모바일 메뉴 열기/닫기
 const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
-}
+  isMenuOpen.value = !isMenuOpen.value;
+};
 
 const closeMenu = () => {
-  isMenuOpen.value = false
-}
+  isMenuOpen.value = false;
+};
 
 // 라우트 바뀌면 모바일 메뉴 닫기
 watch(
-    () => route.path,
-    () => {
-      closeMenu()
-    }
-)
+  () => route.path,
+  () => {
+    closeMenu();
+  }
+);
 </script>
 
 <style scoped>
@@ -179,8 +187,6 @@ watch(
   box-sizing: border-box;
   font-family: 'NPS', sans-serif;
 }
-
-
 
 .logo-box {
   display: flex;
@@ -247,7 +253,6 @@ watch(
 .menu-label {
   white-space: nowrap;
 }
-
 
 .sidebar {
   position: fixed;

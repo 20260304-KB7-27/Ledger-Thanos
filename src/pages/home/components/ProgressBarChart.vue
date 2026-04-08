@@ -14,9 +14,9 @@ Chart.register(...registerables); // chart.js 요소 등록
 const props = defineProps({
   value: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const progressBar = ref(null); // canvas fef와 연결
 
@@ -61,7 +61,7 @@ const chartOptions = {
       },
     },
     y: {
-      display: false,// y축 숨김
+      display: false, // y축 숨김
       grid: {
         display: false, // 격자 숨김
         drawBorder: false, // 축 테두리선 숨김
@@ -103,7 +103,7 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 39px;
   background: white;
-  border: 1px solid #D9D9D9;
+  border: 1px solid #d9d9d9;
   border-radius: 20px;
   transform: translateY(-50%);
   z-index: 0;
@@ -112,8 +112,7 @@ onBeforeUnmount(() => {
 canvas {
   position: relative;
   z-index: 1;
-  width: 100%; 
-  height: 40px; 
+  width: 100%;
+  height: 40px;
 }
-
 </style>
