@@ -1,20 +1,20 @@
 <template>
   <div class="layout">
     <!-- 좌측 네비게이션 -->
-    <Nav />
+    <Nav/>
 
     <!-- 메인 컨텐츠 영역 -->
     <main class="content">
       <!-- 전체 대시보드 그리드 -->
       <section class="home-dashboard">
 
-        <!-- 1행: 만족지수 (왼쪽 크게) -->
+        <!-- 만족지수 (왼쪽 크게) -->
         <SatisfactionCard class="satisfaction"/>
 
-        <!-- 1행: 나의 칭호 (오른쪽) -->
-        <PreferenceCard class="preference" />
+        <!-- 나의 칭호 (오른쪽) -->
+        <PreferenceCard class="preference"/>
 
-        <!-- 2행: 수입/지출/순수익 (3개 카드 묶음) -->
+        <!-- 수입/지출/순수익 (3개 카드 묶음) -->
         <div class="stats-group">
           <SummaryStatCard
               title="이번달 수입"
@@ -38,7 +38,7 @@
           />
         </div>
 
-        <!-- 2행 오른쪽: 거래 추가 버튼 -->
+        <!-- 오른쪽: 거래 추가 버튼 -->
         <button class="add-transaction-card" @click="goToAddTransaction">
           새로운 거래 추가
         </button>
@@ -46,7 +46,7 @@
         <!-- 3행: 최근 거래 -->
         <RecentTransactionCard class="recent" :list="transactionList" />
 
-        <!-- 3행: 이번달 요약 -->
+        <!-- 이번달 요약 -->
         <MonthlySummaryCard :total-count="12" :satisfied-count="8" />
 
       </section>
@@ -55,17 +55,22 @@
 </template>
 
 <script setup>
-// 공통 네비
+/*
+* import
+* */
+// 공통 네비게이션과 페이지 이동에 필요한 라우터
 import Nav from "@/components/Nav.vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
+import {useRouter} from "vue-router";
 
-// 홈 전용 컴포넌트들
+// 홈 대시보드에 배치되는 카드 컴포넌트
 import SatisfactionCard from "@/pages/home/components/SatisfactionCard.vue";
 import SummaryStatCard from "@/pages/home/components/SummaryStatCard.vue";
 import PreferenceCard from "@/pages/home/components/PreferenceCard.vue";
 import RecentTransactionCard from "@/pages/home/components/RecentTransactionCard.vue";
 import MonthlySummaryCard from "@/pages/home/components/MonthlySummaryCard.vue";
+
+
+const router = useRouter();
 
 /* 거래 추가 페이지 이동 */
 const goToAddTransaction = () => {
