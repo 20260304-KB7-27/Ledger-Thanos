@@ -65,6 +65,7 @@ async function testDelete() {
 </script>
 
 <template>
+  <router-view />
   <div style="padding: 2rem; font-family: monospace">
     <h1>API 테스트</h1>
 
