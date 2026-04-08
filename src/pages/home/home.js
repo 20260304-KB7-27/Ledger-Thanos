@@ -1,3 +1,12 @@
+import baedalBadge from '@/assets/badge/baedal.png';
+import caffeineBadge from '@/assets/badge/caffeine.png';
+import chobaiBadge from '@/assets/badge/chobai.png';
+import flexBadge from '@/assets/badge/flex.png';
+import glassBadge from '@/assets/badge/glass.png';
+import houseBadge from '@/assets/badge/house.png';
+import jjanBadge from '@/assets/badge/jjan.png';
+import tripBadge from '@/assets/badge/trip.png';
+
 // 최근 거래
 export const getRecentTransactions = (transactions, limit = 5) => {
   return [...transactions]
@@ -90,4 +99,36 @@ export const getMonthlySummary = (transactions) => {
             count: topCategoryCount,
         }
     };
+};
+
+// TODO::이후 수정될 수 있음.
+/*
+집순이      'Home Potato': houseBadge,
+플렉스      'Money Splash': flexBadge,
+짠돌이      'Coin Guardian': jjanBadge,
+방랑자      'Lost Explorer': tripBadge,
+초빼이      'Tipsy Champ': chobaiBadge,
+배달 마스터 'Delivery Addict': baedalBadge,
+카페인 중독 'Coffee Zombie': caffeineBadge,
+유리몸      'Fragile Hero': glassBadge,
+ */
+// 칭호 이미지는 기존 연결
+const titleImageMap = {
+    'Home Potato': houseBadge,
+    'Money Splash': flexBadge,
+    'Coin Guardian': jjanBadge,
+    'Lost Explorer': tripBadge,
+    'Tipsy Champ': chobaiBadge,
+    'Delivery Addict': baedalBadge,
+    'Coffee Zombie': caffeineBadge,
+    'Fragile Hero': glassBadge,
+};
+
+// 칭호 key 에 맞는 이미지 URL 반환
+export const getDisplayImage = (type, key) => {
+    if (type === 'title') {
+        return titleImageMap[key] ?? '';
+    }
+
+    return '';
 };

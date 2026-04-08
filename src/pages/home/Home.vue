@@ -15,7 +15,11 @@
         />
 
         <!-- 나의 칭호 (오른쪽) -->
-        <PreferenceCard class="preference"/>
+        <PreferenceCard
+          class="preference"
+          :titles="selectedTitles"
+          empty-text="아직 칭호가 없어요."
+        />
 
         <!-- 수입/지출/순수익 (3개 카드 묶음) -->
         <div class="stats-group">
@@ -100,6 +104,8 @@ const router = useRouter();
 const userStore = useUserStore();
 // 홈 화면에서 사용하는 현재 유저의 거래 목록
 const transactions = ref([]);
+// 유저 프로필에서 가져온 획득 칭호 배열을 저장
+const selectedTitles = ref([]);
 
 // 거래 등록 화면으로 이동
 const goToAddTransaction = () => {
@@ -108,9 +114,9 @@ const goToAddTransaction = () => {
 
 onMounted(async () => {
   /*
+    TODO::
     로그인한 유저 정보가 없으면 어떤 거래를 조회해야 하는지 알 수 없으므로
-    홈 최초 진입 시 API 호출을 하지 않고 바로 종료한다.
-    라우터 가드??
+    홈 최초 진입 시 API 호출을 하지 않고 바로 종료
   */
   if (!userStore.user?.id) return;
 
@@ -119,7 +125,16 @@ onMounted(async () => {
     로그인 유저의 거래 목록 조회
     이후 대시보드 카드 계산은 전부 transactions.value로
   */
-  transactions.value = await getUserTransactions(userStore.user.id);
+  const userTransactions = await getUserTransactions(userStore.user.id);
+
+  /*
+  로그인 시 store에 저장된 user 객체에서 획득 칭호 배열을 바로 사용
+  ex) "selectedTitle": ["Home Potato", "Tipsy Champ"]
+  */
+  selectedTitles.value = Array.isArray(userStore.user?.selectedTitle)
+    ? userStore.user.selectedTitle
+    : [];
+  transactions.value = userTransactions;
 });
 
  // 최근 거래 카드는 날짜 최신순으로 정렬된 일부 거래만 사용. 지금은 최대 5개로 지정
@@ -132,11 +147,9 @@ const monthlyExpense = computed(() => getMonthlyExpense(transactions.value));
 const monthlySatisfactionScore = computed(() =>
   getMonthlySatisfactionScore(transactions.value)
 );
-// 순수익은 수입 합계에서 지출 합계를 뺀 값으로... 후추 문의..?
+// 순수익은 수입 합계에서 지출 합계를 뺀 값
 const netProfit = computed(() => getNetProfit(monthlyIncome.value, monthlyExpense.value));
-/*
-  거래 목록이 바뀔 때마다 요약 카드에 필요한 총 거래 수, happy 건수, 최다 카테고리 정보
-*/
+// 거래 목록이 바뀔 때마다 요약 카드에 필요한 총 거래 수, happy 건수, 최다 카테고리 정보
 const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 </script>
 

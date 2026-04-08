@@ -1,15 +1,38 @@
 <template>
   <section class="card">
     <h3>나의 칭호</h3>
-    <p>{{ text }}</p>
+
+    <div v-if="titles.length > 0" class="title-list">
+      <div
+        v-for="title in titles"
+        :key="title"
+        class="title-item"
+      >
+        <img
+          v-if="getDisplayImage('title', title)"
+          :src="getDisplayImage('title', title)"
+          alt="획득한 칭호 이미지"
+          class="title-image"
+        />
+        <p v-else class="title-text">{{ title }}</p>
+      </div>
+    </div>
+
+    <p v-else class="empty-text">{{ emptyText }}</p>
   </section>
 </template>
 
 <script setup>
+import { getDisplayImage } from '@/pages/home/home.js';
+
 defineProps({
-  text: {
+  titles: {
+    type: Array,
+    default: () => [],
+  },
+  emptyText: {
     type: String,
-    default: "카페인 중독, 플렉스, 집순이..",
+    default: '아직 칭호가 없어요.',
   },
 });
 </script>
@@ -29,8 +52,36 @@ h3 {
   margin-bottom: 24px;
 }
 
-p {
+.title-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.title-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-image {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+}
+
+.title-text,
+.empty-text {
   font-size: 18px;
   line-height: 1.6;
+}
+
+.title-text {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #fff6cf;
 }
 </style>
