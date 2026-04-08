@@ -1,14 +1,12 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    <ProgressBarChart></ProgressBarChart>
+    <ProgressBarChart :value="70"></ProgressBarChart>
   </div>
 </template>
 
 <script setup>
 import ProgressBarChart from './components/ProgressBarChart.vue';
-
-
 
 
 </script>

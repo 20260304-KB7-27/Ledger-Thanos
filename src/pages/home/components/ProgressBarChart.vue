@@ -10,12 +10,16 @@ import { Chart, registerables } from 'chart.js';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 Chart.register(...registerables); // chart.js 요소 등록
+const props = defineProps({
+  value: {
+    type: Number,
+    required: true
+  }
+})
 
 const progressBar = ref(null); // canvas fef와 연결
 
 let chartInstance = null; // 차트 인스턴스 초기화
-
-const value = 70;
 const maxValue = 100;
 
 const chartData = {
@@ -23,7 +27,7 @@ const chartData = {
   datasets: [
     {
       label: '만족 지수',
-      data: [value],
+      data: [props.value],
       backgroundColor: '#4ade80',
       borderRadius: 20,
       borderSkipped: false,
