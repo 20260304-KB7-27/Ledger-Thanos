@@ -1,13 +1,35 @@
 {
-  "example": [],
+  "users": [
+    {
+      "id": "1",
+      "nickname": "testUser",
+      "userId": "test",
+      "userPassword": "1234",
+      "userLocation": "강남구",
+      "selectedTitle": ""
+    }
+  ],
   "locations": [
     {
-      "id": 1,
-      "name": "강남역 맛집",
+      "id": "1",
+      "user_id": "1",
+      "name": "친구들과 점심",
       "lat": 37.4979,
       "lng": 127.0276,
-      "category": "식당",
-      "visitedAt": "2024-03-20"
+      "gu": "강남구"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 45000,
+      "category": "restaurant",
+      "memo": "친구들과 점심",
+      "emotion": "happy",
+      "location": "강남구",
+      "date": "2026-04-07"
     }
   ]
 }
