@@ -9,17 +9,19 @@
         class="amount"
         :style="{ color: color }"
     >
-      {{ sign }}{{ amount }}
+      {{ props.sign }}{{ amount }}
     </strong>
   </section>
 </template>
 
 <script setup>
-import { computed } from "vue";
-
 const props = defineProps({
   title: String,
   amount: String,
+  sign: {
+    type: String,
+    default: '+',
+  },
 
   /* 색상 (부모에서 전달) */
   color: {
@@ -27,16 +29,6 @@ const props = defineProps({
     default: "#222",
   },
 
-  /* 타입: income | expense */
-  type: {
-    type: String,
-    default: "income",
-  },
-});
-
-/* + / - 자동 처리 */
-const sign = computed(() => {
-  return props.type === "expense" ? "-" : "+";
 });
 </script>
 

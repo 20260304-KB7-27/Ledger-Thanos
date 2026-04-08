@@ -18,23 +18,23 @@
         <div class="stats-group">
           <SummaryStatCard
               title="이번달 수입"
-              amount="1,200,000원"
+              :amount="`${monthlyIncome.toLocaleString()}원`"
+              sign="+"
               color="#4CE158"
-              type="income"
           />
 
           <SummaryStatCard
               title="이번달 지출"
-              amount="850,000원"
+              :amount="`${monthlyExpense.toLocaleString()}원`"
+              sign="-"
               color="#FF945F"
-              type="expense"
           />
 
           <SummaryStatCard
               title="순수익"
-              amount="350,000원"
+              :amount="`${Math.abs(netProfit).toLocaleString()}원`"
+              :sign="netProfit < 0 ? '-' : '+'"
               color="#FFD400"
-              type="income"
           />
         </div>
 
@@ -76,7 +76,7 @@ import { useUserStore } from '@/stores/user';
 // 홈 진입 시 현재 로그인한 유저의 거래 목록을 조회
 import { getUserTransactions } from '@/service/user/userApi.js';
 // 홈 화면에서 사용하는 계산 로직
-import {getRecentTransactions} from "@/pages/home/home.js";
+import {getMonthlyExpense, getMonthlyIncome, getNetProfit, getRecentTransactions} from "@/pages/home/home.js";
 
 /*
 * 변수
@@ -107,8 +107,14 @@ onMounted(async () => {
   transactions.value = await getUserTransactions(userStore.user.id);
 });
 
-/* 최근 거래 카드는 날짜 최신순으로 정렬된 일부 거래만 사용한다. */
+ // 최근 거래 카드는 날짜 최신순으로 정렬된 일부 거래만 사용. 지금은 최대 5개로 지정
 const recentTransactions = computed(() => getRecentTransactions(transactions.value));
+// 오늘 날짜 기준 같은 달의 income(추후 수정될 수 있음) 거래만 모아 이번달 수입계산
+const monthlyIncome = computed(() => getMonthlyIncome(transactions.value));
+// 오늘 날짜 기준 같은 달의 expense 거래만 모아 이번달 지출계산
+const monthlyExpense = computed(() => getMonthlyExpense(transactions.value));
+// 순수익은 수입 합계에서 지출 합계를 뺀 값으로... 후추 문의..?
+const netProfit = computed(() => getNetProfit(monthlyIncome.value, monthlyExpense.value));
 </script>
 
 
