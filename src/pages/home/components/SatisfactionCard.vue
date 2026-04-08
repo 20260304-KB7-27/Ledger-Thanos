@@ -8,7 +8,7 @@
     </div>
 
     <div class="progress-bar">
-      <ProgressBarChart value="75" bar-color="#FFD400"/>
+      <ProgressBarChart :value="score" bar-color="#FFD400"/>
       <div
           class="progress-fill"
           :style="{ width: score + '%' }"

@@ -47,6 +47,25 @@ export const getNetProfit = (income, expense) => {
     return income - expense;
 };
 
+// 이번달 만족 지수 계산
+export const getMonthlySatisfactionScore = (transactions) => {
+    /*
+      만족 지수는 "이번달 거래 중 emotion 이 happy 인 거래 비율"이다.
+      이번달 거래가 하나도 없으면 0%로 처리한다.
+    */
+    const currentMonthTransactions = getCurrentMonthTransactions(transactions);
+
+    if (currentMonthTransactions.length === 0) {
+        return 0;
+    }
+
+    const happyCount = currentMonthTransactions.filter(
+        (item) => item.emotion === 'happy'
+    ).length;
+
+    return Math.round((happyCount / currentMonthTransactions.length) * 100);
+};
+
 
 // 이번달 요약 카드에서 사용하는 모든 계산 함수
 export const getMonthlySummary = (transactions) => {

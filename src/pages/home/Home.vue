@@ -9,7 +9,10 @@
       <section class="home-dashboard">
 
         <!-- 만족지수 (왼쪽 크게) -->
-        <SatisfactionCard class="satisfaction"/>
+        <SatisfactionCard
+          class="satisfaction"
+          :score="monthlySatisfactionScore"
+        />
 
         <!-- 나의 칭호 (오른쪽) -->
         <PreferenceCard class="preference"/>
@@ -84,6 +87,7 @@ import { getUserTransactions } from '@/service/user/userApi.js';
 import {
   getMonthlyExpense,
   getMonthlyIncome,
+  getMonthlySatisfactionScore,
   getMonthlySummary,
   getNetProfit,
   getRecentTransactions
@@ -124,6 +128,10 @@ const recentTransactions = computed(() => getRecentTransactions(transactions.val
 const monthlyIncome = computed(() => getMonthlyIncome(transactions.value));
 // 오늘 날짜 기준 같은 달의 expense 거래만 모아 이번달 지출계산
 const monthlyExpense = computed(() => getMonthlyExpense(transactions.value));
+// 이번달 전체 거래 중 happy 비율을 퍼센트로 계산한 만족 지수
+const monthlySatisfactionScore = computed(() =>
+  getMonthlySatisfactionScore(transactions.value)
+);
 // 순수익은 수입 합계에서 지출 합계를 뺀 값으로... 후추 문의..?
 const netProfit = computed(() => getNetProfit(monthlyIncome.value, monthlyExpense.value));
 /*
