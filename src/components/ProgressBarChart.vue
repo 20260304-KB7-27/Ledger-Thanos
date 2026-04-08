@@ -26,42 +26,61 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 Chart.register(...registerables); // chart.js 요소 등록
 const props = defineProps({
+  // 진행률 값
   value: {
     type: Number,
     required: true,
   },
+
+  // 진행률 최대값
   maxValue: {
     type: Number,
     default: 100,
   },
+
+  // 데이터 바 색상
   barColor: {
     type: String,
     default: 'white',
   },
+
+  // 데이터 바 border-radius 값
   barRadius: {
     type: Number,
     default: 20,
   },
+
+  // 배경 바 색상
   backgroundColor: {
     type: String,
     default: 'white',
   },
+
+  // 배경 바 border-radius 값
   backgroundRadius: {
     type: Number,
     default: 20,
   },
+
+  // 전체 컴포넌트 너비
   width: {
     type: String,
     default: '100%',
   },
+
+  // 전체 컴포넌트 높이(px)
   height: {
     type: Number,
     default: 40,
   },
+
+  // 배경 바 테두리 색상
   borderColor: {
     type: String,
     default: '#D9D9D9',
   },
+
+  // 배경 바 테두리 두께(px)
   borderWidth: {
     type: Number,
     default: 1,
