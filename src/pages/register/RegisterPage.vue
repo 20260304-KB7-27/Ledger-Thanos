@@ -22,20 +22,20 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">금액</p>
-            <input type="number" v-model="transaction.amount" placeholder="00원 (입력)" class="transparent-input" />
+            <input v-model.number="transaction.amount" type="number" placeholder="00원 (입력)" class="transparent-input" />
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">날짜</p>
-            <input type="date" v-model="transaction.date" class="transparent-input date-input" />
+            <input v-model="transaction.date" type="date" class="transparent-input date-input" />
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">카테고리</p>
             <div class="category-circles">
               <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option"
-                :class="{ 'category-option-active': transaction.category === cat.value }"
-                @click="transaction.category = cat.value" :title="cat.label" :aria-label="cat.label">
+                :class="{ 'category-option-active': transaction.category === cat.value }" :title="cat.label"
+                :aria-label="cat.label" @click="transaction.category = cat.value">
                 <span class="circle" :class="{ 'circle-active': transaction.category === cat.value }">
                   <component :is="cat.icon" :size="20" class="category-icon" />
                 </span>
@@ -54,8 +54,8 @@
                 <img :src="happyIcon" alt="만족" class="face-icon" />
                 <span>만족</span>
               </div>
-              <div class="mood-item clickable" :class="{ active: transaction.emotion === 'sad' }"
-                @click="transaction.emotion = 'sad'">
+              <div class="mood-item clickable" :class="{ active: transaction.emotion === 'regret' }"
+                @click="transaction.emotion = 'regret'">
                 <img :src="sadIcon" alt="후회" class="face-icon" />
                 <span>후회</span>
               </div>
@@ -78,7 +78,7 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">메모</p>
-            <input type="text" v-model="transaction.memo" placeholder="이 소비에 대해 기록해보세요.." class="transparent-input" />
+            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요.." class="transparent-input" />
           </Box>
 
           <button class="submit-button" @click="saveTransaction">저장하기</button>
@@ -93,16 +93,16 @@
 import { ref } from 'vue';
 import {
   Beer,
-  Bike,
-  Bus,
+  BusFront,
   ChevronDown,
   Coffee,
   Cross,
   Ellipsis,
+  Hamburger,
   Package,
   ShoppingBag,
   Store,
-  UtensilsCrossed,
+  Utensils,
 } from '@lucide/vue';
 import happyIcon from '@/assets/svg/happy.svg';
 import sadIcon from '@/assets/svg/sad.svg';
@@ -112,27 +112,35 @@ import api from '@/service/api';
 // ==========================================
 // 2. 가계부 폼 상태 template
 // ==========================================
+const getTodayKST = () => { // UTC -> KST로 변환
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  const dateOffset = new Date(now.getTime() - offset);
+  return dateOffset.toISOString().split('T')[0];
+};
+
+
 const transaction = ref({
   user_id: "1", // 임시 유저 ID
   type: "expense", // 'expense' 또는 'income'
   amount: null,
   category: "shopping",
   memo: "",
-  emotion: "happy", // 'happy' 또는 'sad'
+  emotion: "happy", // 'happy' 또는 'regret'
   location: "",
-  date: new Date().toISOString().split('T')[0] // 오늘 날짜 셋팅
+  date: getTodayKST(), // 오늘 날짜로 세팅
 });
 
 // UI에 뿌려질 카테고리 임시 데이터
 const categoryList = ref([
   { id: 1, label: '쇼핑', value: 'shopping', icon: ShoppingBag },
-  { id: 2, label: '배달', value: 'delivery', icon: Bike },
-  { id: 3, label: '식당', value: 'restaurant', icon: UtensilsCrossed },
+  { id: 2, label: '배달', value: 'delivery', icon: Hamburger },
+  { id: 3, label: '식당', value: 'restaurant', icon: Utensils },
   { id: 4, label: '편의점', value: 'convenience', icon: Store },
   { id: 5, label: '카페', value: 'cafe', icon: Coffee },
   { id: 6, label: '술집', value: 'bar', icon: Beer },
   { id: 7, label: '생필품', value: 'essentials', icon: Package },
-  { id: 8, label: '교통', value: 'transport', icon: Bus },
+  { id: 8, label: '교통', value: 'transport', icon: BusFront },
   { id: 9, label: '병원', value: 'hospital', icon: Cross },
   { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
 ]);
