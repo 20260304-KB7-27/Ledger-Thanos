@@ -44,7 +44,7 @@
         </button>
 
         <!-- 3행: 최근 거래 -->
-        <RecentTransactionCard class="recent" :list="transactionList" />
+        <RecentTransactionCard class="recent" :list="recentTransactions" />
 
         <!-- 이번달 요약 -->
         <MonthlySummaryCard :total-count="12" :satisfied-count="8" />
@@ -69,26 +69,46 @@ import PreferenceCard from "@/pages/home/components/PreferenceCard.vue";
 import RecentTransactionCard from "@/pages/home/components/RecentTransactionCard.vue";
 import MonthlySummaryCard from "@/pages/home/components/MonthlySummaryCard.vue";
 
+// 반응형 상태, 계산 속성, 마운트 시점 데이터를 가져오기 위한 Vue API
+import { ref, computed, onMounted } from 'vue';
+// 로그인 유저 정보를 확인하기 위해 user store
+import { useUserStore } from '@/stores/user';
+// 홈 진입 시 현재 로그인한 유저의 거래 목록을 조회
+import { getUserTransactions } from '@/service/user/userApi.js';
+// 홈 화면에서 사용하는 계산 로직
+import {getRecentTransactions} from "@/pages/home/home.js";
 
+/*
+* 변수
+* */
 const router = useRouter();
+const userStore = useUserStore();
+// 홈 화면에서 사용하는 현재 유저의 거래 목록
+const transactions = ref([]);
 
-/* 거래 추가 페이지 이동 */
+// 거래 등록 화면으로 이동
 const goToAddTransaction = () => {
   router.push("/register");
 };
 
-/* test용으로 json-server에서 가져올 예정 */
-const transactionList = [    {
-  "id": "1",
-  "user_id": "1",
-  "type": "expense",
-  "amount": 45000,
-  "category": "restaurant",
-  "memo": "친구들과 점심",
-  "emotion": "happy",
-  "location": "강남구",
-  "date": "2026-04-07"
-}]
+onMounted(async () => {
+  /*
+    로그인한 유저 정보가 없으면 어떤 거래를 조회해야 하는지 알 수 없으므로
+    홈 최초 진입 시 API 호출을 하지 않고 바로 종료한다.
+    라우터 가드??
+  */
+  if (!userStore.user?.id) return;
+
+  /*
+    userApi에 있는 거래조회로 사용
+    로그인 유저의 거래 목록 조회
+    이후 대시보드 카드 계산은 전부 transactions.value로
+  */
+  transactions.value = await getUserTransactions(userStore.user.id);
+});
+
+/* 최근 거래 카드는 날짜 최신순으로 정렬된 일부 거래만 사용한다. */
+const recentTransactions = computed(() => getRecentTransactions(transactions.value));
 </script>
 
 

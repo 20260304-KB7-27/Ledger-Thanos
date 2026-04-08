@@ -13,10 +13,14 @@
           <div class="thumb"></div>
 
           <div class="info">
-            <strong class="name">{{ item.name }}</strong>
+            <div class="date">
+              <span>{{ item.date }}</span>
+            </div>
+
+            <strong class="name">{{ item.memo }}</strong>
 
             <div class="location">
-              📍 <span>{{ item.location }}</span>
+              📍 <span>{{ item.location }} </span>
             </div>
           </div>
         </div>
@@ -101,6 +105,11 @@ h3 {
 }
 
 .location {
+  font-size: 20px;
+  color: #333;
+}
+
+.date {
   font-size: 20px;
   color: #333;
 }
