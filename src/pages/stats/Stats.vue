@@ -111,114 +111,23 @@ import Deal from './components/Deal.vue';
 import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
 
-const dealLists = [
-  {
-    id: 1,
-    title: '식당',
-    location: '서초구',
-    amount: 12500,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 2,
-    title: '카페',
-    location: '강남구',
-    amount: 6800,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 3,
-    title: '편의점',
-    location: '송파구',
-    amount: 4200,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 4,
-    title: '편의점',
-    location: '송파구',
-    amount: 4200,
-    iconColor: '#d9d9d9',
-  },
-];
+const userStore = useUserStore();
+// 현재 유저 거래 목록
+const transactions = ref([]);
 
-const localSpendingList = [
-  {
-    rank: 1,
-    region: '강남구',
-    period: '30건',
-    amount: 123000,
-  },
-  {
-    rank: 2,
-    region: '서초구',
-    period: '18건',
-    amount: 98000,
-  },
-  {
-    rank: 3,
-    region: '송파구',
-    period: '12건',
-    amount: 76000,
-  },
-  {
-    rank: 4,
-    region: '강남구',
-    period: '30건',
-    amount: 123000,
-  },
-  {
-    rank: 5,
-    region: '서초구',
-    period: '18건',
-    amount: 98000,
-  },
-  {
-    rank: 6,
-    region: '송파구',
-    period: '12건',
-    amount: 76000,
-  },
-];
+onMounted(async () => {
 
-const categorySpendingList = [
-  {
-    id: 1,
-    category: '음식점',
-    amount: 123000,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 2,
-    category: '카페',
-    amount: 86500,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 3,
-    category: '쇼핑',
-    amount: 57200,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 4,
-    category: '음식점',
-    amount: 123000,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 5,
-    category: '카페',
-    amount: 86500,
-    iconColor: '#d9d9d9',
-  },
-  {
-    id: 6,
-    category: '쇼핑',
-    amount: 57200,
-    iconColor: '#d9d9d9',
-  },
-];
+  if (!userStore.user?.id) return;
+
+  /*
+    userApi에 있는 거래조회로 사용
+    로그인 유저의 거래 목록 조회
+  */
+  const userTransactions = await getUserTransactions(userStore.user.id);
+  transactions.value = userTransactions;
+});
+
+
 </script>
 
 <style scoped>
