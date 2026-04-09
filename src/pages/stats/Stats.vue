@@ -56,10 +56,19 @@
       </div>
       <div id="theme-stats">
         <div id="location-spend">
-          <Box width="custom" custom-width="100%"
-            ><div class="box-label">지역별 소비</div>
-            <div v-for="item in localSpendingList">
-              <LocalSpending></LocalSpending>
+          <Box width="custom" custom-width="100%" class="box-custom">
+            <div class="scroll-box">
+              <div class="box-label">지역별 소비</div>
+              <div class="local-list">
+                <LocalSpending
+                  v-for="item in localSpendingList"
+                  :key="item.rank"
+                  :rank="item.rank"
+                  :region="item.region"
+                  :period="item.period"
+                  :amount="item.amount"
+                />
+              </div>
             </div>
           </Box>
         </div>
@@ -113,6 +122,45 @@ const dealLists = [
     location: '송파구',
     amount: 4200,
     iconColor: '#d9d9d9',
+  },
+];
+
+const localSpendingList = [
+  {
+    rank: 1,
+    region: '강남구',
+    period: '30건',
+    amount: 123000,
+  },
+  {
+    rank: 2,
+    region: '서초구',
+    period: '18건',
+    amount: 98000,
+  },
+  {
+    rank: 3,
+    region: '송파구',
+    period: '12건',
+    amount: 76000,
+  },
+    {
+    rank: 4,
+    region: '강남구',
+    period: '30건',
+    amount: 123000,
+  },
+  {
+    rank: 5,
+    region: '서초구',
+    period: '18건',
+    amount: 98000,
+  },
+  {
+    rank: 6,
+    region: '송파구',
+    period: '12건',
+    amount: 76000,
   },
 ];
 </script>
@@ -257,9 +305,8 @@ const dealLists = [
   padding-bottom: 30px;
 }
 
-
 .deal-list,
-.rank-list,
+.local-list,
 .category-list {
   flex: 1;
   min-height: 0;
