@@ -41,4 +41,13 @@ const router = createRouter({
   ],
 });
 
+const publicRoutes = ['login', 'signup'];
+
+router.beforeEach((to) => {
+  const userId = localStorage.getItem('userId');
+  if (!userId && !publicRoutes.includes(to.name)) {
+    return { name: 'login' };
+  }
+});
+
 export default router;

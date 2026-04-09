@@ -1,5 +1,13 @@
 import api from '@/service/api';
 
+export const getUserById = async (id) => {
+  const result = await api.get('/users');
+  const users = Array.isArray(result) ? result : (result.data ?? []);
+  const user = users.find((u) => u.id === id);
+  if (!user) throw new Error('사용자를 찾을 수 없습니다.');
+  return user;
+};
+
 export const getUserTransactions = async (userId) => {
   const result = await api.get('/transactions', { user_id: userId });
   return Array.isArray(result) ? result : (result.data ?? []);
