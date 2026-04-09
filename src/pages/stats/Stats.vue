@@ -12,7 +12,7 @@
       </h3>
 
       <Box width="custom" custom-width="100%">
-        <div class="box-label-header" @click="exportPdf">PDF 내보내기</div>
+        <div class="box-label-header pdf-button" @click="exportPdf">PDF 내보내기</div>
       </Box>
     </div>
     <div class="content">
