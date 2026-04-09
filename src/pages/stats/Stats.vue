@@ -110,6 +110,9 @@ import ProgressBarChart from '@/components/ProgressBarChart.vue';
 import Deal from './components/Deal.vue';
 import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
+import { useUserStore } from '@/stores/user';
+import { ref, onMounted } from 'vue';
+import { getUserTransactions } from '@/service/user/userApi';
 
 const userStore = useUserStore();
 // 현재 유저 거래 목록
@@ -125,6 +128,7 @@ onMounted(async () => {
   */
   const userTransactions = await getUserTransactions(userStore.user.id);
   transactions.value = userTransactions;
+  console.log(transactions);
 });
 
 
