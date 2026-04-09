@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <!-- 좌측 네비게이션 -->
-    <Nav/>
+<!--    <Nav/>-->
 
     <!-- 메인 컨텐츠 영역 -->
     <main class="content">
@@ -239,9 +239,6 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 
 /* PC */
 @media (min-width: 1025px) {
-  .content {
-    padding-left: 30%; /* 네비바 공간 확보 */
-  }
 }
 
 /* 태블릿 */
