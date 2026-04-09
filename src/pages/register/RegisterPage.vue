@@ -33,10 +33,12 @@
           <Box width="custom" customWidth="100%">
             <p class="label">카테고리</p>
             <div class="category-circles">
-              <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option"
-                :class="{ 'category-option-active': transaction.category === cat.value }" :title="cat.label"
-                :aria-label="cat.label" @click="transaction.category = cat.value">
-                <span class="circle" :class="{ 'circle-active': transaction.category === cat.value }">
+              <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option" :class="{
+                'category-option-active': isExpense && transaction.category === cat.value,
+                'category-option-disabled': !isExpense,
+              }" :title="cat.label" :aria-label="cat.label" :disabled="!isExpense"
+                @click="transaction.category = cat.value">
+                <span class="circle" :class="{ 'circle-active': isExpense && transaction.category === cat.value }">
                   <component :is="cat.icon" :size="20" class="category-icon" />
                 </span>
                 <span class="category-name">{{ cat.label }}</span>
@@ -47,38 +49,41 @@
 
         <div class="column right-column">
           <Box width="custom" customWidth="100%">
-            <p class="label center-text">지금 기분은?</p>
+            <p class="label center-text">이 소비에 만족하셨나요?</p>
             <div class="mood-group">
-              <div class="mood-item clickable" :class="{ active: transaction.emotion === 'happy' }"
-                @click="transaction.emotion = 'happy'">
+              <button type="button" class="mood-item mood-button"
+                :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
+                :disabled="!isExpense" @click="transaction.emotion = 'happy'">
                 <img :src="happyIcon" alt="만족" class="face-icon" />
                 <span>만족</span>
-              </div>
-              <div class="mood-item clickable" :class="{ active: transaction.emotion === 'regret' }"
-                @click="transaction.emotion = 'regret'">
+              </button>
+              <button type="button" class="mood-item mood-button"
+                :class="{ active: isExpense && transaction.emotion === 'regret', disabled: !isExpense }"
+                :disabled="!isExpense" @click="transaction.emotion = 'regret'">
                 <img :src="sadIcon" alt="후회" class="face-icon" />
                 <span>후회</span>
-              </div>
+              </button>
             </div>
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">위치</p>
-            <div class="select-wrapper">
-              <select v-model="transaction.location" class="transparent-input select-input">
-                <option disabled value="">서울 자치구를 선택해주세요</option>
+            <div class="select-wrapper" :class="{ 'select-wrapper-disabled': !isExpense }">
+              <select v-model="transaction.location" class="transparent-input select-input" :disabled="!isExpense">
+                <option disabled value="">소비가 이뤄진 위치를 선택해주세요</option>
                 <option v-for="district in seoulDistricts" :key="district" :value="district">
                   {{ district }}
                 </option>
               </select>
               <ChevronDown :size="18" class="select-chevron" />
             </div>
-            <p class="select-caption">서울특별시 25개 자치구 중에서 선택</p>
+            <p class="select-caption" :class="{ 'select-caption-disabled': !isExpense }">드롭다운 메뉴로 선택</p>
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">메모</p>
-            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요.." class="transparent-input" />
+            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요.."
+              class="transparent-input memo-input" :disabled="!isExpense" />
           </Box>
 
           <button class="submit-button" @click="saveTransaction">저장하기</button>
@@ -90,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import {
   Beer,
   BusFront,
@@ -131,6 +136,7 @@ const createInitialTransaction = () => ({
 })
 
 const transaction = ref(createInitialTransaction())
+const isExpense = computed(() => transaction.value.type === 'expense') // 지출 모드, 수입 모드 전환
 
 const resetTransaction = () => {
   transaction.value = createInitialTransaction()
@@ -178,6 +184,29 @@ const seoulDistricts = [
   '강동구',
 ];
 
+const emotionOptions = ['happy', 'regret'];
+
+const buildTransactionPayload = () => {
+  const amount = Number(transaction.value.amount);
+
+  if (isExpense.value) {
+    return {
+      ...transaction.value,
+      amount,
+      memo: transaction.value.memo.trim(),
+    };
+  }
+
+  return { // 수입 모드인 경우 카테고리, 감정, 위치, 메모를 null로 넘김
+    ...transaction.value,
+    amount,
+    category: null,
+    emotion: null,
+    location: null,
+    memo: null,
+  };
+};
+
 // ==========================================
 // 서버 전송 로직 (json-server 연동)
 // ==========================================
@@ -188,16 +217,25 @@ const saveTransaction = async () => {
     return;
   }
 
-  if (!transaction.value.location) {
-    alert("서울 자치구를 선택해주세요!");
-    return;
+  if (isExpense.value) {
+    if (!categoryList.value.some((cat) => cat.value === transaction.value.category)) {
+      alert("지출 카테고리를 선택해주세요!");
+      return;
+    }
+
+    if (!emotionOptions.includes(transaction.value.emotion)) {
+      alert("지출 감정을 선택해주세요!");
+      return;
+    }
+
+    if (!seoulDistricts.includes(transaction.value.location)) {
+      alert("서울 자치구를 선택해주세요!");
+      return;
+    }
   }
 
   try {
-    await api.post('/transactions', {
-      ...transaction.value,
-      amount: Number(transaction.value.amount),
-    });
+    await api.post('/transactions', buildTransactionPayload());
 
     alert("성공적으로 저장되었습니다!");
     // 저장 완료 후 폼 초기화
@@ -306,6 +344,15 @@ const saveTransaction = async () => {
   box-shadow: 0 0 0 3px rgba(244, 208, 63, 0.2);
 }
 
+.select-wrapper-disabled {
+  opacity: 0.55;
+}
+
+.select-wrapper-disabled .select-input,
+.select-wrapper-disabled .select-chevron {
+  cursor: not-allowed;
+}
+
 .select-chevron {
   position: absolute;
   top: 50%;
@@ -320,6 +367,10 @@ const saveTransaction = async () => {
   font-size: 12px;
   font-weight: 600;
   color: #8a774e;
+}
+
+.select-caption-disabled {
+  color: #aa9a74;
 }
 
 .clickable {
@@ -401,6 +452,10 @@ const saveTransaction = async () => {
   font: inherit;
 }
 
+.category-option-disabled {
+  cursor: not-allowed;
+}
+
 .circle {
   width: 48px;
   height: 48px;
@@ -418,6 +473,11 @@ const saveTransaction = async () => {
 .category-option:hover .circle {
   background-color: #f4d03f;
   transform: scale(1.1);
+}
+
+.category-option-disabled:hover .circle {
+  background-color: #f7edd0;
+  transform: none;
 }
 
 .circle-active {
@@ -443,6 +503,17 @@ const saveTransaction = async () => {
   color: #5b3f16;
 }
 
+.category-option-disabled .circle {
+  background-color: #efe5c8;
+  border-color: #ded1ad;
+  color: #b29b70;
+  box-shadow: none;
+}
+
+.category-option-disabled .category-name {
+  color: #b29b70;
+}
+
 /* 기분 선택 그룹 */
 .mood-group {
   display: flex;
@@ -459,8 +530,19 @@ const saveTransaction = async () => {
   border-radius: 15px;
 }
 
+.mood-button {
+  border: none;
+  background: transparent;
+  font: inherit;
+}
+
 .mood-item.active {
   background-color: #fdf8e3;
+}
+
+.mood-item.disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .face-icon {
@@ -468,6 +550,12 @@ const saveTransaction = async () => {
   height: 60px;
   display: block;
   object-fit: contain;
+}
+
+.memo-input:disabled,
+.select-input:disabled {
+  color: #9a865d;
+  cursor: not-allowed;
 }
 
 /* 버튼 */
