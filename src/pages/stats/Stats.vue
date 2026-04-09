@@ -4,7 +4,11 @@
       <Box width="custom" custom-width="100%">
         <div class="box-label-header">주간/월간</div>
       </Box>
-      <h3><span><</span> 2024년 8월 <span>></span></h3>
+
+      <h3>
+        <span><</span> {{ currentYear }}년 {{ currentMonth }}월 <span>></span>
+      </h3>
+
       <Box width="custom" custom-width="100%">
         <div class="box-label-header">PDF 내보내기</div>
       </Box>
@@ -12,27 +16,34 @@
     <div class="content">
       <div id="common-stats">
         <div id="account-info">
-          <Box width="custom" custom-width="100%" class="box-label-account"
-            ><div>이번달 수입</div>
-            <div>00원</div></Box
-          >
-          <Box width="custom" custom-width="100%" class="box-label-account"
-            ><div>이번달 지출</div>
-            <div>00원</div></Box
-          >
-          <Box width="custom" custom-width="100%" class="box-label-account"
-            ><div>순수익</div>
-            <div>00원</div></Box
-          >
+          <Box width="custom" custom-width="100%" class="box-label-account">
+            <div>이번달 수입</div>
+            <div>{{ formatAmount(monthlyIncome) }}</div>
+          </Box>
+
+          <Box width="custom" custom-width="100%" class="box-label-account">
+            <div>이번달 지출</div>
+            <div>{{ formatAmount(monthlyExpense) }}</div>
+          </Box>
+
+          <Box width="custom" custom-width="100%" class="box-label-account">
+            <div>순수익</div>
+            <div>{{ formatAmount(netProfit) }}</div>
+          </Box>
         </div>
         <div id="emotion-info">
           <Box width="custom" custom-width="100%">
             <div class="emotion-content">
               <div class="box-label">감정 통계</div>
               <div class="box-content">
-                <div id="emotion-stats">15회 만족, 5회 후회</div>
+                <div id="emotion-stats">
+                  {{ emotionSatisfiedCount }}회 만족, {{ emotionRegretCount }}회
+                  후회
+                </div>
+
                 <ProgressBarChart
-                  :value="75"
+                  v-if="expenseTransactions.length > 0"
+                  :value="emotionSatisfiedRate"
                   :max-value="100"
                   bar-color="#FFE99A"
                   background-color="white"
@@ -40,7 +51,10 @@
                   :border-width="1"
                   border-color="#d9d9d9"
                 />
-                <div id="emotion-ratio">만족한 소비비율: 71%</div>
+
+                <div id="emotion-ratio">
+                  만족한 소비비율: {{ emotionSatisfiedRate }}%
+                </div>
               </div>
             </div>
           </Box>
@@ -49,7 +63,11 @@
           <Box width="custom" custom-width="100%" class="box-custom">
             <div class="scroll-box">
               <div class="box-label">거래 내역</div>
-              <div class="deal-list">
+
+              <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else-if="error" class="status-text error">{{ error }}</div>
+
+              <div v-else class="deal-list">
                 <Deal
                   v-for="item in dealLists"
                   :key="item.id"
@@ -68,7 +86,9 @@
           <Box width="custom" custom-width="100%" class="box-custom">
             <div class="scroll-box">
               <div class="box-label">지역별 소비</div>
-              <div class="local-list">
+
+              <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else class="local-list">
                 <LocalSpending
                   v-for="item in localSpendingList"
                   :key="item.rank"
@@ -86,7 +106,9 @@
           <Box width="custom" custom-width="100%" class="box-custom">
             <div class="scroll-box">
               <div class="box-label">카테고리별 지출</div>
-              <div class="category-list">
+
+              <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else class="category-list">
                 <CategorySpending
                   v-for="item in categorySpendingList"
                   :key="item.id"
@@ -100,7 +122,6 @@
         </div>
       </div>
     </div>
-    <div></div>
   </div>
 </template>
 
@@ -111,15 +132,146 @@ import Deal from './components/Deal.vue';
 import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
 import { useUserStore } from '@/stores/user';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { getUserTransactions } from '@/service/user/userApi';
 
 const userStore = useUserStore();
 // 현재 유저 거래 목록
 const transactions = ref([]);
 
-onMounted(async () => {
+// 화면 기준 월
+const currentYear = 2026;
+const currentMonth = 4;
 
+const loading = ref(false);
+const error = ref('');
+
+const categoryLabelMap = {
+  restaurant: '식당',
+  salary: '급여',
+  cafe: '카페',
+  shopping: '쇼핑',
+  transport: '교통',
+  entertainment: '문화/여가',
+};
+
+const categoryColorMap = {
+  restaurant: '#d9d9d9',
+  salary: '#d9d9d9',
+  cafe: '#d9d9d9',
+  shopping: '#d9d9d9',
+  transport: '#d9d9d9',
+  entertainment: '#d9d9d9',
+};
+
+const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
+
+const isCurrentMonthTransaction = (tx) => {
+  const date = new Date(tx.date);
+  return (
+    date.getFullYear() === currentYear && date.getMonth() + 1 === currentMonth
+  );
+};
+
+const monthlyTransactions = computed(() => {
+  return transactions.value.filter(isCurrentMonthTransaction);
+});
+
+const monthlyIncome = computed(() => {
+  return monthlyTransactions.value
+    .filter((tx) => tx.type === 'income')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+});
+
+const monthlyExpense = computed(() => {
+  return monthlyTransactions.value
+    .filter((tx) => tx.type === 'expense')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+});
+
+const netProfit = computed(() => {
+  return monthlyIncome.value - monthlyExpense.value;
+});
+
+const expenseTransactions = computed(() => {
+  return monthlyTransactions.value
+    .filter((tx) => tx.type === 'expense')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+});
+
+const emotionSatisfiedCount = computed(() => {
+  return expenseTransactions.value.filter((tx) => tx.emotion === 'happy')
+    .length;
+});
+
+const emotionRegretCount = computed(() => {
+  return expenseTransactions.value.filter((tx) => tx.emotion === 'regret')
+    .length;
+});
+
+const emotionSatisfiedRate = computed(() => {
+  const total = expenseTransactions.value.length;
+  console.log(total);
+  if (!total) return 0;
+  return Math.round((emotionSatisfiedCount.value / total) * 100);
+});
+
+const dealLists = computed(() => {
+  return expenseTransactions.value.map((tx) => ({
+    id: tx.id,
+    title: categoryLabelMap[tx.category] || tx.category,
+    location: tx.location,
+    amount: tx.amount,
+    iconColor: categoryColorMap[tx.category] || '#d9d9d9',
+  }));
+});
+
+const localSpendingList = computed(() => {
+  const grouped = {};
+
+  expenseTransactions.value.forEach((tx) => {
+    if (!grouped[tx.location]) {
+      grouped[tx.location] = {
+        region: tx.location,
+        count: 0,
+        amount: 0,
+      };
+    }
+
+    grouped[tx.location].count += 1;
+    grouped[tx.location].amount += tx.amount;
+  });
+
+  return Object.values(grouped)
+    .sort((a, b) => b.amount - a.amount)
+    .map((item, index) => ({
+      rank: index + 1,
+      region: item.region,
+      period: `${item.count}건`,
+      amount: item.amount,
+    }));
+});
+
+const categorySpendingList = computed(() => {
+  const grouped = {};
+
+  expenseTransactions.value.forEach((tx) => {
+    if (!grouped[tx.category]) {
+      grouped[tx.category] = {
+        id: tx.category,
+        category: categoryLabelMap[tx.category] || tx.category,
+        amount: 0,
+        iconColor: categoryColorMap[tx.category] || '#d9d9d9',
+      };
+    }
+
+    grouped[tx.category].amount += tx.amount;
+  });
+
+  return Object.values(grouped).sort((a, b) => b.amount - a.amount);
+});
+
+onMounted(async () => {
   if (!userStore.user?.id) return;
 
   /*
@@ -128,10 +280,7 @@ onMounted(async () => {
   */
   const userTransactions = await getUserTransactions(userStore.user.id);
   transactions.value = userTransactions;
-  console.log(transactions);
 });
-
-
 </script>
 
 <style scoped>
