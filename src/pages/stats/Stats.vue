@@ -2,11 +2,11 @@
   <div class="main">
     <div class="header">
       <Box width="custom" custom-width="100%">
-        <div class="box-label">주간/월간</div>
+        <div class="box-label-header">주간/월간</div>
       </Box>
       <h3><span><</span> 2024년 8월 <span>></span></h3>
       <Box width="custom" custom-width="100%">
-        <div class="box-label">PDF 내보내기</div>
+        <div class="box-label-header">PDF 내보내기</div>
       </Box>
     </div>
     <div class="content">
@@ -253,6 +253,13 @@ const categorySpendingList = [
   white-space: nowrap;
   padding-left: 10px;
   padding-top: 10px;
+}
+
+.box-label-header {
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  white-space: nowrap;
 }
 
 .box-content {
