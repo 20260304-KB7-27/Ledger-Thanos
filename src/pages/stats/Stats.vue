@@ -6,7 +6,9 @@
       </Box>
 
       <h3>
-        <span><</span> {{ currentYear }}년 {{ currentMonth }}월 <span>></span>
+        <button class="month-arrow" @click="goPrevMonth">&lt;</button>
+        <span>{{ currentYear }}년 {{ currentMonth }}월</span>
+        <button class="month-arrow" @click="goNextMonth">&gt;</button>
       </h3>
 
       <Box width="custom" custom-width="100%">
@@ -140,8 +142,8 @@ const userStore = useUserStore();
 const transactions = ref([]);
 
 // 화면 기준 월
-const currentYear = 2026;
-const currentMonth = 4;
+const currentYear = ref(2026);
+const currentMonth = ref(4);
 
 const loading = ref(false);
 const error = ref('');
@@ -169,7 +171,8 @@ const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
 const isCurrentMonthTransaction = (tx) => {
   const date = new Date(tx.date);
   return (
-    date.getFullYear() === currentYear && date.getMonth() + 1 === currentMonth
+    date.getFullYear() === currentYear.value &&
+    date.getMonth() + 1 === currentMonth.value
   );
 };
 
@@ -271,6 +274,24 @@ const categorySpendingList = computed(() => {
   return Object.values(grouped).sort((a, b) => b.amount - a.amount);
 });
 
+const goPrevMonth = () => {
+  if (currentMonth.value === 1) {
+    currentMonth.value = 12;
+    currentYear.value -= 1;
+  } else {
+    currentMonth.value -= 1;
+  }
+};
+
+const goNextMonth = () => {
+  if (currentMonth.value === 12) {
+    currentMonth.value = 1;
+    currentYear.value += 1;
+  } else {
+    currentMonth.value += 1;
+  }
+};
+
 onMounted(async () => {
   if (!userStore.user?.id) return;
 
@@ -355,6 +376,20 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: 3fr 1.35fr;
   gap: 20px;
+}
+
+.month-arrow {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #444;
+  padding: 4px 8px;
+}
+
+.month-arrow:hover {
+  opacity: 0.7;
 }
 
 #common-stats {
