@@ -11,7 +11,7 @@
         <button class="month-arrow" @click="goNextMonth">&gt;</button>
       </h3>
 
-      <Box width="custom" custom-width="100%">
+      <Box width="custom" custom-width="100%" id="download-pdf">
         <div class="box-label-header pdf-button" @click="exportPdf">
           PDF 내보내기
         </div>
@@ -508,17 +508,61 @@ onMounted(async () => {
 
 @media print {
   .main {
-    background: white;
-    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
     height: auto;
+    min-height: auto;
   }
 
-  .header {
-    margin-bottom: 16px;
-  }
-
-  .pdf-button {
+  #download-pdf{
     display: none;
+  }
+
+  .content,
+  #common-stats,
+  #theme-stats {
+    height: auto !important;
+  }
+
+  #common-stats,
+  #theme-stats {
+    grid-template-rows: auto auto auto !important;
+    gap: 18px !important;
+  }
+
+  #trade-history-info,
+  #location-spend,
+  #category-spend,
+  #emotion-info {
+    height: auto !important;
+  }
+
+  #trade-history-info > *,
+  #location-spend > *,
+  #category-spend > *,
+  #emotion-info > * {
+    height: auto !important;
+  }
+
+  #trade-history-info .box-custom,
+  #location-spend .box-custom,
+  #category-spend .box-custom {
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .scroll-box {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  .deal-list,
+  .local-list,
+  .category-list {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 }
 
