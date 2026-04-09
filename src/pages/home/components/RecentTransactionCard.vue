@@ -1,32 +1,37 @@
 <template>
   <Box
-    width="custom"
-    custom-width="100%"
-    margin-y="0"
-    border="1px solid #d8d8d8"
-    bg-color="#f3f3f3"
-    :shadow="false"
+      width="custom"
+      custom-width="100%"
+      margin-y="0"
+      border="1px solid #d8d8d8"
+      bg-color="#f3f3f3"
+      :shadow="false"
   >
     <section class="card">
       <h3>최근 거래</h3>
 
       <div v-if="list.length > 0" class="list">
         <Box
-          v-for="item in list"
-          :key="item.id"
-          width="custom"
-          custom-width="100%"
-          margin-y="0"
-          border="1px solid #d8d8d8"
-          bg-color="#f8f8f8"
-          :shadow="false"
+            v-for="item in list"
+            :key="item.id"
+            width="custom"
+            custom-width="100%"
+            margin-y="0"
+            border="1px solid #d8d8d8"
+            bg-color="#f8f8f8"
+            :shadow="false"
         >
           <div class="item">
             <!-- 왼쪽 -->
             <div class="left">
               <div>
                 <span class="circle">
-                  <component :is="getCategoryMeta(item.category).icon" :size="20" class="category-icon" />
+                  <template v-if="item.type === 'income'">
+                    <div class="category-icon">수입</div>
+                  </template>
+                  <template v-else>
+                    <component :is="getCategoryMeta(item.category).icon" :size="20" class="category-icon"/>
+                  </template>
                 </span>
               </div>
 
@@ -38,7 +43,7 @@
                 <strong class="name">{{ item.memo }}</strong>
 
                 <div class="location">
-                  <img :src="locationIcon" alt="위치 아이콘" class="location-icon" />
+                  <img :src="locationIcon" alt="위치 아이콘" class="location-icon"/>
                   <span>{{ item.location }} </span>
                 </div>
               </div>
@@ -60,7 +65,7 @@
 <script setup>
 import Box from "@/components/Box.vue";
 import locationIcon from '@/assets/icon/ico_location_black.svg';
-import { getCategoryMeta } from '@/pages/home/home.js';
+import {getCategoryMeta} from '@/pages/home/home.js';
 
 defineProps({
   list: {
@@ -165,6 +170,7 @@ h3 {
   font-size: 30px;
   font-weight: 900;
 }
+
 .circle {
   width: 48px;
   height: 48px;
