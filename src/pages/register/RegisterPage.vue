@@ -25,9 +25,11 @@
             <input v-model.number="transaction.amount" type="number" placeholder="0원 (입력)" class="transparent-input" />
           </Box>
 
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" class="date-box" role="button" tabindex="0" @click="openDatePicker"
+            @keydown.enter.prevent="openDatePicker" @keydown.space.prevent="openDatePicker">
             <p class="label">날짜</p>
-            <input v-model="transaction.date" type="date" class="transparent-input date-input" />
+            <input ref="dateInput" v-model="transaction.date" type="date" class="transparent-input date-input"
+              inputmode="none" @keydown="handleDateKeydown" @beforeinput.prevent @paste.prevent />
           </Box>
 
           <Box width="custom" customWidth="100%">
@@ -152,6 +154,8 @@ const createInitialTransaction = () => ({
 const transaction = ref(createInitialTransaction())
 const isExpense = computed(() => transaction.value.type === 'expense') // 지출 모드, 수입 모드 전환
 const isSubmitting = ref(false) // 중복 저장 방지를 위한 변수
+// 날짜 박스 어디를 눌러도 네이티브 date picker를 열 수 있게 input을 직접 제어
+const dateInput = ref(null)
 
 const resetTransaction = () => {
   transaction.value = createInitialTransaction()
@@ -201,6 +205,33 @@ const seoulDistricts = [
 ];
 
 const emotionOptions = ['happy', 'regret'];
+
+// 브라우저가 지원하면 picker를 직접 열고, 아니면 input에 포커스
+const openDatePicker = () => {
+  if (!dateInput.value) {
+    return;
+  }
+
+  if (typeof dateInput.value.showPicker === 'function') {
+    dateInput.value.showPicker();
+    return;
+  }
+
+  dateInput.value.focus();
+};
+
+// 날짜는 키보드로 직접 수정하지 않고 picker 선택만 허용
+const handleDateKeydown = (event) => {
+  if (event.key === 'Tab' || event.metaKey || event.ctrlKey || event.altKey) {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    openDatePicker();
+  }
+};
 
 // payload 제작
 const buildTransactionPayload = () => {
@@ -346,9 +377,14 @@ const saveTransaction = async () => {
   width: 100%;
 }
 
+.date-box {
+  cursor: pointer;
+}
+
 .date-input {
   font-family: inherit;
   color: #333;
+  cursor: pointer;
 }
 
 .select-input {
