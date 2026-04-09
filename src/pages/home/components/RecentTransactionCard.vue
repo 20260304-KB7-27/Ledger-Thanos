@@ -24,14 +24,10 @@
           <div class="item">
             <!-- 왼쪽 -->
             <div class="left">
-              <div
-                class="thumb"
-                :style="{
-                backgroundColor: getCategoryMeta(item.category).backgroundColor,
-                color: getCategoryMeta(item.category).textColor,
-              }"
-              >
-                <span class="thumb-icon">{{ getCategoryMeta(item.category).icon }}</span>
+              <div>
+                <span class="circle">
+                  <component :is="getCategoryMeta(item.category).icon" :size="20" class="category-icon" />
+                </span>
               </div>
 
               <div class="info">
@@ -168,5 +164,18 @@ h3 {
 .price {
   font-size: 30px;
   font-weight: 900;
+}
+.circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7edd0;
+  border: 1px solid #d8c9a0;
+  color: #805B2E;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 </style>
