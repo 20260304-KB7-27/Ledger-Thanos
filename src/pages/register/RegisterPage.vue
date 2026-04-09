@@ -60,7 +60,7 @@
 
         <div class="column right-column">
           <Box width="custom" customWidth="100%">
-            <p class="label center-text">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
+            <p class="label">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
             <div v-if="isExpense" class="mood-group">
               <button type="button" class="mood-item mood-button"
                 :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
@@ -449,10 +449,6 @@ const saveTransaction = async () => {
   font-weight: bold;
   color: #333;
   margin-bottom: 15px;
-}
-
-.center-text {
-  text-align: center;
 }
 
 .transparent-input {
