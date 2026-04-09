@@ -74,10 +74,18 @@
         </div>
 
         <div id="category-spend">
-          <Box width="custom" custom-width="100%"
-            ><div class="box-label">카테고리별 지출</div>
-            <div v-for="item in categorySpendingList">
-              <CategorySpending></CategorySpending>
+          <Box width="custom" custom-width="100%" class="box-custom">
+            <div class="scroll-box">
+              <div class="box-label">카테고리별 지출</div>
+              <div class="category-list">
+                <CategorySpending
+                  v-for="item in categorySpendingList"
+                  :key="item.id"
+                  :category="item.category"
+                  :amount="item.amount"
+                  :icon-color="item.iconColor"
+                />
+              </div>
             </div>
           </Box>
         </div>
@@ -144,7 +152,7 @@ const localSpendingList = [
     period: '12건',
     amount: 76000,
   },
-    {
+  {
     rank: 4,
     region: '강남구',
     period: '30건',
@@ -161,6 +169,45 @@ const localSpendingList = [
     region: '송파구',
     period: '12건',
     amount: 76000,
+  },
+];
+
+const categorySpendingList = [
+  {
+    id: 1,
+    category: '음식점',
+    amount: 123000,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 2,
+    category: '카페',
+    amount: 86500,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 3,
+    category: '쇼핑',
+    amount: 57200,
+    iconColor: '#d9d9d9',
+  },
+    {
+    id: 4,
+    category: '음식점',
+    amount: 123000,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 5,
+    category: '카페',
+    amount: 86500,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 6,
+    category: '쇼핑',
+    amount: 57200,
+    iconColor: '#d9d9d9',
   },
 ];
 </script>
