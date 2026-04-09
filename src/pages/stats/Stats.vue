@@ -220,13 +220,16 @@ const emotionSatisfiedRate = computed(() => {
 });
 
 const dealLists = computed(() => {
-  return expenseTransactions.value.map((tx) => ({
-    id: tx.id,
-    title: categoryLabelMap[tx.category] || tx.category,
-    location: tx.location,
-    amount: tx.amount,
-    iconColor: categoryColorMap[tx.category] || '#d9d9d9',
-  }));
+  return monthlyTransactions.value
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map((tx) => ({
+      id: tx.id,
+      title: categoryLabelMap[tx.category] || tx.category,
+      location: tx.location,
+      amount: tx.amount,
+      iconColor: categoryColorMap[tx.category] || '#d9d9d9',
+    }));
 });
 
 const localSpendingList = computed(() => {
