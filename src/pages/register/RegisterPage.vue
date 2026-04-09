@@ -29,7 +29,8 @@
             @keydown.enter.prevent="openDatePicker" @keydown.space.prevent="openDatePicker">
             <p class="label">날짜</p>
             <input ref="dateInput" v-model="transaction.date" type="date" class="transparent-input date-input"
-              inputmode="none" @keydown="handleDateKeydown" @beforeinput.prevent @paste.prevent />
+              :min="MIN_TRANSACTION_DATE" :max="MAX_TRANSACTION_DATE" inputmode="none" @keydown="handleDateKeydown"
+              @beforeinput.prevent @paste.prevent />
           </Box>
 
           <Box width="custom" customWidth="100%">
@@ -140,6 +141,27 @@ const getTodayKST = () => { // UTC -> KST로 변환 (9시간 차이 계산)
   const dateOffset = new Date(now.getTime() - offset);
   return dateOffset.toISOString().split('T')[0];
 };
+
+const MIN_TRANSACTION_DATE = '1900-01-01'; // 최대 과거 날짜
+const MAX_TRANSACTION_DATE = '2099-12-31'; // 최대 미래 날짜
+
+const isValidDateString = (value) => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+};
+
+const isDateInAllowedRange = (value) =>
+  value >= MIN_TRANSACTION_DATE && value <= MAX_TRANSACTION_DATE;
 
 const createInitialTransaction = () => ({
   type: 'expense', // 'expense' 또는 'income'
@@ -274,6 +296,23 @@ const saveTransaction = async () => {
   // 유효성 검사
   if (!transaction.value.amount || transaction.value.amount <= 0) {
     alert("금액을 정확히 입력해주세요!");
+    return;
+  }
+
+  const date = transaction.value.date?.trim?.() ?? '';
+
+  if (!date) {
+    alert("날짜를 선택해주세요!");
+    return;
+  }
+
+  if (!isValidDateString(date)) {
+    alert("올바른 날짜를 선택해주세요!");
+    return;
+  }
+
+  if (!isDateInAllowedRange(date)) {
+    alert("날짜는 1900-01-01부터 2099-12-31까지 선택할 수 있어요.");
     return;
   }
 
