@@ -52,22 +52,40 @@ const loadError = ref(false);
 let mapInstance = null;
 const markers = {};
 
-function buildMarkerContent(gu, isActive) {
+function buildMarkerContent(gu, isActive, count = 0) {
   const bg = isActive ? '#FF8C00' : '#FFE99A';
   const border = isActive ? '#cc6f00' : '#E5A900';
   const textColor = isActive ? '#fff' : '#333';
+  const badgeBg = isActive ? '#fff' : '#FF8C00';
+  const badgeColor = isActive ? '#FF8C00' : '#fff';
   const shortName = gu.replace('구', '');
-  return `<div style="
-    background:${bg};
-    border:2px solid ${border};
-    border-radius:50%;
-    width:40px;height:40px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:10px;font-weight:700;color:${textColor};
-    box-shadow:0 2px 6px rgba(0,0,0,0.25);
-    cursor:pointer;
-    white-space:nowrap;
-    ">${shortName}</div>`;
+  return `<div style="position:relative;display:inline-block;cursor:pointer;">
+    <div style="
+      background:${bg};
+      border:2px solid ${border};
+      border-radius:50%;
+      width:44px;height:44px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:10px;font-weight:700;color:${textColor};
+      box-shadow:0 2px 6px rgba(0,0,0,0.25);
+      white-space:nowrap;
+    ">${shortName}</div>
+    <div style="
+      position:absolute;
+      top:-6px;right:-6px;
+      background:${badgeBg};
+      color:${badgeColor};
+      border:1.5px solid ${border};
+      border-radius:50%;
+      min-width:18px;height:18px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:9px;font-weight:800;
+      padding:0 3px;
+      box-sizing:border-box;
+      box-shadow:0 1px 3px rgba(0,0,0,0.2);
+      line-height:1;
+    ">${count}</div>
+  </div>`;
 }
 
 function syncMarkers(summary) {
@@ -84,12 +102,12 @@ function syncMarkers(summary) {
   });
 
   // 마커 추가 또는 갱신
-  summary.forEach(({ gu }) => {
+  summary.forEach(({ gu, count }) => {
     const coords = SEOUL_GU_COORDS[gu];
     if (!coords) return;
 
     const isActive = gu === props.selectedGu;
-    const content = buildMarkerContent(gu, isActive);
+    const content = buildMarkerContent(gu, isActive, count);
 
     if (!markers[gu]) {
       const marker = new window.naver.maps.Marker({
@@ -98,7 +116,7 @@ function syncMarkers(summary) {
         title: gu,
         icon: {
           content,
-          anchor: new window.naver.maps.Point(20, 20),
+          anchor: new window.naver.maps.Point(28, 28),
         },
       });
       window.naver.maps.Event.addListener(marker, 'click', () => {
@@ -108,7 +126,7 @@ function syncMarkers(summary) {
     } else {
       markers[gu].setIcon({
         content,
-        anchor: new window.naver.maps.Point(20, 20),
+        anchor: new window.naver.maps.Point(28, 28),
       });
     }
   });
@@ -162,15 +180,17 @@ watch(
     if (!isLoaded.value) return;
 
     if (oldGu && markers[oldGu]) {
+      const oldCount = props.guSummary.find((s) => s.gu === oldGu)?.count ?? 0;
       markers[oldGu].setIcon({
-        content: buildMarkerContent(oldGu, false),
-        anchor: new window.naver.maps.Point(20, 20),
+        content: buildMarkerContent(oldGu, false, oldCount),
+        anchor: new window.naver.maps.Point(28, 28),
       });
     }
     if (newGu && markers[newGu]) {
+      const newCount = props.guSummary.find((s) => s.gu === newGu)?.count ?? 0;
       markers[newGu].setIcon({
-        content: buildMarkerContent(newGu, true),
-        anchor: new window.naver.maps.Point(20, 20),
+        content: buildMarkerContent(newGu, true, newCount),
+        anchor: new window.naver.maps.Point(28, 28),
       });
       const coords = SEOUL_GU_COORDS[newGu];
       if (coords) {
