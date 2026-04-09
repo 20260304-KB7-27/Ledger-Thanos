@@ -28,37 +28,38 @@ const menus = [
     label: '홈',
     path: '/',
     icon: '/src/assets/icon/ico_home_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_home_selected.svg',
+    activeIcon: '/src/assets/icon/ico_home_selected.svg'
   },
   {
     key: 'register',
     label: '등록',
     path: '/register',
     icon: '/src/assets/icon/ico_register_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_register_selected.svg',
+    activeIcon: '/src/assets/icon/ico_register_selected.svg'
   },
   {
     key: 'stats',
     label: '통계',
     path: '/stats',
     icon: '/src/assets/icon/ico_statics_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_statics_selected.svg',
+    activeIcon: '/src/assets/icon/ico_statics_selected.svg'
   },
   {
     key: 'map',
     label: '지도',
     path: '/map',
     icon: '/src/assets/icon/ico_map_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_map_selected.svg',
+    activeIcon: '/src/assets/icon/ico_map_selected.svg'
   },
   {
     key: 'profile',
     label: '프로필',
     path: '/profile',
     icon: '/src/assets/icon/ico_profile_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_profile_selected.svg',
+    activeIcon: '/src/assets/icon/ico_profile_selected.svg'
   },
-];
+]
+
 </script>
 
 <template>

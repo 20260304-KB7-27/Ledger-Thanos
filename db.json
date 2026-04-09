@@ -28,7 +28,7 @@
       "amount": 3200000,
       "category": "salary",
       "memo": "4월 급여",
-      "emotion": "excited",
+      "emotion": "happy",
       "location": "온라인",
       "date": "2026-04-05"
     },
@@ -39,7 +39,7 @@
       "amount": 4500,
       "category": "cafe",
       "memo": "출근길 아메리카노",
-      "emotion": "tired",
+      "emotion": "regret",
       "location": "서초구",
       "date": "2026-04-08"
     },
@@ -61,7 +61,7 @@
       "amount": 50000,
       "category": "transport",
       "memo": "지하철 정기권 충전",
-      "emotion": "neutral",
+      "emotion": "regret",
       "location": "종로구",
       "date": "2026-04-09"
     },
