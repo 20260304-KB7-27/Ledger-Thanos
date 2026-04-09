@@ -104,7 +104,7 @@ const detailTransactions = computed(() =>
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .summary-area {
