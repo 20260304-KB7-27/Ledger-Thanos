@@ -8,15 +8,29 @@
     bg-color="#ffffff"
     :shadow="true"
   >
-    <button type="button" class="profile-card-button" @click="$emit('open-edit')">
+    <button
+      type="button"
+      class="profile-card-button"
+      @click="$emit('open-edit')"
+    >
       <article class="profile-card">
-        <div class="">
+        <div class="profile-avatar">
           <img
             v-if="selectedBadge"
             :src="selectedBadge.image"
             :alt="selectedBadge.name"
             class="profile-avatar-image"
           />
+          <svg
+            v-else
+            class="profile-avatar-default"
+            viewBox="0 0 80 80"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="40" cy="32" r="18" fill="#b0b0b0" />
+            <ellipse cx="40" cy="72" rx="28" ry="18" fill="#b0b0b0" />
+          </svg>
         </div>
         <div v-if="selectedBadge" class="selected-badge-chip">
           <span>{{ selectedBadge.name }}</span>
@@ -107,6 +121,12 @@ defineProps({
   filter: drop-shadow(0 6px 8px rgba(92, 61, 25, 0.22));
 }
 
+.profile-avatar-default {
+  width: 96px;
+  height: 96px;
+  opacity: 0.7;
+}
+
 .selected-badge-chip {
   display: inline-flex;
   align-items: center;
@@ -155,7 +175,9 @@ defineProps({
   font-weight: 700;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
   pointer-events: none;
 }
 
