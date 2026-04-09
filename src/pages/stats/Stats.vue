@@ -97,7 +97,7 @@
                   :title="item.title"
                   :location="item.location"
                   :amount="item.amount"
-                  :icon-color="item.iconColor"
+                  :icon="item.icon"
                 />
               </div>
             </div>
@@ -137,7 +137,7 @@
                   :key="item.id"
                   :category="item.category"
                   :amount="item.amount"
-                  :icon-color="item.iconColor"
+                  :icon="item.icon"
                 />
               </div>
             </div>
@@ -156,6 +156,18 @@ import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
 import { useUserStore } from '@/stores/user';
 import { ref, onMounted, computed } from 'vue';
+import {
+  Beer,
+  BusFront,
+  Coffee,
+  Cross,
+  Ellipsis,
+  Hamburger,
+  Package,
+  ShoppingBag,
+  Store,
+  Utensils,
+} from '@lucide/vue';
 import { getUserTransactions } from '@/service/user/userApi';
 
 const userStore = useUserStore();
@@ -170,30 +182,46 @@ const baseDate = ref(new Date(2026, 3, 1)); // 2026-04-01
 const loading = ref(false);
 const error = ref('');
 
-const categoryLabelMap = {
-  restaurant: '식당',
-  salary: '급여',
-  cafe: '카페',
-  shopping: '쇼핑',
-  transport: '교통',
-  entertainment: '문화/여가',
-};
+// UI 기준 카테고리 순서
+const categoryList = ref([
+  { id: 1, label: '쇼핑', value: 'shopping', icon: ShoppingBag },
+  { id: 2, label: '배달', value: 'delivery', icon: Hamburger },
+  { id: 3, label: '식당', value: 'restaurant', icon: Utensils },
+  { id: 4, label: '편의점', value: 'convenience', icon: Store },
+  { id: 5, label: '카페', value: 'cafe', icon: Coffee },
+  { id: 6, label: '술집', value: 'bar', icon: Beer },
+  { id: 7, label: '생필품', value: 'essentials', icon: Package },
+  { id: 8, label: '교통', value: 'transport', icon: BusFront },
+  { id: 9, label: '병원', value: 'hospital', icon: Cross },
+  { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
+]);
 
-const categoryColorMap = {
-  restaurant: '#d9d9d9',
-  salary: '#d9d9d9',
-  cafe: '#d9d9d9',
-  shopping: '#d9d9d9',
-  transport: '#d9d9d9',
-  entertainment: '#d9d9d9',
-};
+const categoryMetaMap = computed(() => {
+  return categoryList.value.reduce((acc, item) => {
+    acc[item.value] = {
+      label: item.label,
+      icon: item.icon,
+      order: item.id,
+    };
+    return acc;
+  }, {});
+});
 
 const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
 
 const cloneDate = (date) => new Date(date);
 
-const startOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1);
-const endOfMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
+const startOfMonth = (date) => {
+  const d = new Date(date.getFullYear(), date.getMonth(), 1);
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+const endOfMonth = (date) => {
+  const d = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  d.setHours(23, 59, 59, 999);
+  return d;
+};
 
 const startOfWeek = (date) => {
   const d = cloneDate(date);
@@ -297,10 +325,10 @@ const dealLists = computed(() => {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map((tx) => ({
       id: tx.id,
-      title: categoryLabelMap[tx.category] || tx.category,
+      title: categoryMetaMap.value[tx.category]?.label || tx.category,
       location: tx.location,
       amount: tx.amount,
-      iconColor: categoryColorMap[tx.category] || '#d9d9d9',
+      icon: categoryMetaMap.value[tx.category]?.icon || Ellipsis,
     }));
 });
 
@@ -335,18 +363,19 @@ const categorySpendingList = computed(() => {
 
   expenseTransactions.value.forEach((tx) => {
     if (!grouped[tx.category]) {
-      grouped[tx.category] = {
-        id: tx.category,
-        category: categoryLabelMap[tx.category] || tx.category,
-        amount: 0,
-        iconColor: categoryColorMap[tx.category] || '#d9d9d9',
-      };
+      grouped[tx.category] = 0;
     }
-
-    grouped[tx.category].amount += tx.amount;
+    grouped[tx.category] += tx.amount;
   });
 
-  return Object.values(grouped).sort((a, b) => b.amount - a.amount);
+  return categoryList.value
+    .filter((category) => grouped[category.value] > 0)
+    .map((category) => ({
+      id: category.value,
+      category: category.label,
+      amount: grouped[category.value],
+      icon: category.icon,
+    }));
 });
 
 const setPeriodMode = (mode) => {

@@ -1,11 +1,21 @@
 <template>
   <div class="deal-item">
     <div class="left">
-      <div class="icon" :style="{ backgroundColor: iconColor }"></div>
+      <div class="icon">
+        <component :is="icon" />
+      </div>
 
       <div class="text-group">
         <div class="title">{{ title }}</div>
-        <div class="location"><img :src="icoLocation" width="15px" height="15px" alt="아이콘 오류"> {{ location }}</div>
+        <div class="location">
+          <img
+            :src="icoLocation"
+            width="15px"
+            height="15px"
+            alt="아이콘 오류"
+          />
+          {{ location }}
+        </div>
       </div>
     </div>
 
@@ -14,6 +24,7 @@
 </template>
 
 <script setup>
+import { Ellipsis } from '@lucide/vue';
 import icoLocation from '@/assets/icon/ico_location_black.svg';
 const props = defineProps({
   title: {
@@ -28,9 +39,9 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  iconColor: {
-    type: String,
-    default: '#d9d9d9',
+  icon: {
+    type: [Object, Function],
+    default: Ellipsis,
   },
 });
 
@@ -63,8 +74,18 @@ const formatCurrency = (value) => {
 .icon {
   width: 30px;
   height: 30px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  flex: 0 0 36px;
   border-radius: 50%;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffe99a;
+  color: #ff8c00;
 }
 
 .text-group {
