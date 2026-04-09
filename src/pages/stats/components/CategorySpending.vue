@@ -39,7 +39,7 @@ const formatCurrency = (value) => {
   justify-content: space-between;
   padding: 10px 14px;
   border-radius: 18px;
-  background: #f3e8bf;
+  background: #FFF8DD;
   box-sizing: border-box;
 }
 

@@ -46,13 +46,13 @@ const formatCurrency = (value) => {
   gap: 12px;
   padding: 10px 14px;
   border-radius: 18px;
-  background: #f3e8bf;
+  background: #FFF8DD;
   box-sizing: border-box;
 }
 
 .rank {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +60,7 @@ const formatCurrency = (value) => {
   font-size: 14px;
   font-weight: 700;
   color: #222;
-  background: #ff9f0a;
+  background: #FF8C00;
 }
 
 .info {
