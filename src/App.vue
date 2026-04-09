@@ -1,9 +1,15 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Nav from '@/components/Nav.vue';
+import { useUserStore } from '@/stores/user';
 
 const route = useRoute();
+const userStore = useUserStore();
+
+onMounted(async () => {
+  await userStore.restoreSession();
+});
 
 // login, signup 페이지에서는 Nav 숨기기
 const hideNav = computed(() => {

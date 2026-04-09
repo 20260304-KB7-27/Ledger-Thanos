@@ -17,7 +17,7 @@ const handleLogin = async () => {
   loading.value = true;
   try {
     await userStore.login(userId.value, userPassword.value);
-    router.push('/');
+    router.push('/map');
   } catch (e) {
     error.value = e.message;
   } finally {

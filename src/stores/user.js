@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { loginUser, getUserTransactions } from '@/service/user/userApi';
+import { loginUser, getUserById, getUserTransactions } from '@/service/user/userApi';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null);
@@ -11,12 +11,31 @@ export const useUserStore = defineStore('user', () => {
     const userTransactions = await getUserTransactions(loggedInUser.id);
     user.value = loggedInUser;
     transactions.value = userTransactions;
+    localStorage.setItem('userId', loggedInUser.id);
   };
 
   const logout = () => {
     user.value = null;
     transactions.value = [];
+    localStorage.removeItem('userId');
   };
 
-  return { user, transactions, login, logout };
+  const restoreSession = async () => {
+    const savedId = localStorage.getItem('userId');
+    if (!savedId) return false;
+    try {
+      const [restoredUser, userTransactions] = await Promise.all([
+        getUserById(savedId),
+        getUserTransactions(savedId),
+      ]);
+      user.value = restoredUser;
+      transactions.value = userTransactions;
+      return true;
+    } catch {
+      localStorage.removeItem('userId');
+      return false;
+    }
+  };
+
+  return { user, transactions, login, logout, restoreSession };
 });
