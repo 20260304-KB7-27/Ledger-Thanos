@@ -12,7 +12,9 @@
       </h3>
 
       <Box width="custom" custom-width="100%">
-        <div class="box-label-header pdf-button" @click="exportPdf">PDF 내보내기</div>
+        <div class="box-label-header pdf-button" @click="exportPdf">
+          PDF 내보내기
+        </div>
       </Box>
     </div>
     <div class="content">
@@ -314,7 +316,7 @@ onMounted(async () => {
 <style scoped>
 .main {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   padding: 20px 28px 24px;
   background-color: #fff8dd;
   box-sizing: border-box;
@@ -526,29 +528,99 @@ onMounted(async () => {
     height: auto;
   }
 
-  #common-stats,
-  #theme-stats {
-    height: auto;
-  }
-
-  #theme-stats {
-    grid-template-rows: 260px 220px;
-  }
-}
-
-@media (max-width: 768px) {
   .header {
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-columns: 120px 1fr 120px;
     height: 72px;
     gap: 10px;
   }
 
   .header h3 {
+    font-size: 18px;
+  }
+
+  #common-stats,
+  #theme-stats {
+    height: auto;
+  }
+
+  #common-stats {
+    grid-template-rows: auto auto auto;
+  }
+
+  #theme-stats {
+    gap: 50px;
+    grid-template-rows: 260px 220px;
+  }
+
+  #emotion-info {
+    height: auto;
+  }
+
+  #emotion-info > * {
+    height: auto;
+  }
+
+  .emotion-content {
+    height: auto;
+    gap: 6px;
+  }
+
+  .box-label,
+  .box-content {
     font-size: 16px;
   }
 
+  #emotion-stats,
+  #emotion-ratio {
+    padding: 6px 0;
+  }
   #account-info {
     grid-template-columns: 1fr;
+  }
+
+  #trade-history-info .box-custom {
+    height: auto;
+    max-height: 240px;
+  }
+  #location-spend .box-custom {
+    height: auto;
+    max-height: 290px;
+  }
+  #category-spend .box-custom {
+    height: auto;
+    max-height: 230px;
+  }
+
+  .scroll-box {
+    height: auto;
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+
+  .deal-list {
+    max-height: 170px;
+    overflow-y: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  .local-list {
+    max-height: 220px;
+    overflow-y: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  .category-list {
+    max-height: 160px;
+    overflow-y: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  .box-label,
+  .box-content,
+  .box-label-account,
+  .box-label-header {
+    font-size: 16px;
   }
 }
 </style>
