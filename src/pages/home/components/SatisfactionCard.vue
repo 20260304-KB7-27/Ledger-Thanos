@@ -28,8 +28,7 @@
 
 <script setup>
 import Box from "@/components/Box.vue";
-import ProgressBarChart from "@/pages/home/components/ProgressBarChart.vue";
-
+import ProgressBarChart from "@/components/ProgressBarChart.vue";
 defineProps({
   score: {
     type: Number,
