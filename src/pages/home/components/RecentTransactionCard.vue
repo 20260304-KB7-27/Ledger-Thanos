@@ -42,7 +42,7 @@
 
                 <strong class="name">{{ item.memo }}</strong>
 
-                <div class="location">
+                <div class="location" v-if="item.type === 'expense'">
                   <img :src="locationIcon" alt="위치 아이콘" class="location-icon"/>
                   <span>{{ item.location }} </span>
                 </div>
