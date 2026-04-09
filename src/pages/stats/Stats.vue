@@ -12,7 +12,7 @@
       </h3>
 
       <Box width="custom" custom-width="100%">
-        <div class="box-label-header">PDF 내보내기</div>
+        <div class="box-label-header" @click="exportPdf">PDF 내보내기</div>
       </Box>
     </div>
     <div class="content">
@@ -292,6 +292,10 @@ const goNextMonth = () => {
   }
 };
 
+const exportPdf = () => {
+  window.print();
+};
+
 onMounted(async () => {
   if (!userStore.user?.id) return;
 
@@ -491,7 +495,28 @@ onMounted(async () => {
   scrollbar-width: none;
 }
 
+.pdf-button {
+  cursor: pointer;
+}
+
 /* 반응형 */
+
+@media print {
+  .main {
+    background: white;
+    padding: 0;
+    height: auto;
+  }
+
+  .header {
+    margin-bottom: 16px;
+  }
+
+  .pdf-button {
+    display: none;
+  }
+}
+
 @media (max-width: 1024px) {
   .content {
     grid-template-columns: 1fr;
