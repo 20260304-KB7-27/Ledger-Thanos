@@ -48,3 +48,12 @@ export const signupUser = async ({
     selectedTitle: '',
   });
 };
+
+// 사용자 프로필 수정
+export const updateUserProfile = async (id, payload) => {
+  try {
+    return await api.patch(`/users/${id}`, payload);
+  } catch {
+    return await api.put(`/users/${id}`, payload);
+  }
+};
