@@ -5,7 +5,7 @@
 
       <div class="text-group">
         <div class="title">{{ title }}</div>
-        <div class="location">📍 {{ location }}</div>
+        <div class="location"><img :src="icoLocation" width="15px" height="15px" alt="아이콘 오류"> {{ location }}</div>
       </div>
     </div>
 
@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+import icoLocation from '@/assets/icon/ico_location_black.svg';
 const props = defineProps({
   title: {
     type: String,
