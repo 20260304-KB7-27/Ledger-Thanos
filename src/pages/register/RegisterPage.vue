@@ -116,6 +116,18 @@ import happyIcon from '@/assets/svg/happy.svg';
 import sadIcon from '@/assets/svg/sad.svg';
 import Box from '@/components/Box.vue';
 import api from '@/service/api';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
+
+const normalizeUserId = (value) => {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+};
+
+const currentUserId = computed(() =>
+  normalizeUserId(userStore.user?.id ?? localStorage.getItem('userId'))
+);
 
 // ==========================================
 // 가계부 폼 상태 생성 및 관리
@@ -128,7 +140,6 @@ const getTodayKST = () => { // UTC -> KST로 변환 (9시간 차이 계산)
 };
 
 const createInitialTransaction = () => ({
-  user_id: '1', // 임시 유저 ID
   type: 'expense', // 'expense' 또는 'income'
   amount: null,
   category: 'shopping',
@@ -194,10 +205,12 @@ const emotionOptions = ['happy', 'regret'];
 // payload 제작
 const buildTransactionPayload = () => {
   const amount = Number(transaction.value.amount);
+  const userId = currentUserId.value;
 
   if (isExpense.value) {
     return {
       ...transaction.value,
+      user_id: userId,
       amount,
       memo: transaction.value.memo.trim(),
     };
@@ -205,6 +218,7 @@ const buildTransactionPayload = () => {
 
   return { // 수입 모드인 경우 카테고리, 감정, 위치, 메모를 null로 넘김
     ...transaction.value,
+    user_id: userId,
     amount,
     category: null,
     emotion: null,
@@ -219,6 +233,11 @@ const buildTransactionPayload = () => {
 const saveTransaction = async () => {
   if (isSubmitting.value) {
     return; // 중복 저장 방지
+  }
+
+  if (currentUserId.value === null) {
+    alert("로그인 정보를 확인해주세요.");
+    return;
   }
 
   // 유효성 검사
