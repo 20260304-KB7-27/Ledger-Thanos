@@ -20,6 +20,61 @@
       "emotion": "happy",
       "location": "강남구",
       "date": "2026-04-07"
+    },
+    {
+      "id": 2,
+      "user_id": 1,
+      "type": "income",
+      "amount": 3200000,
+      "category": "salary",
+      "memo": "4월 급여",
+      "emotion": "excited",
+      "location": "온라인",
+      "date": "2026-04-05"
+    },
+    {
+      "id": 3,
+      "user_id": 1,
+      "type": "expense",
+      "amount": 4500,
+      "category": "cafe",
+      "memo": "출근길 아메리카노",
+      "emotion": "tired",
+      "location": "서초구",
+      "date": "2026-04-08"
+    },
+    {
+      "id": 4,
+      "user_id": 1,
+      "type": "expense",
+      "amount": 85000,
+      "category": "shopping",
+      "memo": "봄맞이 셔츠 구매",
+      "emotion": "happy",
+      "location": "마포구",
+      "date": "2026-04-08"
+    },
+    {
+      "id": 5,
+      "user_id": 1,
+      "type": "expense",
+      "amount": 50000,
+      "category": "transport",
+      "memo": "지하철 정기권 충전",
+      "emotion": "neutral",
+      "location": "종로구",
+      "date": "2026-04-09"
+    },
+    {
+      "id": 6,
+      "user_id": 1,
+      "type": "expense",
+      "amount": 25000,
+      "category": "entertainment",
+      "memo": "영화 관람",
+      "emotion": "happy",
+      "location": "용산구",
+      "date": "2026-04-09"
     }
   ]
 }
