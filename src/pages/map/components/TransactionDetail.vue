@@ -13,7 +13,8 @@
           <span class="tx-location">{{ tx.location }}</span>
         </div>
         <span class="tx-amount" :class="tx.type">
-          {{ tx.type === 'expense' ? '-' : '+' }}{{ tx.amount.toLocaleString() }}원
+          {{ tx.type === 'expense' ? '-' : '+'
+          }}{{ tx.amount.toLocaleString() }}원
         </span>
       </li>
     </ul>
@@ -68,11 +69,13 @@ const CATEGORY_ICON = {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 180px;
+  max-height: 165px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #e5a900 transparent;
 }
 
 .tx-item {
