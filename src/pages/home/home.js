@@ -59,20 +59,27 @@ export const getNetProfit = (income, expense) => {
 // 이번달 만족 지수 계산
 export const getMonthlySatisfactionScore = (transactions) => {
     /*
-      만족 지수는 "이번달 거래 중 emotion 이 happy 인 거래 비율"이다.
-      이번달 거래가 하나도 없으면 0%로 처리한다.
+      type은 expense만 조회
+      만족 지수는 "이번달 거래 중 happy / (happy + regret) 비율"
+      happy, regret 둘 다 없으면 0%로 처리
     */
-    const currentMonthTransactions = getCurrentMonthTransactions(transactions);
+    const currentMonthTransactions = getCurrentMonthTransactions(transactions).filter(
+        (item) => item.type === 'expense'
+    );
 
-    if (currentMonthTransactions.length === 0) {
-        return 0;
-    }
-
+    // 만족
     const happyCount = currentMonthTransactions.filter(
         (item) => item.emotion === 'happy'
     ).length;
 
-    return Math.round((happyCount / currentMonthTransactions.length) * 100);
+    // 후회
+    const regretCount = currentMonthTransactions.filter(
+        (item) => item.emotion === 'regret'
+    ).length;
+
+    const targetCount = happyCount + regretCount;
+
+    return targetCount === 0 ? 0 : Math.round((happyCount / targetCount) * 100);
 };
 
 
