@@ -3,7 +3,9 @@
     <div v-if="loadError" class="map-message error-msg">
       지도를 불러오지 못했습니다.<br />API 키를 확인하세요.
     </div>
-    <div v-else-if="!isLoaded" class="map-message loading-msg">지도 불러오는 중...</div>
+    <div v-else-if="!isLoaded" class="map-message loading-msg">
+      지도 불러오는 중...
+    </div>
     <div ref="mapContainer" class="naver-map"></div>
   </div>
 </template>
@@ -170,7 +172,7 @@ watch(
     if (!isLoaded.value) return;
     syncMarkers(newSummary);
   },
-  { deep: true },
+  { deep: true }
 );
 
 // selectedGu 변경 시 마커 하이라이트 + 지도 이동
@@ -197,7 +199,7 @@ watch(
         mapInstance.panTo(new window.naver.maps.LatLng(coords.lat, coords.lng));
       }
     }
-  },
+  }
 );
 </script>
 

@@ -88,7 +88,7 @@ const detailTransactions = computed(() =>
 
 .map-area {
   position: relative;
-  min-height: 400px;
+  min-height: 500px;
 }
 
 .detail-overlay {
@@ -110,10 +110,44 @@ const detailTransactions = computed(() =>
 .summary-area {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .stats-area {
   flex-shrink: 0;
+}
+
+/* 태블릿 (769px ~ 1024px) */
+@media (max-width: 1024px) {
+  .map-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .map-area {
+    height: 400px;
+    min-height: unset;
+  }
+
+  .side-panel {
+    overflow: visible;
+  }
+}
+
+/* 모바일 (≤ 768px) */
+@media (max-width: 768px) {
+  .map-page {
+    padding: 8px;
+  }
+
+  .map-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .map-area {
+    height: 300px;
+    min-height: unset;
+  }
 }
 </style>
