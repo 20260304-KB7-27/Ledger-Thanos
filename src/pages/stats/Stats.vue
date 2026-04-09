@@ -2,13 +2,28 @@
   <div class="main">
     <div class="header">
       <Box width="custom" custom-width="100%">
-        <div class="box-label-header">주간/월간</div>
+        <div class="period-toggle">
+          <button
+            class="toggle-btn"
+            :class="{ active: periodMode === 'week' }"
+            @click="setPeriodMode('week')"
+          >
+            주간
+          </button>
+          <button
+            class="toggle-btn"
+            :class="{ active: periodMode === 'month' }"
+            @click="setPeriodMode('month')"
+          >
+            월간
+          </button>
+        </div>
       </Box>
 
       <h3>
-        <button class="month-arrow" @click="goPrevMonth">&lt;</button>
-        <span>{{ currentYear }}년 {{ currentMonth }}월</span>
-        <button class="month-arrow" @click="goNextMonth">&gt;</button>
+        <button class="month-arrow" @click="goPrevPeriod">&lt;</button>
+        <span>{{ periodLabel }}</span>
+        <button class="month-arrow" @click="goNextPeriod">&gt;</button>
       </h3>
 
       <Box width="custom" custom-width="100%" id="download-pdf">
@@ -21,13 +36,17 @@
       <div id="common-stats">
         <div id="account-info">
           <Box width="custom" custom-width="100%" class="box-label-account">
-            <div>이번달 수입</div>
-            <div>{{ formatAmount(monthlyIncome) }}</div>
+            <div>
+              {{ periodMode === 'week' ? '이번주 수입' : '이번달 수입' }}
+            </div>
+            <div>{{ formatAmount(periodIncome) }}</div>
           </Box>
 
           <Box width="custom" custom-width="100%" class="box-label-account">
-            <div>이번달 지출</div>
-            <div>{{ formatAmount(monthlyExpense) }}</div>
+            <div>
+              {{ periodMode === 'week' ? '이번주 지출' : '이번달 지출' }}
+            </div>
+            <div>{{ formatAmount(periodExpense) }}</div>
           </Box>
 
           <Box width="custom" custom-width="100%" class="box-label-account">
@@ -143,9 +162,10 @@ const userStore = useUserStore();
 // 현재 유저 거래 목록
 const transactions = ref([]);
 
+const periodMode = ref('month');
+
 // 화면 기준 월
-const currentYear = ref(2026);
-const currentMonth = ref(4);
+const baseDate = ref(new Date(2026, 3, 1)); // 2026-04-01
 
 const loading = ref(false);
 const error = ref('');
@@ -170,59 +190,109 @@ const categoryColorMap = {
 
 const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
 
-const isCurrentMonthTransaction = (tx) => {
-  const date = new Date(tx.date);
-  return (
-    date.getFullYear() === currentYear.value &&
-    date.getMonth() + 1 === currentMonth.value
-  );
+const cloneDate = (date) => new Date(date);
+
+const startOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1);
+const endOfMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+const startOfWeek = (date) => {
+  const d = cloneDate(date);
+  const day = d.getDay(); // 0:일 ~ 6:토
+  const diff = day === 0 ? -6 : 1 - day; // 월요일 시작
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
 };
 
-const monthlyTransactions = computed(() => {
-  return transactions.value.filter(isCurrentMonthTransaction);
+const endOfWeek = (date) => {
+  const d = startOfWeek(date);
+  d.setDate(d.getDate() + 6);
+  d.setHours(23, 59, 59, 999);
+  return d;
+};
+
+const getWeekOfMonth = (date) => {
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  const firstWeekStart = startOfWeek(firstDay);
+  const currentWeekStart = startOfWeek(date);
+  const diffDays = Math.floor(
+    (currentWeekStart - firstWeekStart) / (1000 * 60 * 60 * 24)
+  );
+  return Math.floor(diffDays / 7) + 1;
+};
+
+const currentYear = computed(() => baseDate.value.getFullYear());
+const currentMonth = computed(() => baseDate.value.getMonth() + 1);
+const currentWeek = computed(() => getWeekOfMonth(baseDate.value));
+
+const periodLabel = computed(() => {
+  if (periodMode.value === 'month') {
+    return `${currentYear.value}년 ${currentMonth.value}월`;
+  }
+  return `${currentYear.value}년 ${currentMonth.value}월 ${currentWeek.value}주차`;
 });
 
-const monthlyIncome = computed(() => {
-  return monthlyTransactions.value
+const periodRange = computed(() => {
+  if (periodMode.value === 'month') {
+    return {
+      start: startOfMonth(baseDate.value),
+      end: endOfMonth(baseDate.value),
+    };
+  }
+
+  return {
+    start: startOfWeek(baseDate.value),
+    end: endOfWeek(baseDate.value),
+  };
+});
+
+const isCurrentPeriodTransaction = (tx) => {
+  const date = new Date(tx.date);
+  return date >= periodRange.value.start && date <= periodRange.value.end;
+};
+
+const periodTransactions = computed(() => {
+  return transactions.value.filter(isCurrentPeriodTransaction);
+});
+
+const periodIncome = computed(() => {
+  return periodTransactions.value
     .filter((tx) => tx.type === 'income')
     .reduce((sum, tx) => sum + tx.amount, 0);
 });
 
-const monthlyExpense = computed(() => {
-  return monthlyTransactions.value
+const periodExpense = computed(() => {
+  return periodTransactions.value
     .filter((tx) => tx.type === 'expense')
     .reduce((sum, tx) => sum + tx.amount, 0);
 });
 
 const netProfit = computed(() => {
-  return monthlyIncome.value - monthlyExpense.value;
+  return periodIncome.value - periodExpense.value;
 });
 
 const expenseTransactions = computed(() => {
-  return monthlyTransactions.value
+  return periodTransactions.value
     .filter((tx) => tx.type === 'expense')
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 });
 
 const emotionSatisfiedCount = computed(() => {
-  return expenseTransactions.value.filter((tx) => tx.emotion === 'happy')
-    .length;
+  return expenseTransactions.value.filter((tx) => tx.emotion === 'happy').length;
 });
 
 const emotionRegretCount = computed(() => {
-  return expenseTransactions.value.filter((tx) => tx.emotion === 'regret')
-    .length;
+  return expenseTransactions.value.filter((tx) => tx.emotion === 'regret').length;
 });
 
 const emotionSatisfiedRate = computed(() => {
   const total = expenseTransactions.value.length;
-  console.log(total);
   if (!total) return 0;
   return Math.round((emotionSatisfiedCount.value / total) * 100);
 });
 
 const dealLists = computed(() => {
-  return monthlyTransactions.value
+  return periodTransactions.value
     .slice()
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map((tx) => ({
@@ -279,23 +349,34 @@ const categorySpendingList = computed(() => {
   return Object.values(grouped).sort((a, b) => b.amount - a.amount);
 });
 
-const goPrevMonth = () => {
-  if (currentMonth.value === 1) {
-    currentMonth.value = 12;
-    currentYear.value -= 1;
-  } else {
-    currentMonth.value -= 1;
-  }
+const setPeriodMode = (mode) => {
+  periodMode.value = mode;
 };
 
-const goNextMonth = () => {
-  if (currentMonth.value === 12) {
-    currentMonth.value = 1;
-    currentYear.value += 1;
+const goPrevPeriod = () => {
+  const next = cloneDate(baseDate.value);
+
+  if (periodMode.value === 'month') {
+    next.setMonth(next.getMonth() - 1);
   } else {
-    currentMonth.value += 1;
+    next.setDate(next.getDate() - 7);
   }
+
+  baseDate.value = next;
 };
+
+const goNextPeriod = () => {
+  const next = cloneDate(baseDate.value);
+
+  if (periodMode.value === 'month') {
+    next.setMonth(next.getMonth() + 1);
+  } else {
+    next.setDate(next.getDate() + 7);
+  }
+
+  baseDate.value = next;
+};
+
 
 const exportPdf = () => {
   window.print();
@@ -336,6 +417,33 @@ onMounted(async () => {
   text-align: center;
   font-size: 20px;
   font-weight: 600;
+}
+
+.period-toggle {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  background: white;
+}
+
+.toggle-btn {
+  flex: 1;
+  height: 42px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toggle-btn.active {
+  background: #ffe99a;
+}
+
+.toggle-btn:not(:last-child) {
+  border-right: 1px solid #d9d9d9;
 }
 
 .box-label {
@@ -514,7 +622,7 @@ onMounted(async () => {
     min-height: auto;
   }
 
-  #download-pdf{
+  #download-pdf {
     display: none;
   }
 
