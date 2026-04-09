@@ -86,7 +86,7 @@ export const getMonthlySatisfactionScore = (transactions) => {
 // 이번달 요약 카드에서 사용하는 모든 계산 함수
 export const getMonthlySummary = (transactions) => {
     // 만족한 소비 계산 (emotion : happy)
-    const happyCount = transactions.filter((item) => item.emotion === 'happy').length;
+    const happyCount = transactions.filter((item) => item.emotion === 'happy' && item.type === 'expense').length;
 
     // 거래에 제일 많은  category 별 건수
     const categoryMap = transactions.reduce((acc, item) => {
