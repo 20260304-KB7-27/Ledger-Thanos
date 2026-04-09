@@ -43,7 +43,16 @@ const router = createRouter({
 
 const publicRoutes = ['login', 'signup'];
 
-router.beforeEach((to) => {
+let sessionRestored = false;
+
+router.beforeEach(async (to) => {
+  if (!sessionRestored) {
+    const { useUserStore } = await import('@/stores/user');
+    const userStore = useUserStore();
+    await userStore.restoreSession();
+    sessionRestored = true;
+  }
+
   const userId = localStorage.getItem('userId');
   if (!userId && !publicRoutes.includes(to.name)) {
     return { name: 'login' };
