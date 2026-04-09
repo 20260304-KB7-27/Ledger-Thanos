@@ -37,5 +37,9 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  return { user, transactions, login, logout, restoreSession };
+  const setUser = (nextUser) => {
+    user.value = nextUser;
+  };
+
+  return { user, transactions, login, logout, restoreSession, setUser };
 });

@@ -26,7 +26,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: () => {},
+      component: () => import('@/pages/profile/ProfilePage.vue'),
     },
     {
       path: '/login',
