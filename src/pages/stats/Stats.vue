@@ -37,13 +37,21 @@
           </Box>
         </div>
         <div id="trade-history-info">
-          <Box width="custom" custom-width="100%"
-            ><div class="box-label">거래 내역</div>
-            <div v-for="item in dealLists">
-              <Deal></Deal>
+          <Box width="custom" custom-width="100%" class="box-custom">
+            <div class="scroll-box">
+              <div class="box-label">거래 내역</div>
+              <div class="deal-list">
+                <Deal
+                  v-for="item in dealLists"
+                  :key="item.id"
+                  :title="item.title"
+                  :location="item.location"
+                  :amount="item.amount"
+                  :icon-color="item.iconColor"
+                />
+              </div>
             </div>
-            </Box
-          >
+          </Box>
         </div>
       </div>
       <div id="theme-stats">
@@ -53,8 +61,7 @@
             <div v-for="item in localSpendingList">
               <LocalSpending></LocalSpending>
             </div>
-            </Box
-          >
+          </Box>
         </div>
 
         <div id="category-spend">
@@ -63,8 +70,7 @@
             <div v-for="item in categorySpendingList">
               <CategorySpending></CategorySpending>
             </div>
-            </Box
-          >
+          </Box>
         </div>
       </div>
     </div>
@@ -78,6 +84,37 @@ import ProgressBarChart from '@/components/ProgressBarChart.vue';
 import Deal from './components/Deal.vue';
 import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
+
+const dealLists = [
+  {
+    id: 1,
+    title: '식당',
+    location: '서초구',
+    amount: 12500,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 2,
+    title: '카페',
+    location: '강남구',
+    amount: 6800,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 3,
+    title: '편의점',
+    location: '송파구',
+    amount: 4200,
+    iconColor: '#d9d9d9',
+  },
+  {
+    id: 4,
+    title: '편의점',
+    location: '송파구',
+    amount: 4200,
+    iconColor: '#d9d9d9',
+  },
+];
 </script>
 
 <style scoped>
@@ -127,6 +164,18 @@ import CategorySpending from './components/CategorySpending.vue';
   white-space: nowrap;
 }
 
+.box-custom {
+  height: 100%;
+  min-height: 0;
+}
+
+.box-custom:deep(> div) {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .content {
   height: calc(100vh - 72px - 40px - 44px);
   display: grid;
@@ -137,7 +186,7 @@ import CategorySpending from './components/CategorySpending.vue';
 #common-stats {
   height: 100%;
   display: grid;
-  grid-template-rows: 84px 1.5fr 2fr;
+  grid-template-rows: 84px minmax(0, 1.5fr) minmax(0, 2fr);
   gap: 18px;
   min-width: 0;
   min-height: 0;
@@ -168,8 +217,9 @@ import CategorySpending from './components/CategorySpending.vue';
 #theme-stats {
   height: 100%;
   display: grid;
-  grid-template-rows: 1.15fr 0.9fr;
+  grid-template-rows: minmax(0, 1.15fr) minmax(0, 0.9fr);
   gap: 18px;
+  min-height: 0;
 }
 
 #emotion-info,
@@ -177,6 +227,8 @@ import CategorySpending from './components/CategorySpending.vue';
 #location-spend,
 #category-spend {
   width: 100%;
+  min-width: 0;
+  min-height: 0;
 }
 
 #emotion-info :deep(.box-label),
@@ -195,6 +247,31 @@ import CategorySpending from './components/CategorySpending.vue';
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+}
+
+.scroll-box {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: 30px;
+}
+
+
+.deal-list,
+.rank-list,
+.category-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  padding-bottom: 12px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* 반응형 */
