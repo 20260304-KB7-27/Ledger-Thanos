@@ -3,5 +3,3 @@ builder = "nixpacks"
 
 [deploy]
 startCommand = "npm start"
-healthcheckPath = "/users"
-healthcheckTimeout = 30
