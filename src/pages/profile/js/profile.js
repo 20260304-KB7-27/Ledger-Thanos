@@ -103,16 +103,22 @@ export const getNormalizedSelectedTitleKeys = (selectedTitle = []) => {
 };
 
 // 화면에 그릴 전체 배지 목록을 반환한다.
-export const getBadgeCatalog = (selectedTitleKeys = []) => {
+// earnedBadgeKeys: 이번 달 계산으로 획득한 배지 (user.earnedBadges)
+// selectedTitleKeys: 유저가 표시용으로 선택한 배지 (user.selectedTitle)
+export const getBadgeCatalog = (earnedBadgeKeys = [], selectedTitleKeys = []) => {
   return badgeMetaList.map((badge) => ({
     ...badge,
     image: getDisplayImage('title', badge.key),
-    earned: selectedTitleKeys.includes(badge.key),
+    earned: earnedBadgeKeys.includes(badge.key),
+    selected: selectedTitleKeys.includes(badge.key),
   }));
 };
 
 // 선택된 칭호만 상단 칭호 영역에 보여준다.
-export const getSelectedTitleBadges = (badgeCatalog = [], selectedTitleKeys = []) => {
+export const getSelectedTitleBadges = (
+  badgeCatalog = [],
+  selectedTitleKeys = []
+) => {
   return badgeCatalog.filter((badge) => selectedTitleKeys.includes(badge.key));
 };
 
@@ -130,13 +136,15 @@ export const getSelectedBadge = (selectedTitleBadges = []) => {
 export const getProfileSummary = (transactions = []) => {
   const totalCount = transactions.length;
   const activeDays = new Set(
-    transactions
-      .map((item) => item.date)
-      .filter(Boolean)
+    transactions.map((item) => item.date).filter(Boolean)
   ).size;
-  const happyCount = transactions.filter((item) => item.emotion === 'happy').length;
+  const expenses = transactions.filter((item) => item.type === 'expense');
+  const expenseCount = expenses.length;
+  const happyCount = expenses.filter((item) => item.emotion === 'happy').length;
   const satisfactionRate =
-    totalCount === 0 ? '0%' : `${Math.round((happyCount / totalCount) * 100)}%`;
+    expenseCount === 0
+      ? '0%'
+      : `${Math.round((happyCount / expenseCount) * 100)}%`;
 
   return {
     totalCount,
@@ -145,16 +153,12 @@ export const getProfileSummary = (transactions = []) => {
   };
 };
 
-// 실제 가입일이 없어서 가장 이른 거래일을 임시 가입일로 사용한다.
-export const getMemberSinceText = (transactions = []) => {
-  const firstDate = [...transactions]
-    .map((item) => item.date)
-    .filter(Boolean)
-    .sort()[0];
+// user.createdAt 값을 사용해 가입일을 표시한다.
+export const getMemberSinceText = (user) => {
+  const createdAt = user?.createdAt;
+  if (!createdAt) return '가입일 정보 없음';
 
-  if (!firstDate) return '가입일 정보 없음';
-
-  const date = new Date(firstDate);
+  const date = new Date(createdAt);
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월 가입`;
 };
 
