@@ -35,7 +35,7 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">카테고리</p>
-            <div class="category-circles">
+            <div v-if="isExpense" class="category-circles">
               <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option" :class="{
                 'category-option-active': isExpense && transaction.category === cat.value,
                 'category-option-disabled': !isExpense,
@@ -47,13 +47,21 @@
                 <span class="category-name">{{ cat.label }}</span>
               </button>
             </div>
+            <div v-else class="fixed-field">
+              <div class="fixed-field-heading">
+                <DollarSign :size="18" class="fixed-field-icon income-icon" />
+                <strong class="fixed-field-title">Income</strong>
+              </div>
+              <!-- 수입 모드 시 자동 카테고리 선택 비활성화 -->
+              <p class="fixed-field-description">수입은 자동으로 카테고리가 부여돼요.</p>
+            </div>
           </Box>
         </div>
 
         <div class="column right-column">
           <Box width="custom" customWidth="100%">
-            <p class="label center-text">이 소비에 만족하셨나요?</p>
-            <div class="mood-group">
+            <p class="label center-text">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
+            <div v-if="isExpense" class="mood-group">
               <button type="button" class="mood-item mood-button"
                 :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
                 :disabled="!isExpense" @click="transaction.emotion = 'happy'">
@@ -67,11 +75,15 @@
                 <span>후회</span>
               </button>
             </div>
+            <div v-else class="fixed-field fixed-field-center">
+              <!-- 수입 모드 시 감정 선택 비활성화 -->
+              <p class="fixed-field-description">수입은 감정을 저장하지 않아요.</p>
+            </div>
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">위치</p>
-            <div class="select-wrapper" :class="{ 'select-wrapper-disabled': !isExpense }">
+            <div v-if="isExpense" class="select-wrapper">
               <select v-model="transaction.location" class="transparent-input select-input" :disabled="!isExpense">
                 <option disabled value="">소비가 이뤄진 위치를 선택해주세요</option>
                 <option v-for="district in seoulDistricts" :key="district" :value="district">
@@ -80,13 +92,16 @@
               </select>
               <ChevronDown :size="18" class="select-chevron" />
             </div>
-            <p class="select-caption" :class="{ 'select-caption-disabled': !isExpense }">드롭다운 메뉴로 선택</p>
+            <div v-else class="fixed-field">
+              <p class="fixed-field-description">수입은 위치를 저장하지 않아요.</p>
+            </div>
+            <p v-if="isExpense" class="select-caption">드롭다운 메뉴로 선택</p>
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">메모</p>
-            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요..."
-              class="transparent-input memo-input" :disabled="!isExpense" />
+            <input v-model="transaction.memo" type="text" :placeholder="memoPlaceholder"
+              class="transparent-input memo-input" />
           </Box>
 
           <button class="submit-button" :class="{ disabled: isSubmitting }" :disabled="isSubmitting"
@@ -108,6 +123,7 @@ import {
   ChevronDown,
   Coffee,
   Cross,
+  DollarSign,
   Ellipsis,
   Hamburger,
   Package,
@@ -227,6 +243,9 @@ const seoulDistricts = [
 ];
 
 const emotionOptions = ['happy', 'regret'];
+const memoPlaceholder = computed(() =>
+  isExpense.value ? '이 소비에 대해 기록해보세요...' : '이 수입에 대해 기록해보세요...'
+);
 
 // 브라우저가 지원하면 picker를 직접 열고, 아니면 input에 포커스
 const openDatePicker = () => {
@@ -259,24 +278,25 @@ const handleDateKeydown = (event) => {
 const buildTransactionPayload = () => {
   const amount = Number(transaction.value.amount);
   const userId = currentUserId.value;
+  const memo = transaction.value.memo.trim();
 
   if (isExpense.value) {
     return {
       ...transaction.value,
       user_id: userId,
       amount,
-      memo: transaction.value.memo.trim(),
+      memo,
     };
   }
 
-  return { // 수입 모드인 경우 카테고리, 감정, 위치, 메모를 null로 넘김
+  return { // 수입 모드 시 감정, 위치는 null
     ...transaction.value,
     user_id: userId,
     amount,
-    category: null,
+    category: 'income',
     emotion: null,
     location: null,
-    memo: null,
+    memo,
   };
 };
 
@@ -288,6 +308,7 @@ const saveTransaction = async () => {
     return; // 중복 저장 방지
   }
 
+  // 로그인 상태 확인
   if (currentUserId.value === null) {
     alert("로그인 정보를 확인해주세요.");
     return;
@@ -313,6 +334,13 @@ const saveTransaction = async () => {
 
   if (!isDateInAllowedRange(date)) {
     alert("날짜는 1900-01-01부터 2099-12-31까지 선택할 수 있어요.");
+    return;
+  }
+
+  const memo = transaction.value.memo.trim();
+
+  if (!memo) {
+    alert("메모를 입력해주세요!");
     return;
   }
 
@@ -474,6 +502,51 @@ const saveTransaction = async () => {
   font-size: 12px;
   font-weight: 600;
   color: #8a774e;
+}
+
+.fixed-field {
+  min-height: 64px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #d8c9a0;
+  background: #fff8de;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fixed-field-center {
+  align-items: center;
+  text-align: center;
+}
+
+.fixed-field-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fixed-field-icon {
+  flex-shrink: 0;
+}
+
+.income-icon {
+  color: #15803d;
+}
+
+.fixed-field-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #166534;
+}
+
+.fixed-field-description {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6f6340;
+  line-height: 1.4;
 }
 
 .select-caption-disabled {
