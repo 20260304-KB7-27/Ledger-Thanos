@@ -38,20 +38,32 @@
         </div>
         <div id="trade-history-info">
           <Box width="custom" custom-width="100%"
-            ><div class="box-label">거래 내역</div></Box
+            ><div class="box-label">거래 내역</div>
+            <div v-for="item in dealLists">
+              <Deal></Deal>
+            </div>
+            </Box
           >
         </div>
       </div>
       <div id="theme-stats">
         <div id="location-spend">
           <Box width="custom" custom-width="100%"
-            ><div class="box-label">지역별 소비</div></Box
+            ><div class="box-label">지역별 소비</div>
+            <div v-for="item in localSpendingList">
+              <LocalSpending></LocalSpending>
+            </div>
+            </Box
           >
         </div>
 
         <div id="category-spend">
           <Box width="custom" custom-width="100%"
-            ><div class="box-label">카테고리별 지출</div></Box
+            ><div class="box-label">카테고리별 지출</div>
+            <div v-for="item in categorySpendingList">
+              <CategorySpending></CategorySpending>
+            </div>
+            </Box
           >
         </div>
       </div>
@@ -63,6 +75,9 @@
 <script setup>
 import Box from '@/components/Box.vue';
 import ProgressBarChart from '@/components/ProgressBarChart.vue';
+import Deal from './components/Deal.vue';
+import LocalSpending from './components/LocalSpending.vue';
+import CategorySpending from './components/CategorySpending.vue';
 </script>
 
 <style scoped>
