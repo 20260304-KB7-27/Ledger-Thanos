@@ -75,7 +75,7 @@
                 <span>후회</span>
               </button>
             </div>
-            <div v-else class="fixed-field fixed-field-center">
+            <div v-else class="fixed-field">
               <!-- 수입 모드 시 감정 선택 비활성화 -->
               <p class="fixed-field-description">수입은 감정을 저장하지 않아요.</p>
             </div>
@@ -544,11 +544,6 @@ const saveTransaction = async () => {
   gap: 6px;
 }
 
-.fixed-field-center {
-  align-items: center;
-  text-align: center;
-}
-
 .fixed-field-heading {
   display: flex;
   align-items: center;
@@ -742,6 +737,7 @@ const saveTransaction = async () => {
   border: none;
   background: transparent;
   font: inherit;
+  cursor: pointer;
 }
 
 .mood-item.active {
