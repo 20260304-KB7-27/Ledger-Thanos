@@ -22,7 +22,7 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">금액</p>
-            <input v-model.number="transaction.amount" type="number" placeholder="00원 (입력)" class="transparent-input" />
+            <input v-model.number="transaction.amount" type="number" placeholder="0원 (입력)" class="transparent-input" />
           </Box>
 
           <Box width="custom" customWidth="100%">
@@ -82,11 +82,14 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">메모</p>
-            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요.."
+            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요..."
               class="transparent-input memo-input" :disabled="!isExpense" />
           </Box>
 
-          <button class="submit-button" @click="saveTransaction">저장하기</button>
+          <button class="submit-button" :class="{ disabled: isSubmitting }" :disabled="isSubmitting"
+            @click="saveTransaction">
+            {{ isSubmitting ? '저장 중...' : '저장하기' }} <!-- 저장 중일 때 버튼 비활성화 -->
+          </button>
         </div>
 
       </div>
@@ -117,7 +120,7 @@ import api from '@/service/api';
 // ==========================================
 // 가계부 폼 상태 생성 및 관리
 // ==========================================
-const getTodayKST = () => { // UTC -> KST로 변환
+const getTodayKST = () => { // UTC -> KST로 변환 (9시간 차이 계산)
   const now = new Date();
   const offset = now.getTimezoneOffset() * 60000;
   const dateOffset = new Date(now.getTime() - offset);
@@ -137,12 +140,13 @@ const createInitialTransaction = () => ({
 
 const transaction = ref(createInitialTransaction())
 const isExpense = computed(() => transaction.value.type === 'expense') // 지출 모드, 수입 모드 전환
+const isSubmitting = ref(false) // 중복 저장 방지를 위한 변수
 
 const resetTransaction = () => {
   transaction.value = createInitialTransaction()
 }
 
-// UI에 뿌려질 카테고리 임시 데이터
+// UI에 뿌려질 카테고리 데이터
 const categoryList = ref([
   { id: 1, label: '쇼핑', value: 'shopping', icon: ShoppingBag },
   { id: 2, label: '배달', value: 'delivery', icon: Hamburger },
@@ -156,6 +160,7 @@ const categoryList = ref([
   { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
 ]);
 
+// 드롭다운 메뉴 서울 자치구
 const seoulDistricts = [
   '종로구',
   '중구',
@@ -186,6 +191,7 @@ const seoulDistricts = [
 
 const emotionOptions = ['happy', 'regret'];
 
+// payload 제작
 const buildTransactionPayload = () => {
   const amount = Number(transaction.value.amount);
 
@@ -211,6 +217,10 @@ const buildTransactionPayload = () => {
 // 서버 전송 로직 (json-server 연동)
 // ==========================================
 const saveTransaction = async () => {
+  if (isSubmitting.value) {
+    return; // 중복 저장 방지
+  }
+
   // 유효성 검사
   if (!transaction.value.amount || transaction.value.amount <= 0) {
     alert("금액을 정확히 입력해주세요!");
@@ -235,6 +245,7 @@ const saveTransaction = async () => {
   }
 
   try {
+    isSubmitting.value = true;
     await api.post('/transactions', buildTransactionPayload());
 
     alert("성공적으로 저장되었습니다!");
@@ -243,6 +254,8 @@ const saveTransaction = async () => {
   } catch (error) {
     console.error("통신 에러:", error);
     alert("서버와 연결할 수 없습니다. json-server가 실행 중인지 확인해주세요.");
+  } finally {
+    isSubmitting.value = false;
   }
 };
 </script>
@@ -573,7 +586,19 @@ const saveTransaction = async () => {
   transition: transform 0.1s;
 }
 
+.submit-button.disabled,
+.submit-button:disabled {
+  background-color: #d9c87d;
+  color: #6f6340;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 .submit-button:active {
   transform: translateY(2px);
+}
+
+.submit-button:disabled:active {
+  transform: none;
 }
 </style>
