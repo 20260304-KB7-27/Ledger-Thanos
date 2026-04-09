@@ -100,8 +100,8 @@
 
           <Box width="custom" customWidth="100%">
             <p class="label">메모</p>
-            <input v-model="transaction.memo" type="text" :placeholder="memoPlaceholder"
-              class="transparent-input memo-input" />
+            <textarea ref="memoTextarea" v-model="transaction.memo" :placeholder="memoPlaceholder"
+              class="transparent-input memo-input" rows="3" @input="handleMemoInput"></textarea>
           </Box>
 
           <button class="submit-button" :class="{ disabled: isSubmitting }" :disabled="isSubmitting"
@@ -116,7 +116,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import {
   Beer,
   BusFront,
@@ -194,9 +194,11 @@ const isExpense = computed(() => transaction.value.type === 'expense') // 지출
 const isSubmitting = ref(false) // 중복 저장 방지를 위한 변수
 // 날짜 박스 어디를 눌러도 네이티브 date picker를 열 수 있게 input을 직접 제어
 const dateInput = ref(null)
+const memoTextarea = ref(null)
 
 const resetTransaction = () => {
   transaction.value = createInitialTransaction()
+  nextTick(resizeMemoInput)
 }
 
 // UI에 뿌려질 카테고리 데이터
@@ -273,6 +275,23 @@ const handleDateKeydown = (event) => {
     openDatePicker();
   }
 };
+
+const resizeMemoInput = () => {
+  if (!memoTextarea.value) {
+    return;
+  }
+
+  memoTextarea.value.style.height = 'auto';
+  memoTextarea.value.style.height = `${memoTextarea.value.scrollHeight}px`;
+};
+
+const handleMemoInput = () => {
+  resizeMemoInput();
+};
+
+onMounted(() => {
+  resizeMemoInput();
+});
 
 // payload 제작
 const buildTransactionPayload = () => {
@@ -452,6 +471,15 @@ const saveTransaction = async () => {
   font-family: inherit;
   color: #333;
   cursor: pointer;
+}
+
+.memo-input {
+  display: block;
+  min-height: 84px;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.6;
+  font-family: inherit;
 }
 
 .select-input {
