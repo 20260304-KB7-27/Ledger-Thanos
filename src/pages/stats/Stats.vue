@@ -30,8 +30,17 @@
             <div class="emotion-content">
               <div class="box-label">감정 통계</div>
               <div class="box-content">
-                <div>15회 만족, 5회 후회</div>
-                <ProgressBarChart></ProgressBarChart>
+                <div id="emotion-stats">15회 만족, 5회 후회</div>
+                <ProgressBarChart
+                  :value="75"
+                  :max-value="100"
+                  bar-color="#FFE99A"
+                  background-color="white"
+                  :height="30"
+                  :border-width="1"
+                  border-color="#d9d9d9"
+                />
+                <div id="emotion-ratio">만족한 소비비율: 71%</div>
               </div>
             </div>
           </Box>
@@ -191,7 +200,7 @@ const categorySpendingList = [
     amount: 57200,
     iconColor: '#d9d9d9',
   },
-    {
+  {
     id: 4,
     category: '음식점',
     amount: 123000,
@@ -250,6 +259,7 @@ const categorySpendingList = [
   width: 100%;
   font-size: 20px;
   white-space: nowrap;
+  padding-left: 10px;
 }
 
 .box-label-account {
@@ -306,7 +316,16 @@ const categorySpendingList = [
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 10px;
+}
+
+#emotion-stats {
+  padding: 10px 0px;
+}
+
+#emotion-ratio {
+  padding: 10px 0px;
+  font-size: small;
 }
 
 #theme-stats {
