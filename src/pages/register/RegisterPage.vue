@@ -692,28 +692,20 @@ const saveTransaction = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFE99A;
-  color: #FF8C00;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .category-option:hover .circle {
-  background-color: #FF8C00;
-  color: white;
   transform: scale(1.1);
 }
 
 .category-option-disabled:hover .circle {
-  background-color: #f7edd0;
   transform: none;
 }
 
 .circle-active {
-  background-color: #FF8C00;
-  border-color: #805B2E;
-  color: #ffffff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  background-color: #FFE99A;
 }
 
 .category-icon {
@@ -733,9 +725,7 @@ const saveTransaction = async () => {
 }
 
 .category-option-disabled .circle {
-  background-color: #efe5c8;
-  border-color: #ded1ad;
-  color: #FFF8DD;
+  color: #d0d0d0;
   box-shadow: none;
 }
 
