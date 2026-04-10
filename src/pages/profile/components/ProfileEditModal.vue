@@ -123,9 +123,10 @@ h3 {
 .profile-edit-modal {
   width: min(100%, 460px);
   padding: 28px;
-  border-radius: 28px;
-  background: #ffffff;
-  box-shadow: 0 18px 36px rgba(73, 58, 34, 0.18);
+  border-radius: var(--radius-card);
+  background: var(--surface-primary);
+  box-shadow: var(--shadow-emphasis);
+  transition: var(--card-transition);
 }
 
 .profile-edit-header {
@@ -140,7 +141,7 @@ h3 {
   margin: 0;
   font-size: 28px;
   font-weight: 800;
-  color: #111111;
+  color: var(--text-primary);
 }
 
 .profile-edit-field {
@@ -153,31 +154,33 @@ h3 {
 .profile-edit-field span {
   font-size: 16px;
   font-weight: 700;
-  color: #222222;
+  color: var(--text-primary);
 }
 
 .profile-edit-field input,
 .profile-edit-field select {
   width: 100%;
   box-sizing: border-box;
-  border: 1.5px solid #e1d8c7;
-  border-radius: 16px;
-  background: #fffdf8;
+  border: var(--border-width) solid var(--border-soft);
+  border-radius: var(--radius-input);
+  background: var(--input-bg);
   padding: 15px 16px;
   font-size: 16px;
   font-family: inherit;
-  color: #111111;
+  color: var(--input-text);
+  transition: var(--btn-transition);
 }
 
 .profile-edit-field input:focus,
 .profile-edit-field select:focus {
-  outline: 2px solid rgba(255, 233, 154, 0.45);
-  border-color: #ffe99a;
+  outline: none;
+  border-color: var(--accent-strong);
+  box-shadow: var(--input-focus-shadow);
 }
 
 .profile-edit-error {
   margin: 0 0 18px;
-  color: #d14e4e;
+  color: var(--danger);
   font-size: 14px;
   font-weight: 700;
 }
@@ -192,21 +195,31 @@ h3 {
 .profile-edit-primary {
   min-width: 96px;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-button);
   padding: 12px 18px;
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
+  transition: var(--btn-transition);
 }
 
 .profile-edit-secondary {
-  background: #f1eee7;
-  color: #63584a;
+  background: var(--surface-secondary);
+  color: var(--text-muted);
+}
+
+.profile-edit-secondary:hover {
+  transform: var(--btn-hover-lift);
 }
 
 .profile-edit-primary {
-  background: #ffe99a;
-  color: #111111;
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+}
+
+.profile-edit-primary:hover:not(:disabled) {
+  transform: var(--btn-hover-lift);
+  box-shadow: var(--shadow-button);
 }
 
 .profile-edit-primary:disabled {

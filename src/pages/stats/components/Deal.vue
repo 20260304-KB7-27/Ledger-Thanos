@@ -85,10 +85,16 @@ const formatDateTime = (value) => {
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  border: 1px solid #d9d9d9;
-  border-radius: 24px;
-  background: white;
+  border: var(--border-width) solid var(--card-border);
+  border-radius: var(--radius-card);
+  background: var(--card-bg);
   box-sizing: border-box;
+  transition: var(--card-transition);
+}
+
+.deal-item:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 
 .left {
@@ -123,7 +129,7 @@ const formatDateTime = (value) => {
 .title {
   font-size: 20px;
   font-weight: 700;
-  color: #222;
+  color: var(--text-primary);
 }
 
 .meta-row {
@@ -139,19 +145,19 @@ const formatDateTime = (value) => {
   gap: 4px;
   font-size: 14px;
   font-weight: 500;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .date-time {
   font-size: 13px;
   font-weight: 500;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .amount {
   font-size: 18px;
   font-weight: 700;
-  color: #222;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 </style>

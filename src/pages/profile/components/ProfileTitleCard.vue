@@ -4,8 +4,8 @@
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1.5px solid #d9d9d9"
-    bg-color="#ffffff"
+    border="var(--border-width) solid var(--card-border)"
+    bg-color="var(--card-bg)"
     :shadow="false"
   >
     <article class="title-card">
@@ -48,8 +48,7 @@ defineEmits(['toggle-title']);
 
 <style scoped>
 .card-box :deep(.common-box) {
-  border-radius: 24px;
-  box-shadow: 0 5px 8px rgba(120, 105, 76, 0.22);
+  box-shadow: var(--shadow-card);
 }
 
 .card-box :deep(.box-content) {
@@ -82,21 +81,22 @@ h3 {
   gap: 6px;
   text-align: center;
   background: transparent;
-  border: 2px solid transparent;
-  border-radius: 16px;
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-card);
   padding: 10px 6px;
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: var(--btn-transition);
 }
 
 .badge-button:hover {
-  background: #f5f5f5;
+  background: var(--surface-secondary);
+  transform: var(--btn-hover-lift);
 }
 
 .badge-button.selected {
-  border-color: #f59e0b;
-  background: #fffbeb;
+  border-color: var(--accent-primary);
+  background: var(--surface-emphasis);
 }
 
 .badge-image {
@@ -108,20 +108,20 @@ h3 {
 .badge-name {
   font-size: 13px;
   font-weight: 700;
-  color: #111111;
+  color: var(--text-primary);
 }
 
 .badge-rule {
   font-size: 11px;
   line-height: 1.3;
-  color: #6b7280;
+  color: var(--text-muted);
   word-break: keep-all;
 }
 
 .empty-message {
   margin: 12px 0 0;
   font-size: 16px;
-  color: #8c8c8c;
+  color: var(--text-muted);
   text-align: center;
 }
 </style>

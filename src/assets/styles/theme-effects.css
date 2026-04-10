@@ -1,0 +1,64 @@
+/*
+  theme-effects.css
+  CSS 변수로 표현하기 어려운 @keyframes 애니메이션 + #app.theme-happy 한정 additive 효과
+  컴포넌트의 색상/radius/shadow는 theme.css 변수로 처리하고,
+  여기서는 오직 "추가 효과"만 정의한다.
+*/
+
+/* ─────────────────────────────────────────────
+   @keyframes 정의
+───────────────────────────────────────────── */
+
+/* 부드럽게 떠있는 느낌 */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* 그림자가 숨쉬는 pulse 효과 */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: var(--shadow-button);
+  }
+  50% {
+    box-shadow: var(--card-hover-shadow);
+  }
+}
+
+/* 버튼 shimmer (submit 버튼 활성 상태에서) */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   만족(happy) 테마 전용 효과
+   - scoped 스타일을 덮지 않도록 새 property만 추가
+   - transform은 scoped에서 var(--card-hover-lift)로 처리되므로 여기선 건드리지 않음
+───────────────────────────────────────────── */
+
+/* 제출 버튼 pulse-glow (페이지 공통) */
+#app.theme-happy button[type='submit']:not(:disabled) {
+  animation: pulse-glow 2.8s ease-in-out infinite;
+}
+
+/* 프로필 뱃지 이미지 floating */
+#app.theme-happy .badge-image {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* 만족 테마: 카드 그룹 안에서 짝수 카드 딜레이를 살짝 늦춰 리듬감 추가 */
+#app.theme-happy .badge-item:nth-child(even) .badge-image,
+#app.theme-happy .badge-grid .badge-button:nth-child(even) .badge-image {
+  animation-delay: 0.6s;
+}

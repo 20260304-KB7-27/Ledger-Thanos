@@ -84,11 +84,11 @@
                   :key="`${periodMode}-${periodLabel}`"
                   :value="emotionSatisfiedRate"
                   :max-value="100"
-                  bar-color="#FFE99A"
-                  background-color="white"
+                  bar-color="var(--accent-strong)"
+                  background-color="var(--surface-primary)"
                   :height="30"
                   :border-width="1"
-                  border-color="#d9d9d9"
+                  border-color="var(--border-soft)"
                 />
 
                 <div id="emotion-ratio">
@@ -502,7 +502,7 @@ onMounted(async () => {
   width: 100%;
   min-height: 100vh;
   padding: 20px 28px 24px;
-  background-color: #fff8dd;
+  background-color: var(--page-bg-stats);
   box-sizing: border-box;
 }
 
@@ -526,7 +526,7 @@ onMounted(async () => {
   display: flex;
   width: 100%;
   overflow: hidden;
-  background: white;
+  background: var(--surface-primary);
   padding: 0px;
 }
 
@@ -534,15 +534,20 @@ onMounted(async () => {
   flex: 1;
   height: 50px;
   border: none;
-  border-radius: 30px;
+  border-radius: var(--radius-button);
   background: transparent;
   cursor: pointer;
   font-size: 22px;
   font-weight: 600;
+  transition: var(--btn-transition);
+}
+
+.toggle-btn:hover {
+  transform: var(--btn-hover-lift);
 }
 
 .toggle-btn.active {
-  background: #ffe99a;
+  background: var(--surface-emphasis);
 }
 
 .box-label {
@@ -602,8 +607,9 @@ onMounted(async () => {
   font-size: 24px;
   font-weight: 700;
   cursor: pointer;
-  color: #444;
+  color: var(--text-secondary);
   padding: 4px 8px;
+  transition: var(--btn-transition);
 }
 
 .month-arrow:hover {

@@ -4,8 +4,8 @@
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1.5px solid #d9d9d9"
-    bg-color="#ffffff"
+    border="var(--border-width) solid var(--card-border)"
+    bg-color="var(--card-bg)"
     :shadow="false"
   >
     <article class="collection-card">
@@ -100,7 +100,7 @@ h3 {
 .badge-rule {
   font-size: 12px;
   line-height: 1.3;
-  color: #222222;
+  color: var(--text-primary);
   word-break: keep-all;
 }
 

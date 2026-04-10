@@ -4,8 +4,8 @@
       width="custom"
       custom-width="100%"
       margin-y="0"
-      border="1.5px solid #d9d9d9"
-      bg-color="#ffffff"
+      border="var(--border-width) solid var(--card-border)"
+      bg-color="var(--card-bg)"
       :shadow="false"
   >
     <section class="card">
@@ -13,7 +13,7 @@
 
       <strong
           class="amount"
-          :style="{ color: '#111111' }"
+          :style="{ color: 'var(--text-primary)' }"
       >
         {{ props.sign }}{{ amount }}
       </strong>

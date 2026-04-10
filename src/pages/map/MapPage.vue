@@ -76,7 +76,7 @@ const detailTransactions = computed(() =>
   min-height: 100vh;
   padding: 16px;
   box-sizing: border-box;
-  background: #fffbf0;
+  background: var(--page-bg-map);
 }
 
 .map-grid {

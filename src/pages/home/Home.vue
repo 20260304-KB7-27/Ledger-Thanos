@@ -51,7 +51,7 @@
           custom-width="100%"
           margin-y="0"
           border="none"
-          bg-color="#ffd400"
+          bg-color="var(--accent-strong)"
           :shadow="false"
         >
           <button class="add-transaction-card" @click="goToAddTransaction">
@@ -167,7 +167,7 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 /* 메인 영역 */
 .content {
   min-height: 100vh;
-  background: #f9f0c9;
+  background: var(--page-bg-home);
   padding: 32px;
   box-sizing: border-box;
 }
@@ -215,12 +215,21 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
   justify-content: center;
   border: none;
   border-radius: 0;
-  background: #ffd400;
+  background: var(--accent-strong);
   font-size: 22px;
   font-weight: 600;
   cursor: pointer;
   padding: 0;
-  color: #111111;
+  color: var(--text-primary);
+  transition: var(--btn-transition);
+}
+
+.add-transaction-card:hover {
+  transform: var(--btn-hover-lift);
+}
+
+.add-transaction-card:active {
+  transform: var(--btn-active-lift);
 }
 
 .add-transaction-box :deep(.common-box) {

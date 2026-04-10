@@ -83,9 +83,16 @@ const menus = [
 
 <template>
   <div class="app-layout" :class="{ 'no-nav': hideNav }">
-    <Nav v-if="!hideNav" :menus="menus" :logo-src="logoSrc" text-color="var(--nav-text)"
-      active-text-color="var(--nav-active-text)" active-bg="var(--nav-active-bg)"
-      mobile-menu-bg="var(--nav-mobile-menu-bg)" nav-bg="var(--nav-bg)" />
+    <Nav
+      v-if="!hideNav"
+      :menus="menus"
+      :logo-src="logoSrc"
+      text-color="var(--nav-text)"
+      active-text-color="var(--nav-active-text)"
+      active-bg="var(--nav-active-bg)"
+      mobile-menu-bg="var(--nav-mobile-menu-bg)"
+      nav-bg="var(--nav-bg)"
+    />
     <!-- Nav 색상도 theme.css의 semantic token을 그대로 사용 -->
     <main class="content">
       <RouterView />
@@ -104,8 +111,8 @@ const menus = [
 @media (min-width: 1025px) {
   .content {
     /* 실제 배경색은 base.css / theme.css 토큰에서 가져오고 여기서는 레이아웃만 설정 */
-    margin-left: 25%;
-    width: 75%;
+    margin-left: 20%;
+    width: 80%;
     min-height: 100vh;
   }
 

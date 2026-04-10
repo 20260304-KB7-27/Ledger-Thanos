@@ -7,6 +7,7 @@ import router from './router';
 // global css
 import '@/assets/styles/base.css';
 import '@/assets/styles/theme.css';
+import '@/assets/styles/theme-effects.css';
 
 const app = createApp(App);
 

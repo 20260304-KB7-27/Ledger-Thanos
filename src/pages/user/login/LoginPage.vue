@@ -71,7 +71,7 @@ const handleLogin = async () => {
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: #f9f0c9;
+  background: var(--page-bg-auth);
   display: flex;
   flex-direction: column;
 }
@@ -107,33 +107,35 @@ const handleLogin = async () => {
   font-weight: 700;
   text-align: center;
   margin-bottom: 1.75rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .input {
   display: block;
   width: 100%;
   box-sizing: border-box;
-  border: 1.5px solid #ebebeb;
-  border-radius: 50px;
+  border: var(--border-width) solid var(--border-soft);
+  border-radius: var(--radius-button);
   padding: 0.85rem 1.4rem;
   font-size: 1rem;
-  color: #1a1a1a;
+  color: var(--input-text);
   outline: none;
   margin-bottom: 1rem;
-  background: #fff;
+  background: var(--input-bg);
+  transition: var(--btn-transition);
 }
 
 .input:focus {
-  border-color: #ff8578;
+  border-color: var(--accent-primary);
+  box-shadow: var(--input-focus-shadow);
 }
 
 .input::placeholder {
-  color: #bbb;
+  color: var(--text-placeholder);
 }
 
 .error-msg {
-  color: #e53935;
+  color: var(--danger);
   font-size: 0.85rem;
   text-align: center;
   margin-bottom: 0.75rem;
@@ -143,14 +145,24 @@ const handleLogin = async () => {
   display: block;
   width: 100%;
   padding: 1rem;
-  background: #ffd400;
-  color: #111111;
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
   font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-button);
   cursor: pointer;
   margin-top: 0.5rem;
+  transition: var(--btn-transition);
+}
+
+.btn-login:hover:not(:disabled) {
+  transform: var(--btn-hover-lift);
+  box-shadow: var(--shadow-button);
+}
+
+.btn-login:active:not(:disabled) {
+  transform: var(--btn-active-lift);
 }
 
 .btn-login:disabled {
@@ -162,11 +174,11 @@ const handleLogin = async () => {
   text-align: center;
   margin-top: 1.25rem;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-muted);
 }
 
 .signup-link a {
-  color: #d4a200;
+  color: var(--accent-secondary);
   font-weight: 600;
   text-decoration: none;
 }

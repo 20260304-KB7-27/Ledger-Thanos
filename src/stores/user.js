@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', () => {
       return 'neutral';
     }
 
-    if (happyRatio.value >= 0.6) {
+    if (happyRatio.value >= 0.8) {
       return 'happy';
     }
 
