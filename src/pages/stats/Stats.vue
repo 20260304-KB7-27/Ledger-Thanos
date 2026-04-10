@@ -538,6 +538,7 @@ onMounted(async () => {
   background: transparent;
   cursor: pointer;
   font-size: 22px;
+  font-weight: 600;
 }
 
 .toggle-btn.active {
@@ -548,6 +549,7 @@ onMounted(async () => {
   width: 100%;
   text-align: start;
   font-size: 22px;
+  font-weight: 600;
   white-space: nowrap;
   padding-left: 10px;
   padding-top: 10px;
@@ -571,6 +573,7 @@ onMounted(async () => {
   width: 100%;
   text-align: center;
   font-size: 22px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -707,6 +710,7 @@ onMounted(async () => {
 
 .pdf-button {
   cursor: pointer;
+  font-weight: 600;
 }
 
 /* 반응형 */
