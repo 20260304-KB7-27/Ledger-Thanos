@@ -577,6 +577,10 @@ onMounted(async () => {
 .box-label-account {
   width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 22px;
   font-weight: 600;
   white-space: nowrap;
