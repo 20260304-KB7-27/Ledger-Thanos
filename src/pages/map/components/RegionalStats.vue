@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px" :shadow="false">
     <h3 class="panel-title">전체 지역 통계</h3>
     <div class="stats-list">
       <div class="stat-item">

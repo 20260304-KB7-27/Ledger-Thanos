@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px" :shadow="false">
     <h3 class="panel-title">
       상세 내역
       <span v-if="selectedGu" class="gu-tag">{{ selectedGu }}</span>
