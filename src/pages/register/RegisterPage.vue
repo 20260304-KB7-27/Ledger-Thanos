@@ -151,11 +151,33 @@ const currentUserId = computed(() =>
 // ==========================================
 // 가계부 폼 상태 생성 및 관리
 // ==========================================
-const getTodayKST = () => { // UTC -> KST로 변환 (9시간 차이 계산)
-  const now = new Date();
-  const offset = now.getTimezoneOffset() * 60000;
-  const dateOffset = new Date(now.getTime() - offset);
-  return dateOffset.toISOString().split('T')[0];
+const KST_TIME_ZONE = 'Asia/Seoul';
+const KST_UTC_OFFSET = '+09:00';
+
+// UTC -> KST 변환 로직
+const getKSTDateTimeParts = () => {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: KST_TIME_ZONE,
+    hour12: false,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  return Object.fromEntries(
+    formatter
+      .formatToParts(new Date())
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value])
+  );
+};
+
+const getTodayKST = () => {
+  const { year, month, day } = getKSTDateTimeParts();
+  return `${year}-${month}-${day}`;
 };
 
 const MIN_TRANSACTION_DATE = '1900-01-01'; // 최대 과거 날짜
@@ -293,17 +315,25 @@ onMounted(() => {
   resizeMemoInput();
 });
 
+const buildTransactionDateTime = (date) => { // 몇시 몇분을 포함하도록 변경
+  const { hour, minute } = getKSTDateTimeParts();
+
+  return `${date}T${hour}:${minute}:00${KST_UTC_OFFSET}`; // (ex) 2026-04-26T08:58:00+09:00
+};
+
 // payload 제작
 const buildTransactionPayload = () => {
   const amount = Number(transaction.value.amount);
   const userId = currentUserId.value;
   const memo = transaction.value.memo.trim();
+  const date = buildTransactionDateTime(transaction.value.date);
 
   if (isExpense.value) {
     return {
       ...transaction.value,
       user_id: userId,
       amount,
+      date,
       memo,
     };
   }
@@ -312,6 +342,7 @@ const buildTransactionPayload = () => {
     ...transaction.value,
     user_id: userId,
     amount,
+    date,
     category: 'income',
     emotion: null,
     location: null,
