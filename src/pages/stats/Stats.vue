@@ -1,40 +1,76 @@
 <template>
   <div class="main">
     <div class="header">
-      <Box width="custom" custom-width="100%">
-        <div class="box-label-header">주간/월간</div>
+      <Box width="custom" custom-width="100%" :shadow="false">
+        <div class="period-toggle">
+          <button
+            class="toggle-btn"
+            :class="{ active: periodMode === 'week' }"
+            @click="setPeriodMode('week')"
+          >
+            주간
+          </button>
+          <button
+            class="toggle-btn"
+            :class="{ active: periodMode === 'month' }"
+            @click="setPeriodMode('month')"
+          >
+            월간
+          </button>
+        </div>
       </Box>
 
       <h3>
-        <button class="month-arrow" @click="goPrevMonth">&lt;</button>
-        <span>{{ currentYear }}년 {{ currentMonth }}월</span>
-        <button class="month-arrow" @click="goNextMonth">&gt;</button>
+        <button class="month-arrow" @click="goPrevPeriod">&lt;</button>
+        <span>{{ periodLabel }}</span>
+        <button class="month-arrow" @click="goNextPeriod">&gt;</button>
       </h3>
 
-      <Box width="custom" custom-width="100%">
-        <div class="box-label-header pdf-button" @click="exportPdf">PDF 내보내기</div>
+      <Box width="custom" custom-width="100%" id="download-pdf" :shadow="false">
+        <div class="box-label-header pdf-button" @click="exportPdf">
+          PDF 내보내기
+        </div>
       </Box>
     </div>
     <div class="content">
       <div id="common-stats">
         <div id="account-info">
-          <Box width="custom" custom-width="100%" class="box-label-account">
-            <div>이번달 수입</div>
-            <div>{{ formatAmount(monthlyIncome) }}</div>
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-label-account"
+            :shadow="false"
+          >
+            <div>
+              {{ periodMode === 'week' ? '이번주 수입' : '이번달 수입' }}
+            </div>
+            <div>{{ formatAmount(periodIncome) }}</div>
           </Box>
 
-          <Box width="custom" custom-width="100%" class="box-label-account">
-            <div>이번달 지출</div>
-            <div>{{ formatAmount(monthlyExpense) }}</div>
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-label-account"
+            :shadow="false"
+          >
+            <div>
+              {{ periodMode === 'week' ? '이번주 지출' : '이번달 지출' }}
+            </div>
+            <div>{{ formatAmount(periodExpense) }}</div>
           </Box>
 
-          <Box width="custom" custom-width="100%" class="box-label-account">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-label-account"
+            :shadow="false"
+          >
             <div>순수익</div>
             <div>{{ formatAmount(netProfit) }}</div>
           </Box>
         </div>
         <div id="emotion-info">
-          <Box width="custom" custom-width="100%">
+          <Box width="custom" custom-width="100%" :shadow="false">
             <div class="emotion-content">
               <div class="box-label">감정 통계</div>
               <div class="box-content">
@@ -45,6 +81,7 @@
 
                 <ProgressBarChart
                   v-if="expenseTransactions.length > 0"
+                  :key="`${periodMode}-${periodLabel}`"
                   :value="emotionSatisfiedRate"
                   :max-value="100"
                   bar-color="#FFE99A"
@@ -62,7 +99,12 @@
           </Box>
         </div>
         <div id="trade-history-info">
-          <Box width="custom" custom-width="100%" class="box-custom">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-custom"
+            :shadow="false"
+          >
             <div class="scroll-box">
               <div class="box-label">거래 내역</div>
 
@@ -76,7 +118,8 @@
                   :title="item.title"
                   :location="item.location"
                   :amount="item.amount"
-                  :icon-color="item.iconColor"
+                  :icon="item.icon"
+                  :date="item.date"
                 />
               </div>
             </div>
@@ -85,7 +128,12 @@
       </div>
       <div id="theme-stats">
         <div id="location-spend">
-          <Box width="custom" custom-width="100%" class="box-custom">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-custom"
+            :shadow="false"
+          >
             <div class="scroll-box">
               <div class="box-label">지역별 소비</div>
 
@@ -105,7 +153,12 @@
         </div>
 
         <div id="category-spend">
-          <Box width="custom" custom-width="100%" class="box-custom">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-custom"
+            :shadow="false"
+          >
             <div class="scroll-box">
               <div class="box-label">카테고리별 지출</div>
 
@@ -116,7 +169,7 @@
                   :key="item.id"
                   :category="item.category"
                   :amount="item.amount"
-                  :icon-color="item.iconColor"
+                  :icon="item.icon"
                 />
               </div>
             </div>
@@ -135,73 +188,181 @@ import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
 import { useUserStore } from '@/stores/user';
 import { ref, onMounted, computed } from 'vue';
+import {
+  Beer,
+  BusFront,
+  Coffee,
+  Cross,
+  Ellipsis,
+  Hamburger,
+  Package,
+  ShoppingBag,
+  Store,
+  Utensils,
+} from '@lucide/vue';
 import { getUserTransactions } from '@/service/user/userApi';
 
 const userStore = useUserStore();
-// 현재 유저 거래 목록
+
+// 현재 로그인한 유저의 거래 목록
 const transactions = ref([]);
 
-// 화면 기준 월
-const currentYear = ref(2026);
-const currentMonth = ref(4);
+// 조회 기준: 월별 / 주별
+const periodMode = ref('month');
+
+// 통계 기준 날짜
+const baseDate = ref(new Date(2026, 3, 1)); // 2026-04-01
 
 const loading = ref(false);
 const error = ref('');
 
-const categoryLabelMap = {
-  restaurant: '식당',
-  salary: '급여',
-  cafe: '카페',
-  shopping: '쇼핑',
-  transport: '교통',
-  entertainment: '문화/여가',
-};
+// UI 기준 카테고리 순서
+const categoryList = ref([
+  { id: 1, label: '쇼핑', value: 'shopping', icon: ShoppingBag },
+  { id: 2, label: '배달', value: 'delivery', icon: Hamburger },
+  { id: 3, label: '식당', value: 'restaurant', icon: Utensils },
+  { id: 4, label: '편의점', value: 'convenience', icon: Store },
+  { id: 5, label: '카페', value: 'cafe', icon: Coffee },
+  { id: 6, label: '술집', value: 'bar', icon: Beer },
+  { id: 7, label: '생필품', value: 'essentials', icon: Package },
+  { id: 8, label: '교통', value: 'transport', icon: BusFront },
+  { id: 9, label: '병원', value: 'hospital', icon: Cross },
+  { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
+]);
 
-const categoryColorMap = {
-  restaurant: '#d9d9d9',
-  salary: '#d9d9d9',
-  cafe: '#d9d9d9',
-  shopping: '#d9d9d9',
-  transport: '#d9d9d9',
-  entertainment: '#d9d9d9',
-};
-
-const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
-
-const isCurrentMonthTransaction = (tx) => {
-  const date = new Date(tx.date);
-  return (
-    date.getFullYear() === currentYear.value &&
-    date.getMonth() + 1 === currentMonth.value
-  );
-};
-
-const monthlyTransactions = computed(() => {
-  return transactions.value.filter(isCurrentMonthTransaction);
+// category value로 label / icon / 정렬순서를 바로 찾기 위한 매핑 객체
+// 예: categoryMetaMap.value['shopping'] => { label: '쇼핑', icon: ..., order: 1 }
+const categoryMetaMap = computed(() => {
+  return categoryList.value.reduce((acc, item) => {
+    acc[item.value] = {
+      label: item.label,
+      icon: item.icon,
+      order: item.id,
+    };
+    return acc;
+  }, {});
 });
 
-const monthlyIncome = computed(() => {
-  return monthlyTransactions.value
+// 금액 포맷: 12345 -> "12,345원"
+const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
+
+// Date 객체 복사
+const cloneDate = (date) => new Date(date);
+
+// 해당 날짜가 속한 월의 시작일/종료일 계산
+const startOfMonth = (date) => {
+  const d = new Date(date.getFullYear(), date.getMonth(), 1);
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+const endOfMonth = (date) => {
+  const d = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  d.setHours(23, 59, 59, 999);
+  return d;
+};
+
+// 주 시작일: 월요일 기준
+const startOfWeek = (date) => {
+  const d = cloneDate(date);
+  const day = d.getDay(); // 0:일 ~ 6:토
+  const diff = day === 0 ? -6 : 1 - day; // 일요일이면 이전 월요일로, 그 외는 이번 주 월요일로
+  d.setDate(d.getDate() + diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+// 주 종료일: 일요일 23:59:59.999
+const endOfWeek = (date) => {
+  const d = startOfWeek(date);
+  d.setDate(d.getDate() + 6);
+  d.setHours(23, 59, 59, 999);
+  return d;
+};
+
+// 현재 날짜가 해당 월의 몇 번째 주차인지 계산
+const getWeekOfMonth = (date) => {
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  const firstWeekStart = startOfWeek(firstDay);
+  const currentWeekStart = startOfWeek(date);
+  const diffDays = Math.floor(
+    (currentWeekStart - firstWeekStart) / (1000 * 60 * 60 * 24)
+  );
+  return Math.floor(diffDays / 7) + 1;
+};
+
+// 화면 표시에 필요한 현재 연/월/주차
+const currentYear = computed(() => baseDate.value.getFullYear());
+const currentMonth = computed(() => baseDate.value.getMonth() + 1);
+const currentWeek = computed(() => getWeekOfMonth(baseDate.value));
+
+// 상단 제목용 문자열
+// month 모드면 "2026년 4월"
+// week 모드면 "2026년 4월 1주차"
+const periodLabel = computed(() => {
+  if (periodMode.value === 'month') {
+    return `${currentYear.value}년 ${currentMonth.value}월`;
+  }
+  return `${currentYear.value}년 ${currentMonth.value}월 ${currentWeek.value}주차`;
+});
+
+// 현재 선택된 조회 범위(start, end) 계산
+// month 모드: 해당 월 전체
+// week 모드: 해당 주 전체
+const periodRange = computed(() => {
+  if (periodMode.value === 'month') {
+    return {
+      start: startOfMonth(baseDate.value),
+      end: endOfMonth(baseDate.value),
+    };
+  }
+
+  return {
+    start: startOfWeek(baseDate.value),
+    end: endOfWeek(baseDate.value),
+  };
+});
+
+// 거래 1건이 현재 조회 범위 안에 포함되는지 판별
+const isCurrentPeriodTransaction = (tx) => {
+  const date = new Date(tx.date);
+  return date >= periodRange.value.start && date <= periodRange.value.end;
+};
+
+// 현재 기간에 해당하는 거래만 필터링
+const periodTransactions = computed(() => {
+  return transactions.value.filter(isCurrentPeriodTransaction);
+});
+
+// 현재 기간 수입 합계
+const periodIncome = computed(() => {
+  return periodTransactions.value
     .filter((tx) => tx.type === 'income')
     .reduce((sum, tx) => sum + tx.amount, 0);
 });
 
-const monthlyExpense = computed(() => {
-  return monthlyTransactions.value
+// 현재 기간 지출 합계
+const periodExpense = computed(() => {
+  return periodTransactions.value
     .filter((tx) => tx.type === 'expense')
     .reduce((sum, tx) => sum + tx.amount, 0);
 });
 
+// 순이익 = 수입 - 지출
 const netProfit = computed(() => {
-  return monthlyIncome.value - monthlyExpense.value;
+  return periodIncome.value - periodExpense.value;
 });
 
+// 지출 내역만 따로 모으고, 최신순으로 정렬
 const expenseTransactions = computed(() => {
-  return monthlyTransactions.value
+  return periodTransactions.value
     .filter((tx) => tx.type === 'expense')
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 });
 
+// 소비 감정 통계
+// happy: 만족
+// regret: 후회
 const emotionSatisfiedCount = computed(() => {
   return expenseTransactions.value.filter((tx) => tx.emotion === 'happy')
     .length;
@@ -212,26 +373,31 @@ const emotionRegretCount = computed(() => {
     .length;
 });
 
+// 만족 소비 비율(%)
 const emotionSatisfiedRate = computed(() => {
   const total = expenseTransactions.value.length;
-  console.log(total);
   if (!total) return 0;
   return Math.round((emotionSatisfiedCount.value / total) * 100);
 });
 
+// 거래 목록 UI용 데이터 변환
+// 카테고리명을 title로, 아이콘도 함께 붙여서 컴포넌트에 넘김
 const dealLists = computed(() => {
-  return monthlyTransactions.value
+  return periodTransactions.value
     .slice()
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map((tx) => ({
       id: tx.id,
-      title: categoryLabelMap[tx.category] || tx.category,
+      title: categoryMetaMap.value[tx.category]?.label || tx.category,
       location: tx.location,
       amount: tx.amount,
-      iconColor: categoryColorMap[tx.category] || '#d9d9d9',
+      icon: categoryMetaMap.value[tx.category]?.icon || Ellipsis,
+      date: tx.date,
     }));
 });
 
+// 지역별 소비 집계
+// 같은 location끼리 묶어서 건수와 총액 계산
 const localSpendingList = computed(() => {
   const grouped = {};
 
@@ -258,48 +424,68 @@ const localSpendingList = computed(() => {
     }));
 });
 
+// 카테고리별 소비 집계
+// 지출 내역에서 category 기준으로 합산
 const categorySpendingList = computed(() => {
   const grouped = {};
 
   expenseTransactions.value.forEach((tx) => {
     if (!grouped[tx.category]) {
-      grouped[tx.category] = {
-        id: tx.category,
-        category: categoryLabelMap[tx.category] || tx.category,
-        amount: 0,
-        iconColor: categoryColorMap[tx.category] || '#d9d9d9',
-      };
+      grouped[tx.category] = 0;
     }
-
-    grouped[tx.category].amount += tx.amount;
+    grouped[tx.category] += tx.amount;
   });
 
-  return Object.values(grouped).sort((a, b) => b.amount - a.amount);
+  return categoryList.value
+    .filter((category) => grouped[category.value] > 0)
+    .map((category) => ({
+      id: category.value,
+      category: category.label,
+      amount: grouped[category.value],
+      icon: category.icon,
+    }));
 });
 
-const goPrevMonth = () => {
-  if (currentMonth.value === 1) {
-    currentMonth.value = 12;
-    currentYear.value -= 1;
-  } else {
-    currentMonth.value -= 1;
-  }
+// 조회 모드 변경 (월별/주별)
+const setPeriodMode = (mode) => {
+  periodMode.value = mode;
 };
 
-const goNextMonth = () => {
-  if (currentMonth.value === 12) {
-    currentMonth.value = 1;
-    currentYear.value += 1;
+// 이전 기간으로 이동
+// month 모드면 이전 달, week 모드면 이전 주
+const goPrevPeriod = () => {
+  const next = cloneDate(baseDate.value);
+
+  if (periodMode.value === 'month') {
+    next.setMonth(next.getMonth() - 1);
   } else {
-    currentMonth.value += 1;
+    next.setDate(next.getDate() - 7);
   }
+
+  baseDate.value = next;
 };
 
+// 다음 기간으로 이동
+const goNextPeriod = () => {
+  const next = cloneDate(baseDate.value);
+
+  if (periodMode.value === 'month') {
+    next.setMonth(next.getMonth() + 1);
+  } else {
+    next.setDate(next.getDate() + 7);
+  }
+
+  baseDate.value = next;
+};
+
+// 브라우저 인쇄 기능으로 PDF 저장
 const exportPdf = () => {
   window.print();
 };
 
+// 컴포넌트가 마운트되면 로그인한 유저의 거래내역 조회
 onMounted(async () => {
+  // 로그인 유저 정보가 없으면 종료
   if (!userStore.user?.id) return;
 
   /*
@@ -314,7 +500,7 @@ onMounted(async () => {
 <style scoped>
 .main {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   padding: 20px 28px 24px;
   background-color: #fff8dd;
   box-sizing: border-box;
@@ -334,6 +520,28 @@ onMounted(async () => {
   text-align: center;
   font-size: 20px;
   font-weight: 600;
+}
+
+.period-toggle {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  background: white;
+}
+
+.toggle-btn {
+  flex: 1;
+  height: 42px;
+  border: none;
+  border-radius: 30px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toggle-btn.active {
+  background: #ffe99a;
 }
 
 .box-label {
@@ -506,17 +714,61 @@ onMounted(async () => {
 
 @media print {
   .main {
-    background: white;
-    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
     height: auto;
+    min-height: auto;
   }
 
-  .header {
-    margin-bottom: 16px;
-  }
-
-  .pdf-button {
+  #download-pdf {
     display: none;
+  }
+
+  .content,
+  #common-stats,
+  #theme-stats {
+    height: auto !important;
+  }
+
+  #common-stats,
+  #theme-stats {
+    grid-template-rows: auto auto auto !important;
+    gap: 18px !important;
+  }
+
+  #trade-history-info,
+  #location-spend,
+  #category-spend,
+  #emotion-info {
+    height: auto !important;
+  }
+
+  #trade-history-info > *,
+  #location-spend > *,
+  #category-spend > *,
+  #emotion-info > * {
+    height: auto !important;
+  }
+
+  #trade-history-info .box-custom,
+  #location-spend .box-custom,
+  #category-spend .box-custom {
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .scroll-box {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  .deal-list,
+  .local-list,
+  .category-list {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 }
 
@@ -526,29 +778,99 @@ onMounted(async () => {
     height: auto;
   }
 
-  #common-stats,
-  #theme-stats {
-    height: auto;
-  }
-
-  #theme-stats {
-    grid-template-rows: 260px 220px;
-  }
-}
-
-@media (max-width: 768px) {
   .header {
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-columns: 120px 1fr 120px;
     height: 72px;
     gap: 10px;
   }
 
   .header h3 {
+    font-size: 18px;
+  }
+
+  #common-stats,
+  #theme-stats {
+    height: auto;
+  }
+
+  #common-stats {
+    grid-template-rows: auto auto auto;
+  }
+
+  #theme-stats {
+    gap: 50px;
+    grid-template-rows: 260px 220px;
+  }
+
+  #emotion-info {
+    height: auto;
+  }
+
+  #emotion-info > * {
+    height: auto;
+  }
+
+  .emotion-content {
+    height: auto;
+    gap: 6px;
+  }
+
+  .box-label,
+  .box-content {
     font-size: 16px;
   }
 
+  #emotion-stats,
+  #emotion-ratio {
+    padding: 6px 0;
+  }
   #account-info {
     grid-template-columns: 1fr;
+  }
+
+  #trade-history-info .box-custom {
+    height: auto;
+    max-height: 240px;
+  }
+  #location-spend .box-custom {
+    height: auto;
+    max-height: 290px;
+  }
+  #category-spend .box-custom {
+    height: auto;
+    max-height: 230px;
+  }
+
+  .scroll-box {
+    height: auto;
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+
+  .deal-list {
+    max-height: 170px;
+    overflow-y: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  .local-list {
+    max-height: 220px;
+    overflow-y: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  .category-list {
+    max-height: 160px;
+    overflow-y: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+
+  .box-label,
+  .box-content,
+  .box-label-account,
+  .box-label-header {
+    font-size: 16px;
   }
 }
 </style>

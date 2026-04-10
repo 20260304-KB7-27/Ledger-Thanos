@@ -1,7 +1,9 @@
 <template>
   <div class="category-item">
     <div class="left">
-      <div class="icon" :style="{ backgroundColor: iconColor }"></div>
+      <div class="icon">
+        <component :is="icon" :size="16" />
+      </div>
       <div class="category">{{ category }}</div>
     </div>
 
@@ -10,6 +12,8 @@
 </template>
 
 <script setup>
+import { Ellipsis } from '@lucide/vue';
+
 const props = defineProps({
   category: {
     type: String,
@@ -19,9 +23,9 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  iconColor: {
-    type: String,
-    default: '#d9d9d9',
+  icon: {
+    type: [Object, Function],
+    default: Ellipsis,
   },
 });
 
@@ -55,6 +59,11 @@ const formatCurrency = (value) => {
   height: 26px;
   border-radius: 50%;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFE99A;
+  color: #FF8C00;
 }
 
 .category {
