@@ -35,21 +35,36 @@
     <div class="content">
       <div id="common-stats">
         <div id="account-info">
-          <Box width="custom" custom-width="100%" class="box-label-account" :shadow="false">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-label-account"
+            :shadow="false"
+          >
             <div>
               {{ periodMode === 'week' ? '이번주 수입' : '이번달 수입' }}
             </div>
             <div>{{ formatAmount(periodIncome) }}</div>
           </Box>
 
-          <Box width="custom" custom-width="100%" class="box-label-account" :shadow="false">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-label-account"
+            :shadow="false"
+          >
             <div>
               {{ periodMode === 'week' ? '이번주 지출' : '이번달 지출' }}
             </div>
             <div>{{ formatAmount(periodExpense) }}</div>
           </Box>
 
-          <Box width="custom" custom-width="100%" class="box-label-account" :shadow="false">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-label-account"
+            :shadow="false"
+          >
             <div>순수익</div>
             <div>{{ formatAmount(netProfit) }}</div>
           </Box>
@@ -84,7 +99,12 @@
           </Box>
         </div>
         <div id="trade-history-info">
-          <Box width="custom" custom-width="100%" class="box-custom" :shadow="false">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-custom"
+            :shadow="false"
+          >
             <div class="scroll-box">
               <div class="box-label">거래 내역</div>
 
@@ -99,6 +119,7 @@
                   :location="item.location"
                   :amount="item.amount"
                   :icon="item.icon"
+                  :date="item.date"
                 />
               </div>
             </div>
@@ -107,7 +128,12 @@
       </div>
       <div id="theme-stats">
         <div id="location-spend">
-          <Box width="custom" custom-width="100%" class="box-custom" :shadow="false">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-custom"
+            :shadow="false"
+          >
             <div class="scroll-box">
               <div class="box-label">지역별 소비</div>
 
@@ -127,7 +153,12 @@
         </div>
 
         <div id="category-spend">
-          <Box width="custom" custom-width="100%" class="box-custom" :shadow="false">
+          <Box
+            width="custom"
+            custom-width="100%"
+            class="box-custom"
+            :shadow="false"
+          >
             <div class="scroll-box">
               <div class="box-label">카테고리별 지출</div>
 
@@ -307,11 +338,13 @@ const expenseTransactions = computed(() => {
 });
 
 const emotionSatisfiedCount = computed(() => {
-  return expenseTransactions.value.filter((tx) => tx.emotion === 'happy').length;
+  return expenseTransactions.value.filter((tx) => tx.emotion === 'happy')
+    .length;
 });
 
 const emotionRegretCount = computed(() => {
-  return expenseTransactions.value.filter((tx) => tx.emotion === 'regret').length;
+  return expenseTransactions.value.filter((tx) => tx.emotion === 'regret')
+    .length;
 });
 
 const emotionSatisfiedRate = computed(() => {
@@ -330,6 +363,7 @@ const dealLists = computed(() => {
       location: tx.location,
       amount: tx.amount,
       icon: categoryMetaMap.value[tx.category]?.icon || Ellipsis,
+      date: tx.date,
     }));
 });
 

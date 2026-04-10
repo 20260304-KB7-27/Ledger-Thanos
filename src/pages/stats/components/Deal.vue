@@ -7,14 +7,21 @@
 
       <div class="text-group">
         <div class="title">{{ title }}</div>
-        <div class="location">
-          <img
-            :src="icoLocation"
-            width="15px"
-            height="15px"
-            alt="아이콘 오류"
-          />
-          {{ location }}
+
+        <div class="meta-row">
+          <div class="location">
+            <img
+              :src="icoLocation"
+              width="15px"
+              height="15px"
+              alt="아이콘 오류"
+            />
+            {{ location }}
+          </div>
+
+          <div v-if="date" class="date-time">
+            {{ formatDateTime(date) }}
+          </div>
         </div>
       </div>
     </div>
@@ -43,10 +50,30 @@ const props = defineProps({
     type: [Object, Function],
     default: Ellipsis,
   },
+  date: {
+    type: String,
+    default: '',
+  },
 });
 
 const formatCurrency = (value) => {
   return `${value.toLocaleString()}원`;
+};
+
+const formatDateTime = (value) => {
+  if (!value) return '';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return value;
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 </script>
 
@@ -101,10 +128,26 @@ const formatCurrency = (value) => {
   color: #222;
 }
 
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 14px;
   font-weight: 500;
   color: #444;
+}
+
+.date-time {
+  font-size: 13px;
+  font-weight: 500;
+  color: #777;
 }
 
 .amount {
