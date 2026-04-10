@@ -43,11 +43,30 @@ body {
   font-family: var(--font-family-base);
   color: var(--text-primary);
   background: var(--page-bg-home);
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
 }
 
 #app {
   width: 100%;
   min-height: 100vh;
+  color: var(--text-primary);
+  background:
+    var(--app-shell-overlay),
+    var(--app-shell-bg, var(--page-bg-home));
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
+}
+
+.app-layout {
+  color: inherit;
+}
+
+.app-layout > .content {
+  background: var(--app-content-bg, transparent);
+  transition: background 0.35s ease;
 }
 
 img,

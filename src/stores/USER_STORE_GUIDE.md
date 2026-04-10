@@ -119,15 +119,26 @@ const {
 ## App.vue에서 테마 클래스 사용
 
 ```js
+import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 const { appThemeClass } = storeToRefs(userStore);
+
+watch(
+  appThemeClass,
+  (nextThemeClass) => {
+    const appRoot = document.getElementById('app');
+    appRoot?.classList.remove('theme-happy', 'theme-neutral', 'theme-regret');
+    appRoot?.classList.add(nextThemeClass);
+  },
+  { immediate: true }
+);
 ```
 
 ```html
-<div class="app-layout" :class="appThemeClass">
+<div class="app-layout">
   <RouterView />
 </div>
 ```

@@ -74,12 +74,24 @@
   --nav-text: var(--neutral-nav-text);
   --nav-active-bg: var(--accent-primary);
   --nav-active-text: var(--neutral-white);
+  --nav-mobile-menu-bg: var(--surface-emphasis);
   --button-primary-bg: var(--accent-primary);
   --button-primary-text: var(--neutral-white);
   --button-secondary-bg: var(--accent-strong);
   --button-secondary-text: var(--neutral-black);
   --button-danger-bg: var(--neutral-danger-soft);
   --button-danger-text: var(--neutral-white);
+  --app-shell-bg: linear-gradient(
+    180deg,
+    var(--page-bg-home) 0%,
+    var(--page-bg-profile) 100%
+  );
+  --app-shell-overlay: radial-gradient(
+    circle at top,
+    rgba(255, 255, 255, 0.48) 0%,
+    transparent 38%
+  );
+  --app-content-bg: rgba(255, 251, 240, 0.7);
 
   /* Shape and effects -모양과 그림자 효과 등*/
   --radius-card: 20px;
@@ -159,12 +171,24 @@
   --nav-text: var(--happy-nav-text);
   --nav-active-bg: var(--accent-primary);
   --nav-active-text: var(--happy-white);
+  --nav-mobile-menu-bg: var(--surface-secondary);
   --button-primary-bg: var(--accent-primary);
   --button-primary-text: var(--happy-white);
   --button-secondary-bg: var(--accent-strong);
   --button-secondary-text: var(--happy-ink-900);
   --button-danger-bg: var(--happy-minus);
   --button-danger-text: var(--happy-white);
+  --app-shell-bg: linear-gradient(
+    180deg,
+    var(--page-bg-home) 0%,
+    var(--page-bg-profile) 100%
+  );
+  --app-shell-overlay: radial-gradient(
+    circle at top,
+    rgba(255, 255, 255, 0.55) 0%,
+    transparent 40%
+  );
+  --app-content-bg: rgba(255, 247, 217, 0.72);
 
   /* Shape and effects -모양과 그림자 효과 등*/
   --radius-card: 24px;
@@ -220,12 +244,24 @@
   --nav-text: var(--regret-black);
   --nav-active-bg: var(--regret-black);
   --nav-active-text: var(--regret-white);
+  --nav-mobile-menu-bg: var(--surface-secondary);
   --button-primary-bg: var(--regret-black);
   --button-primary-text: var(--regret-white);
   --button-secondary-bg: var(--regret-white);
   --button-secondary-text: var(--regret-black);
   --button-danger-bg: var(--regret-black);
   --button-danger-text: var(--regret-white);
+  --app-shell-bg: linear-gradient(
+    180deg,
+    var(--page-bg-home) 0%,
+    var(--surface-secondary) 100%
+  );
+  --app-shell-overlay: radial-gradient(
+    circle at top,
+    rgba(0, 0, 0, 0.04) 0%,
+    transparent 34%
+  );
+  --app-content-bg: rgba(255, 255, 255, 0.92);
 
   /* Shape and effects -모양과 그림자 효과 등*/
   --radius-card: 0;
