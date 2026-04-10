@@ -4,8 +4,8 @@
       width="custom"
       custom-width="100%"
       margin-y="0"
-      border="1.5px solid #d9d9d9"
-      bg-color="#ffffff"
+      border="var(--border-width) solid var(--card-border)"
+      bg-color="var(--card-bg)"
       :shadow="false"
   >
     <section class="card">
@@ -19,8 +19,8 @@
             width="custom"
             custom-width="100%"
             margin-y="0"
-            border="1px solid #d9d9d9"
-            bg-color="#ffffff"
+            border="var(--border-width) solid var(--card-border)"
+            bg-color="var(--card-bg)"
             :shadow="false"
         >
           <div class="item">
@@ -116,7 +116,7 @@ h3 {
   overflow-y: auto;
   padding-right: 4px;
   scrollbar-width: thin;
-  scrollbar-color: #d9d9d9 transparent;
+  scrollbar-color: var(--border-soft) transparent;
 }
 
 .list > * {
@@ -126,7 +126,7 @@ h3 {
 .empty-text {
   font-size: 20px;
   font-weight: 500;
-  color: #555;
+  color: var(--text-muted);
 }
 
 .item {
@@ -180,7 +180,7 @@ h3 {
 .name {
   font-size: 20px;
   font-weight: 700;
-  color: #222;
+  color: var(--text-primary);
 }
 
 .meta-row {
@@ -196,11 +196,11 @@ h3 {
   gap: 4px;
   font-size: 14px;
   font-weight: 500;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .income-meta {
-  color: #666;
+  color: var(--text-muted);
 }
 
 .location-icon {
@@ -212,13 +212,13 @@ h3 {
 .date {
   font-size: 13px;
   font-weight: 500;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .price {
   font-size: 18px;
   font-weight: 700;
-  color: #222;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 </style>

@@ -235,7 +235,7 @@ watch(
 }
 
 .error-msg {
-  background: #fffdf7;
-  color: #e53935;
+  background: var(--surface-primary);
+  color: var(--danger);
 }
 </style>

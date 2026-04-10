@@ -57,7 +57,7 @@ const formatDateTime = (value) => {
 .panel-title {
   font-size: 22px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin: 0 0 10px 0;
   display: flex;
   align-items: center;
@@ -66,10 +66,10 @@ const formatDateTime = (value) => {
 
 .gu-tag {
   font-size: 11px;
-  background: #ff8c00;
-  color: #fff;
+  background: var(--accent-primary);
+  color: var(--button-primary-text);
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-chip);
   font-weight: 600;
 }
 
@@ -83,7 +83,7 @@ const formatDateTime = (value) => {
   flex-direction: column;
   gap: 8px;
   scrollbar-width: thin;
-  scrollbar-color: #e5a900 transparent;
+  scrollbar-color: var(--accent-strong) transparent;
 }
 
 .tx-item {
@@ -91,7 +91,7 @@ const formatDateTime = (value) => {
   align-items: center;
   gap: 10px;
   padding: 6px 0;
-  border-bottom: 1px solid #f0e8c8;
+  border-bottom: var(--border-width) solid var(--border-soft);
 }
 
 .tx-item:last-child {
@@ -129,20 +129,20 @@ const formatDateTime = (value) => {
 
 .tx-memo {
   font-size: 14px;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .tx-location {
   font-size: 14px;
   font-weight: 500;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .tx-date {
   font-size: 13px;
   font-weight: 500;
-  color: #777;
+  color: var(--text-muted);
 }
 
 .tx-amount {
@@ -152,17 +152,17 @@ const formatDateTime = (value) => {
 }
 
 .tx-amount.expense {
-  color: #e53935;
+  color: var(--amount-minus);
 }
 
 .tx-amount.income {
-  color: #43a047;
+  color: var(--amount-plus);
 }
 
 .hint-msg,
 .empty-msg {
   font-size: 14px;
-  color: #999;
+  color: var(--text-muted);
   text-align: center;
   padding: 12px 0;
 }

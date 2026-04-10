@@ -4,8 +4,8 @@
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1.5px solid #d9d9d9"
-    bg-color="#ffffff"
+    border="var(--border-width) solid var(--card-border)"
+    bg-color="var(--card-bg)"
     :shadow="false"
   >
     <button
@@ -89,7 +89,8 @@ defineProps({
   justify-content: center;
   background:
     radial-gradient(circle at top, rgba(255, 199, 173, 0.16), transparent 40%),
-    linear-gradient(180deg, #ffffff 0%, #fffdf8 100%);
+    linear-gradient(180deg, var(--surface-primary) 0%, var(--surface-secondary) 100%);
+  transition: var(--card-transition);
 }
 
 .profile-avatar {
@@ -122,9 +123,9 @@ defineProps({
   align-items: center;
   gap: 5px;
   padding: 4px 10px 4px 6px;
-  border-radius: 999px;
-  background: rgba(255, 245, 246, 0.92);
-  color: #ffd400;
+  border-radius: var(--radius-chip);
+  background: var(--surface-secondary);
+  color: var(--accent-strong);
   font-size: 17px;
   font-weight: 700;
   line-height: 1;
@@ -133,7 +134,7 @@ defineProps({
 .selected-badge-empty {
   margin: 14px 0 0;
   font-size: 15px;
-  color: #8c8c8c;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -141,7 +142,7 @@ defineProps({
   margin-top: 8px;
   font-size: 31px;
   font-weight: 800;
-  color: #111111;
+  color: var(--text-primary);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -149,7 +150,7 @@ defineProps({
 .profile-meta {
   margin: 8px 0 0;
   font-size: 17px;
-  color: #2d2d2d;
+  color: var(--text-secondary);
   line-height: 1.2;
 }
 
@@ -158,7 +159,7 @@ defineProps({
   top: 16px;
   right: 16px;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-chip);
   background: rgba(17, 17, 17, 0.82);
   color: #ffffff;
   font-size: 12px;
@@ -178,14 +179,16 @@ defineProps({
 }
 
 .profile-card-button:focus-visible {
-  outline: 3px solid rgba(255, 133, 120, 0.4);
+  outline: 3px solid var(--accent-primary);
   outline-offset: 4px;
-  border-radius: 24px;
+  border-radius: var(--radius-card);
 }
 
 .profile-card-button:hover .profile-card {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
   background:
     radial-gradient(circle at top, rgba(255, 199, 173, 0.22), transparent 44%),
-    linear-gradient(180deg, #ffffff 0%, #fffaf1 100%);
+    linear-gradient(180deg, var(--surface-primary) 0%, var(--surface-emphasis) 100%);
 }
 </style>

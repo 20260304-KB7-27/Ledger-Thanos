@@ -36,7 +36,7 @@ const totalAmount = computed(() => props.transactions.reduce((s, t) => s + t.amo
 .panel-title {
   font-size: 22px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin: 0 0 10px 0;
 }
 
@@ -51,7 +51,7 @@ const totalAmount = computed(() => props.transactions.reduce((s, t) => s + t.amo
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #f0e8c8;
+  border-bottom: var(--border-width) solid var(--border-soft);
 }
 
 .stat-item:last-child {
@@ -60,12 +60,12 @@ const totalAmount = computed(() => props.transactions.reduce((s, t) => s + t.amo
 
 .stat-label {
   font-size: 14px;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .stat-value {
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 </style>

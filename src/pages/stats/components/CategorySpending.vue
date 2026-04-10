@@ -42,9 +42,15 @@ const formatCurrency = (value) => {
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  border-radius: 18px;
-  background: #FFF8DD;
+  border-radius: var(--radius-card);
+  background: var(--surface-secondary);
   box-sizing: border-box;
+  transition: var(--card-transition);
+}
+
+.category-item:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 
 .left {
@@ -67,13 +73,13 @@ const formatCurrency = (value) => {
 .category {
   font-size: 14px;
   font-weight: 700;
-  color: #444;
+  color: var(--text-secondary);
 }
 
 .amount {
   font-size: 14px;
   font-weight: 700;
-  color: #444;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 </style>

@@ -25,10 +25,10 @@ const props = defineProps({
   },
 
   // border 설정
-  border: { type: String, default: '1px solid #d9d9d9' }, // figma-외곽선 기준
+  border: { type: String, default: 'var(--border-width) solid var(--card-border)' },
 
   // background 설정
-  bgColor: { type: String, default: '#ffffff' },
+  bgColor: { type: String, default: 'var(--card-bg)' },
 
   // shadow 설정
   shadow: { type: Boolean, default: true },
@@ -57,10 +57,10 @@ const boxStyles = computed(() => ({
 <style scoped>
 .common-box {
   box-sizing: border-box;
-  border-radius: 25px; /* figma 설정 기준 */
+  border-radius: var(--radius-card);
   height: auto; /* 내용물에 따라 세로 길이가 유동적으로 늘어남 */
   overflow: hidden; /* 내부 마진 병합(Margin Collapsing) 방지 */
-  transition: all 0.2s ease-in-out;
+  transition: var(--card-transition);
 }
 
 /* 가로 길이 규격 클래스 */
@@ -76,7 +76,12 @@ const boxStyles = computed(() => ({
 
 /* 그림자 설정 */
 .has-shadow {
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25); /* figma-바깥쪽 그림자 기준 */
+  box-shadow: var(--shadow-card);
+}
+
+.has-shadow:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 
 /* 내부 콘텐츠 래퍼 (좌우는 padding으로, 위아래는 인라인 style 마진으로 제어) */

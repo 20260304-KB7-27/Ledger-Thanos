@@ -45,9 +45,15 @@ const formatCurrency = (value) => {
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  border-radius: 18px;
-  background: #FFF8DD;
+  border-radius: var(--radius-card);
+  background: var(--surface-secondary);
   box-sizing: border-box;
+  transition: var(--card-transition);
+}
+
+.local-item:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 
 .rank {
@@ -59,8 +65,8 @@ const formatCurrency = (value) => {
   border-radius: 50%;
   font-size: 14px;
   font-weight: 700;
-  color: #222;
-  background: #FF8C00;
+  color: var(--button-primary-text);
+  background: var(--accent-primary);
 }
 
 .info {
@@ -70,19 +76,19 @@ const formatCurrency = (value) => {
 .region {
   font-size: 14px;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .period {
   margin-top: 2px;
   font-size: 12px;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .amount {
   font-size: 14px;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 </style>

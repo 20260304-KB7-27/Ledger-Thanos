@@ -33,7 +33,7 @@ const emit = defineEmits(['select-gu']);
 .panel-title {
   font-size: 22px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin: 0 0 10px 0;
 }
 
@@ -53,25 +53,26 @@ const emit = defineEmits(['select-gu']);
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-chip);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: var(--btn-transition);
 }
 
 .gu-item:hover {
-  background: #fff3cd;
+  background: var(--surface-secondary);
+  transform: var(--btn-hover-lift);
 }
 
 .gu-item.active {
-  background: #ffe08a;
+  background: var(--surface-emphasis);
 }
 
 .rank-badge {
   flex-shrink: 0;
   width: 22px;
   height: 22px;
-  background: #ff8c00;
-  color: #fff;
+  background: var(--accent-primary);
+  color: var(--button-primary-text);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -84,18 +85,18 @@ const emit = defineEmits(['select-gu']);
   flex: 1;
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .gu-total {
   font-size: 14px;
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .empty-msg {
   font-size: 13px;
-  color: #999;
+  color: var(--text-muted);
   text-align: center;
   padding: 16px 0;
 }

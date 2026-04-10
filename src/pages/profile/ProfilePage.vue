@@ -222,7 +222,7 @@ const handleLogout = () => {
   gap: 34px;
   padding: 32px 38px;
   box-sizing: border-box;
-  background: #f9f0c9;
+  background: var(--page-bg-profile);
 }
 
 .left-column {
@@ -253,15 +253,24 @@ const handleLogout = () => {
 
 .logout-button {
   width: 100%;
-  border: none;
-  border-radius: 999px;
-  background: #f00000;
-  color: #ffffff;
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-button);
+  background: var(--button-danger-bg);
+  color: var(--button-danger-text);
   font-size: 28px;
   font-weight: 800;
   padding: 20px 24px;
   cursor: pointer;
-  box-shadow: 0 5px 8px rgba(240, 0, 0, 0.24);
+  box-shadow: var(--shadow-button);
+  transition: var(--btn-transition);
+}
+
+.logout-button:hover {
+  transform: var(--btn-hover-lift);
+}
+
+.logout-button:active {
+  transform: var(--btn-active-lift);
 }
 
 @media (max-width: 1024px) {

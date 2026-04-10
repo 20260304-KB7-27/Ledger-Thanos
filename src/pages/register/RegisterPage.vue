@@ -435,9 +435,9 @@ const saveTransaction = async () => {
   전체 레이아웃 및 반응형 처리
 ========================================== */
 .ledger-wrapper {
-  background-color: #fdf8e3;
+  background-color: var(--page-bg-register);
   min-height: 100vh;
-  
+
 }
 
 .content {
@@ -482,7 +482,7 @@ const saveTransaction = async () => {
 .label {
   font-size: 22px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-secondary);
   margin-bottom: 15px;
 }
 
@@ -500,7 +500,7 @@ const saveTransaction = async () => {
 
 .date-input {
   font-family: inherit;
-  color: #333;
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -516,17 +516,18 @@ const saveTransaction = async () => {
 .select-input {
   appearance: none;
   cursor: pointer;
-  color: #333;
+  color: var(--input-text);
   width: 100%;
   padding: 14px 44px 14px 16px;
-  border-radius: 14px;
-  border: 1px solid #d8c9a0;
-  background: #fff8de;
+  border-radius: var(--radius-input);
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--surface-secondary);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition: var(--btn-transition);
 }
 
 .select-input:invalid {
-  color: #ffe99a;
+  color: var(--text-placeholder);
 }
 
 .select-wrapper {
@@ -534,8 +535,8 @@ const saveTransaction = async () => {
 }
 
 .select-wrapper:focus-within .select-input {
-  border-color: #ffe99a;
-  box-shadow: 0 0 0 3px rgba(244, 208, 63, 0.2);
+  border-color: var(--accent-strong);
+  box-shadow: var(--input-focus-shadow);
 }
 
 .select-wrapper-disabled {
@@ -552,7 +553,7 @@ const saveTransaction = async () => {
   top: 50%;
   right: 16px;
   transform: translateY(-50%);
-  color: #8c7441;
+  color: var(--text-secondary);
   pointer-events: none;
 }
 
@@ -560,15 +561,15 @@ const saveTransaction = async () => {
   margin: 8px 4px 0;
   font-size: 12px;
   font-weight: 600;
-  color: #8a774e;
+  color: var(--text-muted);
 }
 
 .fixed-field {
   min-height: 64px;
   padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid #d8c9a0;
-  background: #fff8de;
+  border-radius: var(--radius-input);
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--surface-secondary);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -586,20 +587,20 @@ const saveTransaction = async () => {
 }
 
 .income-icon {
-  color: #15803d;
+  color: var(--amount-plus);
 }
 
 .fixed-field-title {
   font-size: 16px;
   font-weight: 800;
-  color: #166534;
+  color: var(--amount-plus);
 }
 
 .fixed-field-description {
   margin: 0;
   font-size: 13px;
   font-weight: 600;
-  color: #6f6340;
+  color: var(--text-muted);
   line-height: 1.4;
 }
 
@@ -618,35 +619,35 @@ const saveTransaction = async () => {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   padding: 8px;
-  border-radius: 18px;
-  background: #fff2bf;
+  border-radius: var(--radius-card);
+  background: var(--surface-emphasis);
 }
 
 .toggle-button {
-  border: 1px solid transparent;
+  border: var(--border-width) solid transparent;
   background: transparent;
-  border-radius: 14px;
+  border-radius: var(--radius-input);
   padding: 12px 16px;
   font-size: 22px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  transition: var(--btn-transition);
 }
 
 .toggle-button:hover {
-  transform: translateY(-1px);
+  transform: var(--btn-hover-lift);
 }
 
 .toggle-button.expense.active {
-  background: #FF945F;
-  color: #ffffff;
-  box-shadow: 0 8px 18px rgba(217, 119, 6, 0.25);
+  background: var(--amount-minus);
+  color: var(--button-primary-text);
+  box-shadow: var(--shadow-button);
 }
 
 .toggle-button.income.active {
-  background: #4CE158;
-  color: #ffffff;
-  box-shadow: 0 8px 18px rgba(21, 128, 61, 0.22);
+  background: var(--amount-plus);
+  color: var(--button-primary-text);
+  box-shadow: var(--shadow-button);
 }
 
 .mode-indicator {
@@ -657,11 +658,11 @@ const saveTransaction = async () => {
 }
 
 .mode-indicator.expense {
-  color: #b45309;
+  color: var(--accent-primary);
 }
 
 .mode-indicator.income {
-  color: #166534;
+  color: var(--amount-plus);
 }
 
 /* 카테고리 원형 마커 */
@@ -696,11 +697,11 @@ const saveTransaction = async () => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--btn-transition);
 }
 
 .category-option:hover .circle {
-  transform: scale(1.1);
+  transform: var(--chip-hover-scale);
 }
 
 .category-option-disabled:hover .circle {
@@ -708,7 +709,7 @@ const saveTransaction = async () => {
 }
 
 .circle-active {
-  background-color: #FFE99A;
+  background-color: var(--surface-emphasis);
 }
 
 .category-icon {
@@ -718,22 +719,22 @@ const saveTransaction = async () => {
 .category-name {
   font-size: 12px;
   font-weight: 600;
-  color: #7b6742;
+  color: var(--text-muted);
   line-height: 1.2;
   word-break: keep-all;
 }
 
 .category-option-active .category-name {
-  color: #5b3f16;
+  color: var(--text-secondary);
 }
 
 .category-option-disabled .circle {
-  color: #d0d0d0;
+  color: var(--text-placeholder);
   box-shadow: none;
 }
 
 .category-option-disabled .category-name {
-  color: #FFF8DD;
+  color: var(--surface-secondary);
 }
 
 /* 기분 선택 그룹 */
@@ -760,7 +761,7 @@ const saveTransaction = async () => {
 }
 
 .mood-item.active {
-  background-color: #FFF8DD;
+  background-color: var(--surface-secondary);
 }
 
 .mood-item.disabled {
@@ -771,40 +772,46 @@ const saveTransaction = async () => {
 .face-icon {
   width: 60px;
   height: 60px;
-  display: block;
+  display: var(--image-display);
   object-fit: contain;
+  opacity: var(--illustration-opacity);
 }
 
 .memo-input:disabled,
 .select-input:disabled {
-  color: #FFF8DD;
+  color: var(--text-placeholder);
   cursor: not-allowed;
 }
 
 /* 버튼 */
 .submit-button {
   margin-top: auto;
-  background-color: #FFD400;
+  background-color: var(--button-secondary-bg);
   border: none;
-  border-radius: 25px;
+  border-radius: var(--radius-button);
   padding: 20px;
   font-size: 22px;
   font-weight: 600;
-  color: #000;
+  color: var(--button-secondary-text);
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: var(--btn-transition);
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: var(--btn-hover-lift);
+  box-shadow: var(--shadow-button);
 }
 
 .submit-button.disabled,
 .submit-button:disabled {
-  background-color: #FFE99A;
-  color: #6f6340;
+  background-color: var(--surface-emphasis);
+  color: var(--text-muted);
   cursor: not-allowed;
   box-shadow: none;
 }
 
-.submit-button:active {
-  transform: translateY(2px);
+.submit-button:active:not(:disabled) {
+  transform: var(--btn-active-lift);
 }
 
 .submit-button:disabled:active {

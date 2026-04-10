@@ -4,8 +4,8 @@
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1.5px solid #d9d9d9"
-    bg-color="#ffffff"
+    border="var(--border-width) solid var(--card-border)"
+    bg-color="var(--card-bg)"
     :shadow="false"
   >
     <article class="summary-card">
@@ -59,13 +59,19 @@ h3 {
 }
 
 .summary-item {
-  background: #ffe99a;
-  border-radius: 18px;
+  background: var(--surface-emphasis);
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #111111;
+  color: var(--text-primary);
+  transition: var(--card-transition);
+}
+
+.summary-item:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 
 .summary-label {
@@ -76,6 +82,6 @@ h3 {
 .summary-value {
   font-size: 18px;
   font-weight: 600;
-  color: #111111;
+  color: var(--text-primary);
 }
 </style>

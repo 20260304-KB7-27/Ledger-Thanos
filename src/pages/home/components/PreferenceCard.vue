@@ -4,8 +4,8 @@
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1.5px solid #d9d9d9"
-    bg-color="#ffffff"
+    border="var(--border-width) solid var(--card-border)"
+    bg-color="var(--card-bg)"
     :shadow="false"
   >
     <section class="card">
@@ -73,9 +73,10 @@ h3 {
   width: 120px;
   height: 120px;
   object-fit: cover;
-  border-radius: 18px;
-  border: 1px solid #d8d8d8;
-  background: #fff;
+  border-radius: var(--radius-card);
+  border: var(--border-width) solid var(--border-soft);
+  background: var(--card-bg);
+  opacity: var(--illustration-opacity);
 }
 
 .title-text,
@@ -86,8 +87,8 @@ h3 {
 
 .title-text {
   padding: 8px 12px;
-  border-radius: 999px;
-  background: #fff6cf;
+  border-radius: var(--radius-chip);
+  background: var(--surface-emphasis);
 }
 
 .empty-wrap {
@@ -101,7 +102,7 @@ h3 {
   margin: 14px 0 0;
   font-size: 15px;
   line-height: 1.4;
-  color: #8c8c8c;
+  color: var(--text-muted);
   text-align: center;
 }
 </style>

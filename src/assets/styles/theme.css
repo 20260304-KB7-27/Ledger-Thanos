@@ -107,6 +107,16 @@
   --icon-display: block;
   --image-display: block;
   --illustration-opacity: 1;
+
+  /* Interaction tokens - 인터랙션 효과 */
+  --card-transition: transform 0.2s ease, box-shadow 0.2s ease;
+  --card-hover-lift: translateY(-3px);
+  --card-hover-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  --btn-transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  --btn-hover-lift: translateY(-1px);
+  --btn-active-lift: translateY(1px);
+  --input-focus-shadow: 0 0 0 3px rgba(255, 200, 100, 0.25);
+  --chip-hover-scale: scale(1.05);
 }
 
 #app.theme-happy {
@@ -204,6 +214,16 @@
   --icon-display: block;
   --image-display: block;
   --illustration-opacity: 1;
+
+  /* Interaction tokens - 만족 테마: 풍부한 spring 애니메이션 */
+  --card-transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease;
+  --card-hover-lift: translateY(-8px);
+  --card-hover-shadow: 0 20px 48px rgba(255, 152, 152, 0.32);
+  --btn-transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, box-shadow 0.22s ease;
+  --btn-hover-lift: translateY(-4px);
+  --btn-active-lift: translateY(3px);
+  --input-focus-shadow: 0 0 0 4px rgba(255, 152, 152, 0.35);
+  --chip-hover-scale: scale(1.12);
 }
 
 #app.theme-regret {
@@ -277,4 +297,14 @@
   --icon-display: none;
   --image-display: none;
   --illustration-opacity: 0;
+
+  /* Interaction tokens - 후회 테마: 모든 애니메이션 비활성화 */
+  --card-transition: none;
+  --card-hover-lift: none;
+  --card-hover-shadow: none;
+  --btn-transition: none;
+  --btn-hover-lift: none;
+  --btn-active-lift: none;
+  --input-focus-shadow: none;
+  --chip-hover-scale: none;
 }
