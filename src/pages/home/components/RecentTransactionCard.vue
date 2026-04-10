@@ -97,8 +97,9 @@ defineProps({
 <style scoped>
 .card {
   padding: 40px 32px;
-  min-height: 220px;
+  max-height: 220px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 h3 {
@@ -111,6 +112,15 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  max-height: 122px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
+}
+
+.list > * {
+  flex-shrink: 0;
 }
 
 .empty-text {
