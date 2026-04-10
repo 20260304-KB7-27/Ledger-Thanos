@@ -1,48 +1,49 @@
 <template>
   <Box
-    width="custom"
-    custom-width="100%"
-    margin-y="0"
-    border="1px solid #d8d8d8"
-    bg-color="#f3f3f3"
-    :shadow="false"
+      width="custom"
+      custom-width="100%"
+      margin-y="0"
+      border="1px solid #d8d8d8"
+      bg-color="#f3f3f3"
+      :shadow="false"
   >
     <section class="card">
       <h3>최근 거래</h3>
 
       <div v-if="list.length > 0" class="list">
         <Box
-          v-for="item in list"
-          :key="item.id"
-          width="custom"
-          custom-width="100%"
-          margin-y="0"
-          border="1px solid #d8d8d8"
-          bg-color="#f8f8f8"
-          :shadow="false"
+            v-for="item in list"
+            :key="item.id"
+            width="custom"
+            custom-width="100%"
+            margin-y="0"
+            border="1px solid #d8d8d8"
+            bg-color="#f8f8f8"
+            :shadow="false"
         >
           <div class="item">
             <!-- 왼쪽 -->
             <div class="left">
-              <div
-                class="thumb"
-                :style="{
-                backgroundColor: getCategoryMeta(item.category).backgroundColor,
-                color: getCategoryMeta(item.category).textColor,
-              }"
-              >
-                <span class="thumb-icon">{{ getCategoryMeta(item.category).icon }}</span>
+              <div>
+                <span class="circle">
+                  <template v-if="item.type === 'income'">
+                    <div class="category-icon">수입</div>
+                  </template>
+                  <template v-else>
+                    <component :is="getCategoryMeta(item.category).icon" :size="20" class="category-icon"/>
+                  </template>
+                </span>
               </div>
 
               <div class="info">
                 <div class="date">
-                  <span>{{ item.date }}</span>
+                  <span>{{ formatTransactionDate(item.date) }}</span>
                 </div>
 
                 <strong class="name">{{ item.memo }}</strong>
 
-                <div class="location">
-                  <img :src="locationIcon" alt="위치 아이콘" class="location-icon" />
+                <div class="location" v-if="item.type === 'expense'">
+                  <img :src="locationIcon" alt="위치 아이콘" class="location-icon"/>
                   <span>{{ item.location }} </span>
                 </div>
               </div>
@@ -64,7 +65,23 @@
 <script setup>
 import Box from "@/components/Box.vue";
 import locationIcon from '@/assets/icon/ico_location_black.svg';
-import { getCategoryMeta } from '@/pages/home/home.js';
+import {getCategoryMeta} from '@/pages/home/home.js';
+
+const formatTransactionDate = (dateString) => {
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateString;
+  }
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
 
 defineProps({
   list: {
@@ -168,5 +185,19 @@ h3 {
 .price {
   font-size: 30px;
   font-weight: 900;
+}
+
+.circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7edd0;
+  border: 1px solid #d8c9a0;
+  color: #805B2E;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 </style>

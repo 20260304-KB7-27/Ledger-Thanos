@@ -49,7 +49,7 @@ const selectedGu = ref(null);
 const isMapReady = ref(false);
 
 const mapTransactions = computed(() =>
-  transactions.value.filter((t) => t.location)
+  transactions.value.filter((t) => t.location && t.type === 'expense')
 );
 
 const guSummary = computed(() => {

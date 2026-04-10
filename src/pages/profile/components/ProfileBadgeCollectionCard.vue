@@ -11,7 +11,9 @@
     <article class="collection-card">
       <div class="collection-header">
         <h2 class="section-title">모든 뱃지</h2>
-        <span class="collection-count">{{ earnedBadgeCount }} / {{ badgeCatalog.length }}</span>
+        <span class="collection-count"
+          >{{ earnedBadgeCount }} / {{ badgeCatalog.length }}</span
+        >
       </div>
 
       <div class="badge-grid">
@@ -73,7 +75,7 @@ defineProps({
 
 .badge-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(122px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(122px, 1fr));
   gap: 34px 18px;
 }
 

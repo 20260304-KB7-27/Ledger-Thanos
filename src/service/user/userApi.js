@@ -45,7 +45,9 @@ export const signupUser = async ({
     userPassword,
     nickname,
     userLocation,
-    selectedTitle: '',
+    selectedTitle: [],
+    earnedBadges: [],
+    createdAt: new Date().toISOString().slice(0, 10),
   });
 };
 

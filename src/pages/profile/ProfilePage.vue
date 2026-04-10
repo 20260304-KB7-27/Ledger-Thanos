@@ -21,7 +21,9 @@
     <section class="right-column">
       <!-- 칭호 선택 -->
       <ProfileTitleCard
-        :selected-title-badges="selectedTitleBadges"
+        :earned-badges="earnedBadgeCatalog"
+        :selected-title-keys="normalizedSelectedTitleKeys"
+        @toggle-title="toggleTitle"
       />
 
       <!-- 모든 뱃지 -->
@@ -51,8 +53,9 @@
 /*
  * import
  */
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { tryCalculateBadges } from '@/pages/profile/js/badgeCalculator';
 import { updateUserProfile } from '@/service/user/userApi';
 import { useUserStore } from '@/stores/user';
 import ProfileUserCard from '@/pages/profile/components/ProfileUserCard.vue';
@@ -94,12 +97,17 @@ const normalizedSelectedTitleKeys = computed(() =>
   getNormalizedSelectedTitleKeys(profile.value.selectedTitle)
 );
 
+const earnedBadgeKeys = computed(() => {
+  const badges = userStore.user?.earnedBadges;
+  return Array.isArray(badges) ? badges : [];
+});
+
 const badgeCatalog = computed(() =>
-  getBadgeCatalog(normalizedSelectedTitleKeys.value)
+  getBadgeCatalog(earnedBadgeKeys.value, normalizedSelectedTitleKeys.value)
 );
 
-const earnedBadgeCount = computed(
-  () => getEarnedBadgeCount(badgeCatalog.value)
+const earnedBadgeCount = computed(() =>
+  getEarnedBadgeCount(badgeCatalog.value)
 );
 
 const selectedTitleBadges = computed(() => {
@@ -109,13 +117,20 @@ const selectedTitleBadges = computed(() => {
   );
 });
 
-const selectedBadge = computed(() => getSelectedBadge(selectedTitleBadges.value));
+const selectedBadge = computed(() =>
+  getSelectedBadge(selectedTitleBadges.value)
+);
+
+// 획득한 배지만 추려서 칭호 선택 카드에 전달
+const earnedBadgeCatalog = computed(() =>
+  badgeCatalog.value.filter((b) => b.earned)
+);
 
 /*
  * 활동 요약 / 가입일 표시
  */
 const summary = computed(() => getProfileSummary(transactions.value));
-const memberSinceText = computed(() => getMemberSinceText(transactions.value));
+const memberSinceText = computed(() => getMemberSinceText(userStore.user));
 
 /*
  * 프로필 수정 모달 상태
@@ -169,6 +184,28 @@ const saveProfile = async () => {
   } finally {
     isSavingProfile.value = false;
   }
+};
+
+/*
+ * 월말 배지 자동 계산
+ */
+onMounted(() => {
+  tryCalculateBadges(
+    transactions.value,
+    userStore.user,
+    (updatedUser) => userStore.setUser(updatedUser),
+  );
+});
+
+const toggleTitle = async (key) => {
+  const current = normalizedSelectedTitleKeys.value;
+  const next = current.includes(key) ? [] : [key];
+
+  const result = await updateUserProfile(userStore.user.id, {
+    ...userStore.user,
+    selectedTitle: next,
+  });
+  userStore.setUser(result?.data ?? result);
 };
 
 const handleLogout = () => {
@@ -257,7 +294,6 @@ const handleLogout = () => {
     width: 100%;
     flex-basis: auto;
   }
-
 }
 
 @media (max-width: 640px) {
