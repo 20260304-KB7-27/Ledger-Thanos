@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="header">
-      <Box width="custom" custom-width="100%">
+      <Box width="custom" custom-width="100%" :shadow="false">
         <div class="period-toggle">
           <button
             class="toggle-btn"
@@ -26,7 +26,7 @@
         <button class="month-arrow" @click="goNextPeriod">&gt;</button>
       </h3>
 
-      <Box width="custom" custom-width="100%" id="download-pdf">
+      <Box width="custom" custom-width="100%" id="download-pdf" :shadow="false">
         <div class="box-label-header pdf-button" @click="exportPdf">
           PDF 내보내기
         </div>
@@ -35,27 +35,27 @@
     <div class="content">
       <div id="common-stats">
         <div id="account-info">
-          <Box width="custom" custom-width="100%" class="box-label-account">
+          <Box width="custom" custom-width="100%" class="box-label-account" :shadow="false">
             <div>
               {{ periodMode === 'week' ? '이번주 수입' : '이번달 수입' }}
             </div>
             <div>{{ formatAmount(periodIncome) }}</div>
           </Box>
 
-          <Box width="custom" custom-width="100%" class="box-label-account">
+          <Box width="custom" custom-width="100%" class="box-label-account" :shadow="false">
             <div>
               {{ periodMode === 'week' ? '이번주 지출' : '이번달 지출' }}
             </div>
             <div>{{ formatAmount(periodExpense) }}</div>
           </Box>
 
-          <Box width="custom" custom-width="100%" class="box-label-account">
+          <Box width="custom" custom-width="100%" class="box-label-account" :shadow="false">
             <div>순수익</div>
             <div>{{ formatAmount(netProfit) }}</div>
           </Box>
         </div>
         <div id="emotion-info">
-          <Box width="custom" custom-width="100%">
+          <Box width="custom" custom-width="100%" :shadow="false">
             <div class="emotion-content">
               <div class="box-label">감정 통계</div>
               <div class="box-content">
@@ -83,7 +83,7 @@
           </Box>
         </div>
         <div id="trade-history-info">
-          <Box width="custom" custom-width="100%" class="box-custom">
+          <Box width="custom" custom-width="100%" class="box-custom" :shadow="false">
             <div class="scroll-box">
               <div class="box-label">거래 내역</div>
 
@@ -106,7 +106,7 @@
       </div>
       <div id="theme-stats">
         <div id="location-spend">
-          <Box width="custom" custom-width="100%" class="box-custom">
+          <Box width="custom" custom-width="100%" class="box-custom" :shadow="false">
             <div class="scroll-box">
               <div class="box-label">지역별 소비</div>
 
@@ -126,7 +126,7 @@
         </div>
 
         <div id="category-spend">
-          <Box width="custom" custom-width="100%" class="box-custom">
+          <Box width="custom" custom-width="100%" class="box-custom" :shadow="false">
             <div class="scroll-box">
               <div class="box-label">카테고리별 지출</div>
 
