@@ -413,7 +413,10 @@ const saveTransaction = async () => {
 
   try {
     isSubmitting.value = true;
-    await api.post('/transactions', buildTransactionPayload());
+    const savedTransaction = await api.post('/transactions', buildTransactionPayload());
+
+    // 저장 직후 pinia userStore에도 반영해서 감정 집계와 전역 UI를 즉시 갱신
+    userStore.addTransaction(savedTransaction);
 
     alert("성공적으로 저장되었습니다!");
     // 저장 완료 후 폼 초기화

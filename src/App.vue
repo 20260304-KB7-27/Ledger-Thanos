@@ -1,9 +1,30 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import Nav from '@/components/Nav.vue';
+import { useUserStore } from '@/stores/user';
 
 const route = useRoute();
+const userStore = useUserStore();
+const { appThemeClass } = storeToRefs(userStore);
+const themeClassNames = ['theme-happy', 'theme-neutral', 'theme-regret'];
+
+// theme.css가 #app.theme-* 셀렉터를 기준으로 토큰을 바꾸므로 mount root에 클래스를 동기화
+const syncAppThemeClass = (nextThemeClass) => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const appRoot = document.getElementById('app');
+
+  if (!appRoot) {
+    return;
+  }
+
+  appRoot.classList.remove(...themeClassNames);
+  appRoot.classList.add(nextThemeClass);
+};
 
 // login, signup 페이지에서는 Nav 숨기기
 const hideNav = computed(() => {
@@ -11,11 +32,16 @@ const hideNav = computed(() => {
   return path === '/login' || path === '/signup';
 });
 
+watch(
+  appThemeClass,
+  (nextThemeClass) => {
+    // 감정 비율이 바뀌면 App 루트 토큰도 바로 갱신
+    syncAppThemeClass(nextThemeClass);
+  },
+  { immediate: true }
+);
+
 const logoSrc = '/src/assets/icon/logo.svg';
-const textColor = 'linear-gradient(180deg, #F6E3A1 0%, #EFAF9E 100%)';
-const backGroundColor = '#FF8C00';
-const navBgColor = '#ffffff';
-const navBgColor1 = '#FFAAAA';
 const menus = [
   {
     key: 'home',
@@ -57,42 +83,15 @@ const menus = [
 
 <template>
   <div class="app-layout" :class="{ 'no-nav': hideNav }">
-    <Nav
-      v-if="!hideNav"
-      :menus="menus"
-      :logo-src="logoSrc"
-      :active-text-color="navBgColor"
-      :active-bg="backGroundColor"
-      :mobileMenuBg="navBgColor1"
-      :nav-bg="textColor"
-    />
+    <Nav v-if="!hideNav" :menus="menus" :logo-src="logoSrc" text-color="var(--nav-text)"
+      active-text-color="var(--nav-active-text)" active-bg="var(--nav-active-bg)"
+      mobile-menu-bg="var(--nav-mobile-menu-bg)" nav-bg="var(--nav-bg)" />
+    <!-- Nav 색상도 theme.css의 semantic token을 그대로 사용 -->
     <main class="content">
       <RouterView />
     </main>
   </div>
 </template>
-
-<style>
-/* 글로벌 리셋 — 브라우저 기본 margin/padding 제거 */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-#app {
-  width: 100%;
-  min-height: 100vh;
-}
-</style>
 
 <style scoped>
 .app-layout {
@@ -104,6 +103,7 @@ body {
 /* ─── 데스크탑 (1025px+): 사이드바 25% → 콘텐츠 나머지 75% ─── */
 @media (min-width: 1025px) {
   .content {
+    /* 실제 배경색은 base.css / theme.css 토큰에서 가져오고 여기서는 레이아웃만 설정 */
     margin-left: 25%;
     width: 75%;
     min-height: 100vh;
