@@ -25,14 +25,17 @@
             <input v-model.number="transaction.amount" type="number" placeholder="0원 (입력)" class="transparent-input" />
           </Box>
 
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" class="date-box" role="button" tabindex="0" @click="openDatePicker"
+            @keydown.enter.prevent="openDatePicker" @keydown.space.prevent="openDatePicker">
             <p class="label">날짜</p>
-            <input v-model="transaction.date" type="date" class="transparent-input date-input" />
+            <input ref="dateInput" v-model="transaction.date" type="date" class="transparent-input date-input"
+              :min="MIN_TRANSACTION_DATE" :max="MAX_TRANSACTION_DATE" inputmode="none" @keydown="handleDateKeydown"
+              @beforeinput.prevent @paste.prevent />
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">카테고리</p>
-            <div class="category-circles">
+            <div v-if="isExpense" class="category-circles">
               <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option" :class="{
                 'category-option-active': isExpense && transaction.category === cat.value,
                 'category-option-disabled': !isExpense,
@@ -44,13 +47,21 @@
                 <span class="category-name">{{ cat.label }}</span>
               </button>
             </div>
+            <div v-else class="fixed-field">
+              <div class="fixed-field-heading">
+                <DollarSign :size="18" class="fixed-field-icon income-icon" />
+                <strong class="fixed-field-title">Income</strong>
+              </div>
+              <!-- 수입 모드 시 자동 카테고리 선택 비활성화 -->
+              <p class="fixed-field-description">수입은 자동으로 카테고리가 부여돼요.</p>
+            </div>
           </Box>
         </div>
 
         <div class="column right-column">
           <Box width="custom" customWidth="100%">
-            <p class="label center-text">이 소비에 만족하셨나요?</p>
-            <div class="mood-group">
+            <p class="label">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
+            <div v-if="isExpense" class="mood-group">
               <button type="button" class="mood-item mood-button"
                 :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
                 :disabled="!isExpense" @click="transaction.emotion = 'happy'">
@@ -64,11 +75,15 @@
                 <span>후회</span>
               </button>
             </div>
+            <div v-else class="fixed-field">
+              <!-- 수입 모드 시 감정 선택 비활성화 -->
+              <p class="fixed-field-description">수입은 감정을 저장하지 않아요.</p>
+            </div>
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">위치</p>
-            <div class="select-wrapper" :class="{ 'select-wrapper-disabled': !isExpense }">
+            <div v-if="isExpense" class="select-wrapper">
               <select v-model="transaction.location" class="transparent-input select-input" :disabled="!isExpense">
                 <option disabled value="">소비가 이뤄진 위치를 선택해주세요</option>
                 <option v-for="district in seoulDistricts" :key="district" :value="district">
@@ -77,13 +92,16 @@
               </select>
               <ChevronDown :size="18" class="select-chevron" />
             </div>
-            <p class="select-caption" :class="{ 'select-caption-disabled': !isExpense }">드롭다운 메뉴로 선택</p>
+            <div v-else class="fixed-field">
+              <p class="fixed-field-description">수입은 위치를 저장하지 않아요.</p>
+            </div>
+            <p v-if="isExpense" class="select-caption">드롭다운 메뉴로 선택</p>
           </Box>
 
           <Box width="custom" customWidth="100%">
             <p class="label">메모</p>
-            <input v-model="transaction.memo" type="text" placeholder="이 소비에 대해 기록해보세요..."
-              class="transparent-input memo-input" :disabled="!isExpense" />
+            <textarea ref="memoTextarea" v-model="transaction.memo" :placeholder="memoPlaceholder"
+              class="transparent-input memo-input" rows="3" @input="handleMemoInput"></textarea>
           </Box>
 
           <button class="submit-button" :class="{ disabled: isSubmitting }" :disabled="isSubmitting"
@@ -98,13 +116,14 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import {
   Beer,
   BusFront,
   ChevronDown,
   Coffee,
   Cross,
+  DollarSign,
   Ellipsis,
   Hamburger,
   Package,
@@ -132,12 +151,55 @@ const currentUserId = computed(() =>
 // ==========================================
 // 가계부 폼 상태 생성 및 관리
 // ==========================================
-const getTodayKST = () => { // UTC -> KST로 변환 (9시간 차이 계산)
-  const now = new Date();
-  const offset = now.getTimezoneOffset() * 60000;
-  const dateOffset = new Date(now.getTime() - offset);
-  return dateOffset.toISOString().split('T')[0];
+const KST_TIME_ZONE = 'Asia/Seoul';
+const KST_UTC_OFFSET = '+09:00';
+
+// UTC -> KST 변환 로직
+const getKSTDateTimeParts = () => {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: KST_TIME_ZONE,
+    hour12: false,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  return Object.fromEntries(
+    formatter
+      .formatToParts(new Date())
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value])
+  );
 };
+
+const getTodayKST = () => {
+  const { year, month, day } = getKSTDateTimeParts();
+  return `${year}-${month}-${day}`;
+};
+
+const MIN_TRANSACTION_DATE = '1900-01-01'; // 최대 과거 날짜
+const MAX_TRANSACTION_DATE = '2099-12-31'; // 최대 미래 날짜
+
+const isValidDateString = (value) => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+};
+
+const isDateInAllowedRange = (value) =>
+  value >= MIN_TRANSACTION_DATE && value <= MAX_TRANSACTION_DATE;
 
 const createInitialTransaction = () => ({
   type: 'expense', // 'expense' 또는 'income'
@@ -152,9 +214,13 @@ const createInitialTransaction = () => ({
 const transaction = ref(createInitialTransaction())
 const isExpense = computed(() => transaction.value.type === 'expense') // 지출 모드, 수입 모드 전환
 const isSubmitting = ref(false) // 중복 저장 방지를 위한 변수
+// 날짜 박스 어디를 눌러도 네이티브 date picker를 열 수 있게 input을 직접 제어
+const dateInput = ref(null)
+const memoTextarea = ref(null)
 
 const resetTransaction = () => {
   transaction.value = createInitialTransaction()
+  nextTick(resizeMemoInput)
 }
 
 // UI에 뿌려질 카테고리 데이터
@@ -201,29 +267,86 @@ const seoulDistricts = [
 ];
 
 const emotionOptions = ['happy', 'regret'];
+const memoPlaceholder = computed(() =>
+  isExpense.value ? '이 소비에 대해 기록해보세요...' : '이 수입에 대해 기록해보세요...'
+);
+
+// 브라우저가 지원하면 picker를 직접 열고, 아니면 input에 포커스
+const openDatePicker = () => {
+  if (!dateInput.value) {
+    return;
+  }
+
+  if (typeof dateInput.value.showPicker === 'function') {
+    dateInput.value.showPicker();
+    return;
+  }
+
+  dateInput.value.focus();
+};
+
+// 날짜는 키보드로 직접 수정하지 않고 picker 선택만 허용
+const handleDateKeydown = (event) => {
+  if (event.key === 'Tab' || event.metaKey || event.ctrlKey || event.altKey) {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    openDatePicker();
+  }
+};
+
+const resizeMemoInput = () => {
+  if (!memoTextarea.value) {
+    return;
+  }
+
+  memoTextarea.value.style.height = 'auto';
+  memoTextarea.value.style.height = `${memoTextarea.value.scrollHeight}px`;
+};
+
+const handleMemoInput = () => {
+  resizeMemoInput();
+};
+
+onMounted(() => {
+  resizeMemoInput();
+});
+
+const buildTransactionDateTime = (date) => { // 몇시 몇분을 포함하도록 변경
+  const { hour, minute } = getKSTDateTimeParts();
+
+  return `${date}T${hour}:${minute}:00${KST_UTC_OFFSET}`; // (ex) 2026-04-26T08:58:00+09:00
+};
 
 // payload 제작
 const buildTransactionPayload = () => {
   const amount = Number(transaction.value.amount);
   const userId = currentUserId.value;
+  const memo = transaction.value.memo.trim();
+  const date = buildTransactionDateTime(transaction.value.date);
 
   if (isExpense.value) {
     return {
       ...transaction.value,
       user_id: userId,
       amount,
-      memo: transaction.value.memo.trim(),
+      date,
+      memo,
     };
   }
 
-  return { // 수입 모드인 경우 카테고리, 감정, 위치, 메모를 null로 넘김
+  return { // 수입 모드 시 감정, 위치는 null
     ...transaction.value,
     user_id: userId,
     amount,
-    category: null,
+    date,
+    category: 'income',
     emotion: null,
     location: null,
-    memo: null,
+    memo,
   };
 };
 
@@ -235,6 +358,7 @@ const saveTransaction = async () => {
     return; // 중복 저장 방지
   }
 
+  // 로그인 상태 확인
   if (currentUserId.value === null) {
     alert("로그인 정보를 확인해주세요.");
     return;
@@ -243,6 +367,30 @@ const saveTransaction = async () => {
   // 유효성 검사
   if (!transaction.value.amount || transaction.value.amount <= 0) {
     alert("금액을 정확히 입력해주세요!");
+    return;
+  }
+
+  const date = transaction.value.date?.trim?.() ?? '';
+
+  if (!date) {
+    alert("날짜를 선택해주세요!");
+    return;
+  }
+
+  if (!isValidDateString(date)) {
+    alert("올바른 날짜를 선택해주세요!");
+    return;
+  }
+
+  if (!isDateInAllowedRange(date)) {
+    alert("날짜는 1900-01-01부터 2099-12-31까지 선택할 수 있어요.");
+    return;
+  }
+
+  const memo = transaction.value.memo.trim();
+
+  if (!memo) {
+    alert("메모를 입력해주세요!");
     return;
   }
 
@@ -334,10 +482,6 @@ const saveTransaction = async () => {
   margin-bottom: 15px;
 }
 
-.center-text {
-  text-align: center;
-}
-
 .transparent-input {
   border: none;
   outline: none;
@@ -346,9 +490,23 @@ const saveTransaction = async () => {
   width: 100%;
 }
 
+.date-box {
+  cursor: pointer;
+}
+
 .date-input {
   font-family: inherit;
   color: #333;
+  cursor: pointer;
+}
+
+.memo-input {
+  display: block;
+  min-height: 84px;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.6;
+  font-family: inherit;
 }
 
 .select-input {
@@ -399,6 +557,46 @@ const saveTransaction = async () => {
   font-size: 12px;
   font-weight: 600;
   color: #8a774e;
+}
+
+.fixed-field {
+  min-height: 64px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #d8c9a0;
+  background: #fff8de;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fixed-field-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fixed-field-icon {
+  flex-shrink: 0;
+}
+
+.income-icon {
+  color: #15803d;
+}
+
+.fixed-field-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #166534;
+}
+
+.fixed-field-description {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6f6340;
+  line-height: 1.4;
 }
 
 .select-caption-disabled {
@@ -566,6 +764,7 @@ const saveTransaction = async () => {
   border: none;
   background: transparent;
   font: inherit;
+  cursor: pointer;
 }
 
 .mood-item.active {
