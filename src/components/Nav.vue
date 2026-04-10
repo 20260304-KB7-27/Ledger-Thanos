@@ -258,7 +258,7 @@ watch(
   position: fixed;
   top: 0;
   left: 0;
-  width: 25%;
+  width: 20%;
   height: 100vh;
   background: v-bind(navBg);
   padding: 15px 20px;
@@ -272,10 +272,6 @@ watch(
   .tablet-only,
   .mobile-only {
     display: none !important;
-  }
-
-  .content {
-    margin-left: 25%;
   }
 }
 
@@ -304,11 +300,6 @@ watch(
   .desktop-only,
   .mobile-only {
     display: none !important;
-  }
-
-  .content {
-    margin-left: 0;
-    padding-top: 12%;
   }
 }
 
