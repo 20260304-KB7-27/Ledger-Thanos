@@ -434,10 +434,12 @@ const saveTransaction = async () => {
 .ledger-wrapper {
   background-color: #fdf8e3;
   min-height: 100vh;
+  
 }
 
 .content {
-  padding: 40px 60px;
+  padding: 20px 28px 24px;
+  width: 100%;
   overflow-y: auto;
   box-sizing: border-box;
   min-height: 100vh;
@@ -464,7 +466,6 @@ const saveTransaction = async () => {
 .grid-layout {
   display: flex;
   gap: 30px;
-  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -476,7 +477,7 @@ const saveTransaction = async () => {
 }
 
 .label {
-  font-size: 14px;
+  font-size: 22px;
   font-weight: bold;
   color: #333;
   margin-bottom: 15px;
@@ -624,7 +625,7 @@ const saveTransaction = async () => {
   background: transparent;
   border-radius: 14px;
   padding: 12px 16px;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 800;
   color: #8c7441;
   cursor: pointer;
@@ -796,7 +797,7 @@ const saveTransaction = async () => {
   border: none;
   border-radius: 25px;
   padding: 20px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
   color: #000;
   cursor: pointer;
