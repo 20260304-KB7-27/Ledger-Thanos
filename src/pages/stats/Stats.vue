@@ -66,6 +66,7 @@
 
                 <ProgressBarChart
                   v-if="expenseTransactions.length > 0"
+                  :key="`${periodMode}-${periodLabel}`"
                   :value="emotionSatisfiedRate"
                   :max-value="100"
                   bar-color="#FFE99A"
