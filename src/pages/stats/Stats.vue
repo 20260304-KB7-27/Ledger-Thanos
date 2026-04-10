@@ -487,8 +487,6 @@ onMounted(async () => {
   display: flex;
   width: 100%;
   overflow: hidden;
-  border-radius: 10px;
-  border: 1px solid #d9d9d9;
   background: white;
 }
 
@@ -496,6 +494,7 @@ onMounted(async () => {
   flex: 1;
   height: 42px;
   border: none;
+  border-radius: 30px;
   background: transparent;
   cursor: pointer;
   font-size: 16px;
@@ -504,10 +503,6 @@ onMounted(async () => {
 
 .toggle-btn.active {
   background: #ffe99a;
-}
-
-.toggle-btn:not(:last-child) {
-  border-right: 1px solid #d9d9d9;
 }
 
 .box-label {
