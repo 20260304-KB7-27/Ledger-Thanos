@@ -1,0 +1,187 @@
+:root,
+#app.theme-neutral {
+  /* Neutral palette - 기본 상태 컬러 */
+  --neutral-main-yellow: #ffd400;
+  --neutral-light-orange: #ff8c00;
+  --neutral-main-orange: #ff5f00;
+
+  /* Semantic colors - 각 역할 별 컬러 */
+  --page-bg-home: #f6efcf;
+  --page-bg-register: #fdf8e3;
+  --page-bg-stats: #fff8dd;
+  --page-bg-map: #fffbf0;
+  --page-bg-profile: #f9f0c9;
+  --page-bg-auth: #ffd400;
+  --surface-primary: #ffffff;
+  --surface-secondary: #fff8de;
+  --surface-emphasis: #fff2bf;
+  --text-primary: #1a1a1a;
+  --text-secondary: #333333;
+  --text-muted: #555555;
+  --text-placeholder: #bbbbbb;
+  --border-soft: #ebebeb;
+  --border-strong: #d8c9a0;
+  --accent-primary: #ff8c00;
+  --accent-secondary: #ff5f00;
+  --accent-strong: #ffd400;
+  --amount-plus: #4ce158;
+  --amount-minus: #ff945f;
+  --danger: #e53935;
+
+  /* Component roles - 컴포넌트 별 컬러 */
+  --card-bg: var(--surface-primary);
+  --card-border: var(--border-soft);
+  --input-bg: var(--surface-primary);
+  --input-border: var(--border-soft);
+  --input-text: var(--text-primary);
+  --nav-bg: linear-gradient(180deg, #f6e3a1 0%, #efaf9e 100%);
+  --nav-text: #805b2e;
+  --nav-active-bg: #ff8c00;
+  --nav-active-text: #ffffff;
+  --button-primary-bg: var(--accent-primary);
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: var(--accent-strong);
+  --button-secondary-text: #000000;
+  --button-danger-bg: #ff8578;
+  --button-danger-text: #ffffff;
+
+  /* Shape and effects -모양과 그림자 효과 등*/
+  --radius-card: 20px;
+  --radius-button: 999px;
+  --radius-input: 999px;
+  --radius-chip: 999px;
+  --border-width: 1px;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-button: 0 8px 18px rgba(0, 0, 0, 0.16);
+  --shadow-emphasis: 0 5px 8px rgba(196, 112, 93, 0.24);
+
+  /* Content visibility - 콘텐츠 표시 여부 */
+  --icon-display: block;
+  --image-display: block;
+  --illustration-opacity: 1;
+}
+
+#app.theme-happy {
+  /* Happy palette - 만족 상태 컬러 */
+  --happy-main-pink: #ff9898;
+  --happy-light-pink: #ffaaaa;
+  --happy-light-yellow: #ffe99a;
+  --happy-plus: #4ce158;
+  --happy-minus: #ff945f;
+
+  /* Semantic colors - 각 역할 별 컬러 */
+  --page-bg-home: #fff4c9;
+  --page-bg-register: #fff6d7;
+  --page-bg-stats: #fff0bc;
+  --page-bg-map: #fff8df;
+  --page-bg-profile: #ffe4d5;
+  --page-bg-auth: #ffe99a;
+  --surface-primary: #fff9f1;
+  --surface-secondary: #ffeccf;
+  --surface-emphasis: #ffe99a;
+  --text-primary: #5c3218;
+  --text-secondary: #805b2e;
+  --text-muted: #9a6b52;
+  --text-placeholder: #c8a38d;
+  --border-soft: #ffd1bd;
+  --border-strong: #ffaaaa;
+  --accent-primary: #ff9898;
+  --accent-secondary: #ff8c00;
+  --accent-strong: #ffe99a;
+  --amount-plus: #4ce158;
+  --amount-minus: #ff945f;
+  --danger: #d95c5c;
+
+  /* Component roles - 컴포넌트 별 컬러 */
+  --card-bg: var(--surface-primary);
+  --card-border: var(--border-soft);
+  --input-bg: #fff6ea;
+  --input-border: var(--border-strong);
+  --input-text: var(--text-primary);
+  --nav-bg: linear-gradient(180deg, #ffe99a 0%, #ffaaaa 100%);
+  --nav-text: #7a4b2d;
+  --nav-active-bg: #ff9898;
+  --nav-active-text: #ffffff;
+  --button-primary-bg: var(--accent-primary);
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: var(--accent-strong);
+  --button-secondary-text: #5c3218;
+  --button-danger-bg: #ff945f;
+  --button-danger-text: #ffffff;
+
+  /* Shape and effects -모양과 그림자 효과 등*/
+  --radius-card: 24px;
+  --radius-button: 999px;
+  --radius-input: 18px;
+  --radius-chip: 999px;
+  --border-width: 1px;
+  --shadow-card: 0 14px 32px rgba(255, 152, 152, 0.28);
+  --shadow-button: 0 12px 24px rgba(255, 140, 0, 0.22);
+  --shadow-emphasis: 0 18px 40px rgba(255, 170, 170, 0.24);
+
+  /* Content visibility - 콘텐츠 표시 여부 */
+  --icon-display: block;
+  --image-display: block;
+  --illustration-opacity: 1;
+}
+
+#app.theme-regret {
+  /* Regret palette - 후회 상태 컬러 */
+  --regret-black: #000000;
+  --regret-white: #ffffff;
+
+  /* Semantic colors - 각 역할 별 컬러 */
+  --page-bg-home: #ffffff;
+  --page-bg-register: #ffffff;
+  --page-bg-stats: #ffffff;
+  --page-bg-map: #ffffff;
+  --page-bg-profile: #ffffff;
+  --page-bg-auth: #ffffff;
+  --surface-primary: #ffffff;
+  --surface-secondary: #ffffff;
+  --surface-emphasis: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-muted: #000000;
+  --text-placeholder: #000000;
+  --border-soft: #000000;
+  --border-strong: #000000;
+  --accent-primary: #000000;
+  --accent-secondary: #ffffff;
+  --accent-strong: #000000;
+  --amount-plus: #000000;
+  --amount-minus: #000000;
+  --danger: #000000;
+
+  /* Component roles - 컴포넌트 별 컬러 */
+  --card-bg: var(--surface-primary);
+  --card-border: var(--border-strong);
+  --input-bg: #ffffff;
+  --input-border: var(--border-strong);
+  --input-text: var(--text-primary);
+  --nav-bg: #ffffff;
+  --nav-text: #000000;
+  --nav-active-bg: #000000;
+  --nav-active-text: #ffffff;
+  --button-primary-bg: #000000;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: #ffffff;
+  --button-secondary-text: #000000;
+  --button-danger-bg: #000000;
+  --button-danger-text: #ffffff;
+
+  /* Shape and effects -모양과 그림자 효과 등*/
+  --radius-card: 0;
+  --radius-button: 0;
+  --radius-input: 0;
+  --radius-chip: 0;
+  --border-width: 2px;
+  --shadow-card: none;
+  --shadow-button: none;
+  --shadow-emphasis: none;
+
+  /* Content visibility - 콘텐츠 표시 여부 */
+  --icon-display: none;
+  --image-display: none;
+  --illustration-opacity: 0;
+}
