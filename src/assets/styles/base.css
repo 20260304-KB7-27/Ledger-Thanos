@@ -1,0 +1,63 @@
+/* 폰트 지정 */
+@font-face {
+  font-family: 'NPS';
+  src: url('../fonts/NPSfont_regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NPS';
+  src: url('../fonts/NPSfont_bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NPS';
+  src: url('../fonts/NPSfont_extrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-display: swap;
+}
+
+:root {
+  --font-family-base: 'NPS', sans-serif;
+}
+
+/* 전역 리셋 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  color: var(--text-primary);
+  background: var(--page-bg-home);
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+img,
+svg {
+  display: block;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
