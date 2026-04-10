@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" bgColor="#FFFDF7" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px">
     <h3 class="panel-title">지역별 요약</h3>
     <ul v-if="summary.length > 0" class="gu-list">
       <li
@@ -31,8 +31,8 @@ const emit = defineEmits(['select-gu']);
 
 <style scoped>
 .panel-title {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   color: #333;
   margin: 0 0 10px 0;
 }
@@ -82,12 +82,13 @@ const emit = defineEmits(['select-gu']);
 
 .gu-name {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 600;
   color: #333;
 }
 
 .gu-total {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #555;
 }

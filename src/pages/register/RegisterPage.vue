@@ -434,10 +434,12 @@ const saveTransaction = async () => {
 .ledger-wrapper {
   background-color: #fdf8e3;
   min-height: 100vh;
+  
 }
 
 .content {
-  padding: 40px 60px;
+  padding: 20px 28px 24px;
+  width: 100%;
   overflow-y: auto;
   box-sizing: border-box;
   min-height: 100vh;
@@ -464,7 +466,6 @@ const saveTransaction = async () => {
 .grid-layout {
   display: flex;
   gap: 30px;
-  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -476,8 +477,8 @@ const saveTransaction = async () => {
 }
 
 .label {
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 600;
   color: #333;
   margin-bottom: 15px;
 }
@@ -522,7 +523,7 @@ const saveTransaction = async () => {
 }
 
 .select-input:invalid {
-  color: #9a865d;
+  color: #ffe99a;
 }
 
 .select-wrapper {
@@ -530,7 +531,7 @@ const saveTransaction = async () => {
 }
 
 .select-wrapper:focus-within .select-input {
-  border-color: #c89a2b;
+  border-color: #ffe99a;
   box-shadow: 0 0 0 3px rgba(244, 208, 63, 0.2);
 }
 
@@ -616,7 +617,6 @@ const saveTransaction = async () => {
   padding: 8px;
   border-radius: 18px;
   background: #fff2bf;
-  border: 1px solid #ead9a1;
 }
 
 .toggle-button {
@@ -624,9 +624,8 @@ const saveTransaction = async () => {
   background: transparent;
   border-radius: 14px;
   padding: 12px 16px;
-  font-size: 16px;
-  font-weight: 800;
-  color: #8c7441;
+  font-size: 22px;
+  font-weight: 600;
   cursor: pointer;
   transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -636,13 +635,13 @@ const saveTransaction = async () => {
 }
 
 .toggle-button.expense.active {
-  background: #d97706;
+  background: #FF945F;
   color: #ffffff;
   box-shadow: 0 8px 18px rgba(217, 119, 6, 0.25);
 }
 
 .toggle-button.income.active {
-  background: #15803d;
+  background: #4CE158;
   color: #ffffff;
   box-shadow: 0 8px 18px rgba(21, 128, 61, 0.22);
 }
@@ -650,7 +649,7 @@ const saveTransaction = async () => {
 .mode-indicator {
   margin: 10px 4px 0;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
 }
 
@@ -693,15 +692,15 @@ const saveTransaction = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f7edd0;
-  border: 1px solid #d8c9a0;
-  color: #805B2E;
+  background-color: #FFE99A;
+  color: #FF8C00;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .category-option:hover .circle {
-  background-color: #f4d03f;
+  background-color: #FF8C00;
+  color: white;
   transform: scale(1.1);
 }
 
@@ -711,7 +710,7 @@ const saveTransaction = async () => {
 }
 
 .circle-active {
-  background-color: #805B2E;
+  background-color: #FF8C00;
   border-color: #805B2E;
   color: #ffffff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
@@ -736,12 +735,12 @@ const saveTransaction = async () => {
 .category-option-disabled .circle {
   background-color: #efe5c8;
   border-color: #ded1ad;
-  color: #b29b70;
+  color: #FFF8DD;
   box-shadow: none;
 }
 
 .category-option-disabled .category-name {
-  color: #b29b70;
+  color: #FFF8DD;
 }
 
 /* 기분 선택 그룹 */
@@ -768,7 +767,7 @@ const saveTransaction = async () => {
 }
 
 .mood-item.active {
-  background-color: #fdf8e3;
+  background-color: #FFF8DD;
 }
 
 .mood-item.disabled {
@@ -785,19 +784,19 @@ const saveTransaction = async () => {
 
 .memo-input:disabled,
 .select-input:disabled {
-  color: #9a865d;
+  color: #FFF8DD;
   cursor: not-allowed;
 }
 
 /* 버튼 */
 .submit-button {
   margin-top: auto;
-  background-color: #f4d03f;
+  background-color: #FFD400;
   border: none;
   border-radius: 25px;
   padding: 20px;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 600;
   color: #000;
   cursor: pointer;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -806,7 +805,7 @@ const saveTransaction = async () => {
 
 .submit-button.disabled,
 .submit-button:disabled {
-  background-color: #d9c87d;
+  background-color: #FFE99A;
   color: #6f6340;
   cursor: not-allowed;
   box-shadow: none;

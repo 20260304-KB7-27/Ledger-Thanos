@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="header">
-      <Box width="custom" custom-width="100%" :shadow="false">
+      <Box width="custom" custom-width="100%" :shadow="false" margin-y="8px">
         <div class="period-toggle">
           <button
             class="toggle-btn"
@@ -518,7 +518,7 @@ onMounted(async () => {
 .header h3 {
   margin: 0;
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
 }
 
@@ -527,16 +527,17 @@ onMounted(async () => {
   width: 100%;
   overflow: hidden;
   background: white;
+  padding: 0px;
 }
 
 .toggle-btn {
   flex: 1;
-  height: 42px;
+  height: 50px;
   border: none;
   border-radius: 30px;
   background: transparent;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 600;
 }
 
@@ -547,7 +548,8 @@ onMounted(async () => {
 .box-label {
   width: 100%;
   text-align: start;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 600;
   white-space: nowrap;
   padding-left: 10px;
   padding-top: 10px;
@@ -556,7 +558,7 @@ onMounted(async () => {
 .box-label-header {
   width: 100%;
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
   white-space: nowrap;
 }
 
@@ -570,7 +572,8 @@ onMounted(async () => {
 .box-label-account {
   width: 100%;
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -610,7 +613,7 @@ onMounted(async () => {
 #common-stats {
   height: 100%;
   display: grid;
-  grid-template-rows: 84px minmax(0, 1.5fr) minmax(0, 2fr);
+  grid-template-rows: 100px minmax(0, 1.4fr) minmax(0, 2fr);
   gap: 18px;
   min-width: 0;
   min-height: 0;
@@ -635,7 +638,6 @@ onMounted(async () => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 #emotion-stats {
@@ -708,6 +710,7 @@ onMounted(async () => {
 
 .pdf-button {
   cursor: pointer;
+  font-weight: 600;
 }
 
 /* 반응형 */
@@ -778,8 +781,13 @@ onMounted(async () => {
     height: auto;
   }
 
+  .toggle-btn {
+    border-radius: 20px;
+    font-size: 17px;
+  }
+
   .header {
-    grid-template-columns: 120px 1fr 120px;
+    grid-template-columns: 130px 1fr 130px;
     height: 72px;
     gap: 10px;
   }
