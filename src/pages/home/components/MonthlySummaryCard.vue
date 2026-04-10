@@ -23,7 +23,7 @@
 
         <div class="summary-row">
           <span class="label">최다 카테고리</span>
-          <span class="value">{{ topCategory }} {{ topCategoryCount }}건</span>
+          <span class="value">{{ getCategoryMeta(topCategory).label }} {{ topCategoryCount }}건</span>
         </div>
       </div>
     </section>
@@ -32,6 +32,7 @@
 
 <script setup>
 import Box from "@/components/Box.vue";
+import {getCategoryMeta} from "@/pages/home/home.js";
 
 defineProps({
   totalCount: {
