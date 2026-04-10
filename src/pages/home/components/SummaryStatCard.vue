@@ -1,18 +1,19 @@
 <template>
   <Box
+      class="card-box"
       width="custom"
       custom-width="100%"
       margin-y="0"
-      :border="`2px solid ${color}`"
-      bg-color="#f3f3f3"
+      border="1.5px solid #d9d9d9"
+      bg-color="#ffffff"
       :shadow="false"
   >
     <section class="card">
-      <p class="title">{{ title }}</p>
+      <h3>{{ title }}</h3>
 
       <strong
           class="amount"
-          :style="{ color: color }"
+          :style="{ color: '#111111' }"
       >
         {{ props.sign }}{{ amount }}
       </strong>
@@ -36,32 +37,53 @@ const props = defineProps({
     type: String,
     default: '+',
   },
-
-  /* 색상 (부모에서 전달) */
-  color: {
-    type: String,
-    default: "#222",
-  },
-
 });
 </script>
 
 <style scoped>
 .card {
   padding: 24px 16px;
-  min-height: 140px;
+  min-height: 220px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
 }
 
-.title {
-  margin: 0 0 28px;
-  font-size: 20px;
-  font-weight: 800;
-  color: #111;
+h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  word-break: keep-all;
 }
 
 .amount {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 400;
   line-height: 1.2;
+  white-space: nowrap;
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .card {
+    min-height: 148px;
+    padding: 20px 14px;
+    gap: 12px;
+  }
+
+  h3 {
+    font-size: 16px;
+    line-height: 1.25;
+    word-break: keep-all;
+  }
+
+  .amount {
+    font-size: 14px;
+    line-height: 1.3;
+    word-break: keep-all;
+  }
 }
 </style>

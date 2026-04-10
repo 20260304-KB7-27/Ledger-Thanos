@@ -1,10 +1,11 @@
 <template>
   <Box
+    class="card-box"
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1px solid #d8d8d8"
-    bg-color="#f3f3f3"
+    border="1.5px solid #d9d9d9"
+    bg-color="#ffffff"
     :shadow="false"
   >
     <section class="card">
@@ -18,7 +19,7 @@
 
         <div class="summary-row">
           <span class="label">만족한 소비</span>
-          <span class="value highlight">{{ satisfiedCount }}건</span>
+          <span class="value">{{ satisfiedCount }}건</span>
         </div>
 
         <div class="summary-row">
@@ -63,9 +64,8 @@ defineProps({
 
 h3 {
   margin: 0 0 36px;
-  font-size: 26px;
-  font-weight: 800;
-  color: #111;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .summary-list {
@@ -82,19 +82,34 @@ h3 {
 }
 
 .label {
-  font-size: 22px;
-  font-weight: 500;
-  color: #111;
+  font-size: 20px;
 }
 
 .value {
-  font-size: 22px;
-  font-weight: 800;
-  color: #111;
+  font-size: 20px;
   text-align: right;
 }
 
-.highlight {
-  color: #f2c300;
+@media (min-width: 769px) and (max-width: 1400px) {
+  .card {
+    padding: 32px 24px;
+  }
+
+  .label,
+  .value {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .summary-row:last-child {
+    align-items: flex-start;
+  }
+
+  .summary-row:last-child .value {
+    max-width: 92px;
+    text-align: right;
+    word-break: keep-all;
+  }
 }
+
 </style>
