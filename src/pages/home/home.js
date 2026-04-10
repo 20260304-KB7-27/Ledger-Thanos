@@ -10,6 +10,9 @@ import {Beer, BusFront, Coffee, Cross, Ellipsis, Hamburger, Package, ShoppingBag
 
 // 최근 거래
 export const getRecentTransactions = (transactions, limit = 5) => {
+    return [...transactions]
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, limit);
     const rslt = [...transactions]
         .sort((a, b) => {
             const dateDiff = new Date(b.date) - new Date(a.date);
