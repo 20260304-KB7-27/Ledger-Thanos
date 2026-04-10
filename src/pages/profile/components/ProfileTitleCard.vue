@@ -10,14 +10,17 @@
   >
     <article class="title-card">
       <h2 class="section-title">칭호 선택</h2>
-      <div v-if="selectedTitleBadges.length > 0" class="badge-grid compact">
+      <div v-if="earnedBadges.length > 0" class="badge-grid compact">
         <button
-          v-for="badge in selectedTitleBadges"
+          v-for="badge in earnedBadges"
           :key="badge.key"
           type="button"
           class="badge-button"
+          :class="{ selected: selectedTitleKeys.includes(badge.key) }"
+          @click="$emit('toggle-title', badge.key)"
         >
           <img :src="badge.image" :alt="badge.name" class="badge-image" />
+          <span class="badge-name">{{ badge.name }}</span>
           <span class="badge-rule">{{ badge.rule }}</span>
         </button>
       </div>
@@ -30,11 +33,17 @@
 import Box from '@/components/Box.vue';
 
 defineProps({
-  selectedTitleBadges: {
+  earnedBadges: {
+    type: Array,
+    required: true,
+  },
+  selectedTitleKeys: {
     type: Array,
     required: true,
   },
 });
+
+defineEmits(['toggle-title']);
 </script>
 
 <style scoped>
@@ -59,14 +68,10 @@ defineProps({
   color: #111111;
 }
 
-.badge-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(122px, 1fr));
-  gap: 34px 18px;
-}
-
 .badge-grid.compact {
-  gap: 8px 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px 14px;
   align-items: start;
 }
 
@@ -75,25 +80,42 @@ defineProps({
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 6px;
   text-align: center;
   background: transparent;
-  border: none;
-  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 10px 6px;
   font-family: inherit;
   cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.badge-button:hover {
+  background: #f5f5f5;
+}
+
+.badge-button.selected {
+  border-color: #f59e0b;
+  background: #fffbeb;
 }
 
 .badge-image {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
 }
 
+.badge-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111111;
+}
+
 .badge-rule {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.3;
-  color: #222222;
+  color: #6b7280;
   word-break: keep-all;
 }
 
