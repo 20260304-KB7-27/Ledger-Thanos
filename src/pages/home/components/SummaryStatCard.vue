@@ -62,7 +62,7 @@ h3 {
 
 .amount {
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
 }
