@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" bgColor="#FFFDF7" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px">
     <h3 class="panel-title">전체 지역 통계</h3>
     <div class="stats-list">
       <div class="stat-item">
@@ -34,8 +34,8 @@ const totalAmount = computed(() => props.transactions.reduce((s, t) => s + t.amo
 
 <style scoped>
 .panel-title {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   color: #333;
   margin: 0 0 10px 0;
 }
@@ -59,7 +59,7 @@ const totalAmount = computed(() => props.transactions.reduce((s, t) => s + t.amo
 }
 
 .stat-label {
-  font-size: 13px;
+  font-size: 14px;
   color: #666;
 }
 

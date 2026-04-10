@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" bgColor="#FFFDF7" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px">
     <h3 class="panel-title">
       상세 내역
       <span v-if="selectedGu" class="gu-tag">{{ selectedGu }}</span>
@@ -47,8 +47,8 @@ const CATEGORY_ICON = {
 
 <style scoped>
 .panel-title {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 600;
   color: #333;
   margin: 0 0 10px 0;
   display: flex;
@@ -103,7 +103,7 @@ const CATEGORY_ICON = {
 }
 
 .tx-memo {
-  font-size: 13px;
+  font-size: 14px;
   color: #333;
   font-weight: 500;
 }
@@ -114,7 +114,7 @@ const CATEGORY_ICON = {
 }
 
 .tx-amount {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   flex-shrink: 0;
 }
@@ -129,7 +129,7 @@ const CATEGORY_ICON = {
 
 .hint-msg,
 .empty-msg {
-  font-size: 13px;
+  font-size: 14px;
   color: #999;
   text-align: center;
   padding: 12px 0;
