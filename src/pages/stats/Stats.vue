@@ -203,12 +203,14 @@ import {
 import { getUserTransactions } from '@/service/user/userApi';
 
 const userStore = useUserStore();
-// 현재 유저 거래 목록
+
+// 현재 로그인한 유저의 거래 목록
 const transactions = ref([]);
 
+// 조회 기준: 월별 / 주별
 const periodMode = ref('month');
 
-// 화면 기준 월
+// 통계 기준 날짜
 const baseDate = ref(new Date(2026, 3, 1)); // 2026-04-01
 
 const loading = ref(false);
@@ -228,6 +230,8 @@ const categoryList = ref([
   { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
 ]);
 
+// category value로 label / icon / 정렬순서를 바로 찾기 위한 매핑 객체
+// 예: categoryMetaMap.value['shopping'] => { label: '쇼핑', icon: ..., order: 1 }
 const categoryMetaMap = computed(() => {
   return categoryList.value.reduce((acc, item) => {
     acc[item.value] = {
@@ -239,10 +243,13 @@ const categoryMetaMap = computed(() => {
   }, {});
 });
 
+// 금액 포맷: 12345 -> "12,345원"
 const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
 
+// Date 객체 복사
 const cloneDate = (date) => new Date(date);
 
+// 해당 날짜가 속한 월의 시작일/종료일 계산
 const startOfMonth = (date) => {
   const d = new Date(date.getFullYear(), date.getMonth(), 1);
   d.setHours(0, 0, 0, 0);
@@ -255,15 +262,17 @@ const endOfMonth = (date) => {
   return d;
 };
 
+// 주 시작일: 월요일 기준
 const startOfWeek = (date) => {
   const d = cloneDate(date);
   const day = d.getDay(); // 0:일 ~ 6:토
-  const diff = day === 0 ? -6 : 1 - day; // 월요일 시작
+  const diff = day === 0 ? -6 : 1 - day; // 일요일이면 이전 월요일로, 그 외는 이번 주 월요일로
   d.setDate(d.getDate() + diff);
   d.setHours(0, 0, 0, 0);
   return d;
 };
 
+// 주 종료일: 일요일 23:59:59.999
 const endOfWeek = (date) => {
   const d = startOfWeek(date);
   d.setDate(d.getDate() + 6);
@@ -271,6 +280,7 @@ const endOfWeek = (date) => {
   return d;
 };
 
+// 현재 날짜가 해당 월의 몇 번째 주차인지 계산
 const getWeekOfMonth = (date) => {
   const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstWeekStart = startOfWeek(firstDay);
@@ -281,10 +291,14 @@ const getWeekOfMonth = (date) => {
   return Math.floor(diffDays / 7) + 1;
 };
 
+// 화면 표시에 필요한 현재 연/월/주차
 const currentYear = computed(() => baseDate.value.getFullYear());
 const currentMonth = computed(() => baseDate.value.getMonth() + 1);
 const currentWeek = computed(() => getWeekOfMonth(baseDate.value));
 
+// 상단 제목용 문자열
+// month 모드면 "2026년 4월"
+// week 모드면 "2026년 4월 1주차"
 const periodLabel = computed(() => {
   if (periodMode.value === 'month') {
     return `${currentYear.value}년 ${currentMonth.value}월`;
@@ -292,6 +306,9 @@ const periodLabel = computed(() => {
   return `${currentYear.value}년 ${currentMonth.value}월 ${currentWeek.value}주차`;
 });
 
+// 현재 선택된 조회 범위(start, end) 계산
+// month 모드: 해당 월 전체
+// week 모드: 해당 주 전체
 const periodRange = computed(() => {
   if (periodMode.value === 'month') {
     return {
@@ -306,37 +323,46 @@ const periodRange = computed(() => {
   };
 });
 
+// 거래 1건이 현재 조회 범위 안에 포함되는지 판별
 const isCurrentPeriodTransaction = (tx) => {
   const date = new Date(tx.date);
   return date >= periodRange.value.start && date <= periodRange.value.end;
 };
 
+// 현재 기간에 해당하는 거래만 필터링
 const periodTransactions = computed(() => {
   return transactions.value.filter(isCurrentPeriodTransaction);
 });
 
+// 현재 기간 수입 합계
 const periodIncome = computed(() => {
   return periodTransactions.value
     .filter((tx) => tx.type === 'income')
     .reduce((sum, tx) => sum + tx.amount, 0);
 });
 
+// 현재 기간 지출 합계
 const periodExpense = computed(() => {
   return periodTransactions.value
     .filter((tx) => tx.type === 'expense')
     .reduce((sum, tx) => sum + tx.amount, 0);
 });
 
+// 순이익 = 수입 - 지출
 const netProfit = computed(() => {
   return periodIncome.value - periodExpense.value;
 });
 
+// 지출 내역만 따로 모으고, 최신순으로 정렬
 const expenseTransactions = computed(() => {
   return periodTransactions.value
     .filter((tx) => tx.type === 'expense')
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 });
 
+// 소비 감정 통계
+// happy: 만족
+// regret: 후회
 const emotionSatisfiedCount = computed(() => {
   return expenseTransactions.value.filter((tx) => tx.emotion === 'happy')
     .length;
@@ -347,12 +373,15 @@ const emotionRegretCount = computed(() => {
     .length;
 });
 
+// 만족 소비 비율(%)
 const emotionSatisfiedRate = computed(() => {
   const total = expenseTransactions.value.length;
   if (!total) return 0;
   return Math.round((emotionSatisfiedCount.value / total) * 100);
 });
 
+// 거래 목록 UI용 데이터 변환
+// 카테고리명을 title로, 아이콘도 함께 붙여서 컴포넌트에 넘김
 const dealLists = computed(() => {
   return periodTransactions.value
     .slice()
@@ -367,6 +396,8 @@ const dealLists = computed(() => {
     }));
 });
 
+// 지역별 소비 집계
+// 같은 location끼리 묶어서 건수와 총액 계산
 const localSpendingList = computed(() => {
   const grouped = {};
 
@@ -393,6 +424,8 @@ const localSpendingList = computed(() => {
     }));
 });
 
+// 카테고리별 소비 집계
+// 지출 내역에서 category 기준으로 합산
 const categorySpendingList = computed(() => {
   const grouped = {};
 
@@ -413,10 +446,13 @@ const categorySpendingList = computed(() => {
     }));
 });
 
+// 조회 모드 변경 (월별/주별)
 const setPeriodMode = (mode) => {
   periodMode.value = mode;
 };
 
+// 이전 기간으로 이동
+// month 모드면 이전 달, week 모드면 이전 주
 const goPrevPeriod = () => {
   const next = cloneDate(baseDate.value);
 
@@ -429,6 +465,7 @@ const goPrevPeriod = () => {
   baseDate.value = next;
 };
 
+// 다음 기간으로 이동
 const goNextPeriod = () => {
   const next = cloneDate(baseDate.value);
 
@@ -441,12 +478,14 @@ const goNextPeriod = () => {
   baseDate.value = next;
 };
 
-
+// 브라우저 인쇄 기능으로 PDF 저장
 const exportPdf = () => {
   window.print();
 };
 
+// 컴포넌트가 마운트되면 로그인한 유저의 거래내역 조회
 onMounted(async () => {
+  // 로그인 유저 정보가 없으면 종료
   if (!userStore.user?.id) return;
 
   /*
