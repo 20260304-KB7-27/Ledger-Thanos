@@ -4,7 +4,7 @@
       <div class="grid-layout">
 
         <div class="column left-column">
-          <Box width="custom" customWidth="100%" marginY="8px">
+          <Box width="custom" customWidth="100%" marginY="8px" :shadow="false">
             <div class="toggle-group">
               <button type="button" class="toggle-button expense" :class="{ active: transaction.type === 'expense' }"
                 @click="transaction.type = 'expense'">
@@ -20,20 +20,20 @@
             </p>
           </Box>
 
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">금액</p>
             <input v-model.number="transaction.amount" type="number" placeholder="0원 (입력)" class="transparent-input" />
           </Box>
 
           <Box width="custom" customWidth="100%" class="date-box" role="button" tabindex="0" @click="openDatePicker"
-            @keydown.enter.prevent="openDatePicker" @keydown.space.prevent="openDatePicker">
+            @keydown.enter.prevent="openDatePicker" @keydown.space.prevent="openDatePicker" :shadow="false">
             <p class="label">날짜</p>
             <input ref="dateInput" v-model="transaction.date" type="date" class="transparent-input date-input"
               :min="MIN_TRANSACTION_DATE" :max="MAX_TRANSACTION_DATE" inputmode="none" @keydown="handleDateKeydown"
               @beforeinput.prevent @paste.prevent />
           </Box>
 
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">카테고리</p>
             <div v-if="isExpense" class="category-circles">
               <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option" :class="{
@@ -59,7 +59,7 @@
         </div>
 
         <div class="column right-column">
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
             <div v-if="isExpense" class="mood-group">
               <button type="button" class="mood-item mood-button"
@@ -81,7 +81,7 @@
             </div>
           </Box>
 
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">위치</p>
             <div v-if="isExpense" class="select-wrapper">
               <select v-model="transaction.location" class="transparent-input select-input" :disabled="!isExpense">
@@ -98,7 +98,7 @@
             <p v-if="isExpense" class="select-caption">드롭다운 메뉴로 선택</p>
           </Box>
 
-          <Box width="custom" customWidth="100%">
+          <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">메모</p>
             <textarea ref="memoTextarea" v-model="transaction.memo" :placeholder="memoPlaceholder"
               class="transparent-input memo-input" rows="3" @input="handleMemoInput"></textarea>
@@ -799,7 +799,6 @@ const saveTransaction = async () => {
   font-weight: 600;
   color: #000;
   cursor: pointer;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   transition: transform 0.1s;
 }
 
