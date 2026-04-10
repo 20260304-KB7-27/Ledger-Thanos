@@ -1,12 +1,12 @@
 <template>
   <Box
-    class="card-box profile-card-box"
+    class="card-box"
     width="custom"
     custom-width="100%"
     margin-y="0"
     border="1.5px solid #d9d9d9"
     bg-color="#ffffff"
-    :shadow="true"
+    :shadow="false"
   >
     <button
       type="button"
@@ -69,16 +69,6 @@ defineProps({
 </script>
 
 <style scoped>
-.card-box :deep(.common-box) {
-  border-radius: 24px;
-  box-shadow: 0 5px 8px rgba(120, 105, 76, 0.22);
-  overflow: hidden;
-}
-
-.card-box :deep(.box-content) {
-  padding: 0;
-}
-
 .profile-card-button {
   width: 100%;
   border: none;
@@ -134,7 +124,7 @@ defineProps({
   padding: 4px 10px 4px 6px;
   border-radius: 999px;
   background: rgba(255, 245, 246, 0.92);
-  color: #ff9ca0;
+  color: #ffd400;
   font-size: 17px;
   font-weight: 700;
   line-height: 1;

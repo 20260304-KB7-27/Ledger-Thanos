@@ -215,24 +215,6 @@ const handleLogout = () => {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: 'NPS';
-  src: url('@/assets/fonts/NPSfont_regular.ttf') format('truetype');
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'NPS';
-  src: url('@/assets/fonts/NPSfont_bold.ttf') format('truetype');
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: 'NPS';
-  src: url('@/assets/fonts/NPSfont_extrabold.ttf') format('truetype');
-  font-weight: 800;
-}
-
 .profile-page {
   min-height: 100vh;
   display: flex;
@@ -241,7 +223,6 @@ const handleLogout = () => {
   padding: 32px 38px;
   box-sizing: border-box;
   background: #f9f0c9;
-  font-family: 'NPS', sans-serif;
 }
 
 .left-column {
@@ -274,13 +255,13 @@ const handleLogout = () => {
   width: 100%;
   border: none;
   border-radius: 999px;
-  background: #ff8578;
+  background: #f00000;
   color: #ffffff;
   font-size: 28px;
   font-weight: 800;
   padding: 20px 24px;
   cursor: pointer;
-  box-shadow: 0 5px 8px rgba(196, 112, 93, 0.24);
+  box-shadow: 0 5px 8px rgba(240, 0, 0, 0.24);
 }
 
 @media (max-width: 1024px) {

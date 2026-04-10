@@ -27,13 +27,13 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="login-page">
+  <div class="login-page theme-auth-page">
     <header class="header">
       <img :src="logoSrc" alt="Ledger 로고" class="logo-icon" />
     </header>
 
     <main class="main">
-      <div class="card">
+      <div class="card theme-auth-card">
         <h1 class="title">로그인</h1>
 
         <form @submit.prevent="handleLogin">
@@ -71,7 +71,7 @@ const handleLogin = async () => {
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: #ffd400;
+  background: #f9f0c9;
   display: flex;
   flex-direction: column;
 }
@@ -84,8 +84,8 @@ const handleLogin = async () => {
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 100px;
+  height: 100px;
 }
 
 .main {
@@ -97,12 +97,9 @@ const handleLogin = async () => {
 }
 
 .card {
-  background: #fff;
-  border-radius: 20px;
   padding: 2.5rem 2rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 .title {
@@ -128,7 +125,7 @@ const handleLogin = async () => {
 }
 
 .input:focus {
-  border-color: #ffd400;
+  border-color: #ff8578;
 }
 
 .input::placeholder {
@@ -146,8 +143,8 @@ const handleLogin = async () => {
   display: block;
   width: 100%;
   padding: 1rem;
-  background: #ff8c00;
-  color: #fff;
+  background: #ffd400;
+  color: #111111;
   font-size: 1rem;
   font-weight: 600;
   border: none;
@@ -169,7 +166,7 @@ const handleLogin = async () => {
 }
 
 .signup-link a {
-  color: #ff8c00;
+  color: #d4a200;
   font-weight: 600;
   text-decoration: none;
 }

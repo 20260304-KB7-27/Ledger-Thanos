@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px" :shadow="false">
     <h3 class="panel-title">지역별 요약</h3>
     <ul v-if="summary.length > 0" class="gu-list">
       <li

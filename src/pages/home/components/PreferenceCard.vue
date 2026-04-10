@@ -1,16 +1,17 @@
 <template>
   <Box
+    class="card-box"
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1px solid #d8d8d8"
-    bg-color="#f3f3f3"
+    border="1.5px solid #d9d9d9"
+    bg-color="#ffffff"
     :shadow="false"
   >
     <section class="card">
       <h3>나의 칭호</h3>
 
-      <div v-if="titles.length > 0" class="title-list">
+      <div v-if="titles.length > 0">
         <div
           v-for="title in titles"
           :key="title"
@@ -26,7 +27,9 @@
         </div>
       </div>
 
-      <p v-else class="empty-text">{{ emptyText }}</p>
+      <div v-else class="empty-wrap">
+        <p class="empty-text">{{ emptyText }}</p>
+      </div>
     </section>
   </Box>
 </template>
@@ -49,20 +52,15 @@ defineProps({
 
 <style scoped>
 .card {
-  padding: 32px 16px;
+  padding: 40px 32px;
   min-height: 220px;
+  box-sizing: border-box;
 }
 
 h3 {
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 24px;
-}
-
-.title-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  margin: 0 0 36px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .title-item {
@@ -72,8 +70,8 @@ h3 {
 }
 
 .title-image {
-  width: 72px;
-  height: 72px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   border-radius: 18px;
   border: 1px solid #d8d8d8;
@@ -90,5 +88,20 @@ h3 {
   padding: 8px 12px;
   border-radius: 999px;
   background: #fff6cf;
+}
+
+.empty-wrap {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-text {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #8c8c8c;
+  text-align: center;
 }
 </style>

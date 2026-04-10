@@ -1,10 +1,10 @@
 <template>
-  <div class="layout">
+  <div>
     <!-- 좌측 네비게이션 -->
 <!--    <Nav/>-->
 
     <!-- 메인 컨텐츠 영역 -->
-    <main class="content">
+    <main class="content theme-page-shell">
       <!-- 전체 대시보드 그리드 -->
       <section class="home-dashboard">
 
@@ -16,7 +16,6 @@
 
         <!-- 나의 칭호 (오른쪽) -->
         <PreferenceCard
-          class="preference"
           :titles="selectedTitles"
           empty-text="아직 칭호가 없어요."
         />
@@ -24,24 +23,24 @@
         <!-- 수입/지출/순수익 (3개 카드 묶음) -->
         <div class="stats-group">
           <SummaryStatCard
+              class="summary-stat"
               title="이번달 수입"
               :amount="`${monthlyIncome.toLocaleString()}원`"
               sign="+"
-              color="#4CE158"
           />
 
           <SummaryStatCard
+              class="summary-stat"
               title="이번달 지출"
               :amount="`${monthlyExpense.toLocaleString()}원`"
               sign="-"
-              color="#FF945F"
           />
 
           <SummaryStatCard
+              class="summary-stat"
               title="순수익"
               :amount="`${Math.abs(netProfit).toLocaleString()}원`"
               :sign="netProfit < 0 ? '-' : '+'"
-              color="#FFD400"
           />
         </div>
 
@@ -51,7 +50,7 @@
           width="custom"
           custom-width="100%"
           margin-y="0"
-          border="1px solid #d8d8d8"
+          border="none"
           bg-color="#ffd400"
           :shadow="false"
         >
@@ -65,6 +64,7 @@
 
         <!-- 이번달 요약 -->
         <MonthlySummaryCard
+            class="monthly-summary"
             :total-count="monthlySummary.totalCount"
             :satisfied-count="monthlySummary.happyCount"
             :top-category="monthlySummary.topCategory.label"
@@ -80,8 +80,6 @@
 /*
 * import
 * */
-// 공통 네비게이션과 페이지 이동에 필요한 라우터
-import Nav from "@/components/Nav.vue";
 import Box from "@/components/Box.vue";
 import {useRouter} from "vue-router";
 
@@ -124,11 +122,7 @@ const goToAddTransaction = () => {
 };
 
 onMounted(async () => {
-  /*
-    TODO::
-    로그인한 유저 정보가 없으면 어떤 거래를 조회해야 하는지 알 수 없으므로
-    홈 최초 진입 시 API 호출을 하지 않고 바로 종료
-  */
+
   if (!userStore.user?.id) return;
 
   /*
@@ -173,7 +167,7 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 /* 메인 영역 */
 .content {
   min-height: 100vh;
-  background: #f6efcf; /* 전체 배경색 (첨부 이미지 베이지톤) */
+  background: #f9f0c9;
   padding: 32px;
   box-sizing: border-box;
 }
@@ -221,35 +215,32 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
   justify-content: center;
   border: none;
   border-radius: 0;
-  background: transparent;
+  background: #ffd400;
   font-size: 22px;
-  font-weight: 800;
+  font-weight: 600;
   cursor: pointer;
   padding: 0;
+  color: #111111;
 }
 
-.add-transaction-box :deep(.common-box),
-.add-transaction-box :deep(.box-content) {
+.add-transaction-box :deep(.common-box) {
   height: 100%;
+  border-radius: 24px;
+}
+
+.add-transaction-box :deep(.box-content) {
+  display: flex;
+  height: 100%;
+  padding: 0;
 }
 
 /* =========================
    반응형 처리
-========================= */
 
-/* PC */
-@media (min-width: 1025px) {
-}
-
-/* 태블릿 */
+ */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .content {
-    padding-top: 15%;
-  }
-
-  /* 1열로 변경 */
-  .home-dashboard {
-    grid-template-columns: 1fr;
+  .stats-group {
+    gap: 14px;
   }
 }
 

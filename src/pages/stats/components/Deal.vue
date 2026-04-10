@@ -111,8 +111,6 @@ const formatDateTime = (value) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffe99a;
-  color: #ff8c00;
 }
 
 .text-group {

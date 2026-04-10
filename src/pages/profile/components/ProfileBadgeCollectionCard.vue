@@ -1,16 +1,16 @@
 <template>
   <Box
-    class="card-box collection-card-box"
+    class="card-box"
     width="custom"
     custom-width="100%"
     margin-y="0"
     border="1.5px solid #d9d9d9"
     bg-color="#ffffff"
-    :shadow="true"
+    :shadow="false"
   >
     <article class="collection-card">
       <div class="collection-header">
-        <h2 class="section-title">모든 뱃지</h2>
+        <h3>모든 뱃지</h3>
         <span class="collection-count"
           >{{ earnedBadgeCount }} / {{ badgeCatalog.length }}</span
         >
@@ -48,10 +48,16 @@ defineProps({
 
 <style scoped>
 .collection-card {
-  min-height: 100%;
-  padding: 24px 30px 28px;
+  padding: 40px 32px;
+  min-height: 220px;
+  box-sizing: border-box;
 }
 
+h3 {
+  margin: 0 0 36px;
+  font-size: 22px;
+  font-weight: 600;
+}
 .collection-header {
   display: flex;
   align-items: baseline;
@@ -60,17 +66,10 @@ defineProps({
   margin-bottom: 28px;
 }
 
-.section-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-  color: #111111;
-}
-
 .collection-count {
-  font-size: 24px;
-  font-weight: 800;
-  color: #111111;
+  margin: 0 0 36px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .badge-grid {

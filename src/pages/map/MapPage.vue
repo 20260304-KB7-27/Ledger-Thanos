@@ -73,7 +73,7 @@ const detailTransactions = computed(() =>
 <style scoped>
 .map-page {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   padding: 16px;
   box-sizing: border-box;
   background: #fffbf0;
@@ -83,7 +83,7 @@ const detailTransactions = computed(() =>
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 12px;
-  height: 100%;
+  min-height: calc(100vh - 32px);
 }
 
 .map-area {

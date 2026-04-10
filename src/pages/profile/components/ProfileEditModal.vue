@@ -11,7 +11,7 @@
       aria-labelledby="profile-edit-title"
     >
       <header class="profile-edit-header">
-        <h2 id="profile-edit-title" class="profile-edit-title">프로필 수정</h2>
+        <h3 id="profile-edit-title" class="profile-edit-title">프로필 수정</h3>
       </header>
 
       <label class="profile-edit-field">
@@ -104,6 +104,11 @@ defineProps({
 </script>
 
 <style scoped>
+h3 {
+  margin: 0 0 36px;
+  font-size: 22px;
+  font-weight: 600;
+}
 .profile-edit-overlay {
   position: fixed;
   inset: 0;
@@ -166,8 +171,8 @@ defineProps({
 
 .profile-edit-field input:focus,
 .profile-edit-field select:focus {
-  outline: 2px solid rgba(255, 133, 120, 0.28);
-  border-color: #ff8578;
+  outline: 2px solid rgba(255, 233, 154, 0.45);
+  border-color: #ffe99a;
 }
 
 .profile-edit-error {
@@ -200,8 +205,8 @@ defineProps({
 }
 
 .profile-edit-primary {
-  background: #ff8578;
-  color: #ffffff;
+  background: #ffe99a;
+  color: #111111;
 }
 
 .profile-edit-primary:disabled {

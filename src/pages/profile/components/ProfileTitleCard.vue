@@ -1,15 +1,15 @@
 <template>
   <Box
-    class="card-box title-card-box"
+    class="card-box"
     width="custom"
     custom-width="100%"
     margin-y="0"
     border="1.5px solid #d9d9d9"
     bg-color="#ffffff"
-    :shadow="true"
+    :shadow="false"
   >
     <article class="title-card">
-      <h2 class="section-title">칭호 선택</h2>
+      <h3>칭호 선택</h3>
       <div v-if="earnedBadges.length > 0" class="badge-grid compact">
         <button
           v-for="badge in earnedBadges"
@@ -61,11 +61,10 @@ defineEmits(['toggle-title']);
   padding: 24px 30px 24px;
 }
 
-.section-title {
-  margin: 0 0 24px;
+h3 {
+  margin: 0 0 36px;
   font-size: 22px;
-  font-weight: 800;
-  color: #111111;
+  font-weight: 600;
 }
 
 .badge-grid.compact {

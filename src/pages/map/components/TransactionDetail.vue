@@ -1,5 +1,5 @@
 <template>
-  <Box width="custom" customWidth="100%" marginY="12px">
+  <Box width="custom" customWidth="100%" marginY="12px" :shadow="false">
     <h3 class="panel-title">
       상세 내역
       <span v-if="selectedGu" class="gu-tag">{{ selectedGu }}</span>
@@ -7,10 +7,15 @@
     <p v-if="!selectedGu" class="hint-msg">지역을 선택하세요</p>
     <ul v-else-if="transactions.length > 0" class="tx-list">
       <li v-for="tx in transactions" :key="tx.id" class="tx-item">
-        <span class="tx-icon">{{ CATEGORY_ICON[tx.category] ?? '💳' }}</span>
+        <span class="tx-icon">
+          <component :is="getCategoryMeta(tx.category).icon" :size="18" />
+        </span>
         <div class="tx-info">
           <span class="tx-memo">{{ tx.memo }}</span>
-          <span class="tx-location">{{ tx.location }}</span>
+          <div class="tx-meta">
+            <span class="tx-location">{{ tx.location }}</span>
+            <span v-if="tx.date" class="tx-date">{{ formatDateTime(tx.date) }}</span>
+          </div>
         </div>
         <span class="tx-amount" :class="tx.type">
           {{ tx.type === 'expense' ? '-' : '+'
@@ -24,24 +29,27 @@
 
 <script setup>
 import Box from '@/components/Box.vue';
+import { getCategoryMeta } from '@/pages/home/home.js';
 
 defineProps({
   transactions: { type: Array, default: () => [] },
   selectedGu: { type: String, default: null },
 });
 
-const CATEGORY_ICON = {
-  restaurant: '🍽️',
-  cafe: '☕',
-  transport: '🚌',
-  shopping: '🛍️',
-  grocery: '🛒',
-  health: '💊',
-  entertainment: '🎬',
-  education: '📚',
-  utility: '🏠',
-  salary: '💰',
-  other: '📝',
+const formatDateTime = (value) => {
+  if (!value) return '';
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return value;
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 </script>
 
@@ -91,8 +99,18 @@ const CATEGORY_ICON = {
 }
 
 .tx-icon {
-  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  flex: 0 0 36px;
+  border-radius: 50%;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tx-info {
@@ -102,6 +120,13 @@ const CATEGORY_ICON = {
   gap: 2px;
 }
 
+.tx-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .tx-memo {
   font-size: 14px;
   color: #333;
@@ -109,8 +134,15 @@ const CATEGORY_ICON = {
 }
 
 .tx-location {
-  font-size: 11px;
-  color: #999;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+}
+
+.tx-date {
+  font-size: 13px;
+  font-weight: 500;
+  color: #777;
 }
 
 .tx-amount {

@@ -1,14 +1,15 @@
 <template>
   <Box
+    class="card-box"
     width="custom"
     custom-width="100%"
     margin-y="0"
-    border="1px solid #d8d8d8"
-    bg-color="#f3f3f3"
+    border="1.5px solid #d9d9d9"
+    bg-color="#ffffff"
     :shadow="false"
   >
     <section class="card">
-      <h3 class="label">이번달 만족 지수</h3>
+      <h3>이번달 만족 지수</h3>
 
       <div class="score-wrap">
         <strong class="score">{{ score }}</strong>
@@ -39,14 +40,15 @@ defineProps({
 
 <style scoped>
 .card {
-  padding: 36px 32px;
+  padding: 40px 32px;
+  min-height: 220px;
+  box-sizing: border-box;
 }
 
-.label {
-  margin: 0 0 24px;
-  font-size: 26px;
-  font-weight: 800;
-  color: #111;
+h3 {
+  margin: 0 0 36px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .score-wrap {
