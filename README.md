@@ -167,4 +167,6 @@ ledger/
 
 ## 📄 라이선스
 
-This project is for educational purposes.
+This project is licensed under the [MIT License](LICENSE).
+
+Copyright (c) 2026 Team.Thanos
