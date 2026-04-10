@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { seoulDistricts } from '@/pages/profile/js/profile.js';
 import { signupUser } from '@/service/user/userApi';
 import logoSrc from '@/assets/icon/logo.svg';
 
@@ -40,13 +41,13 @@ const handleSignup = async () => {
 </script>
 
 <template>
-  <div class="signup-page">
+  <div class="signup-page theme-auth-page">
     <header class="header">
       <img :src="logoSrc" alt="Ledger 로고" class="logo-icon" />
     </header>
 
     <main class="main">
-      <div class="card">
+      <div class="card theme-auth-card">
         <h1 class="title">회원가입</h1>
 
         <form @submit.prevent="handleSignup">
@@ -83,13 +84,20 @@ const handleSignup = async () => {
               placeholder="닉네임"
               required
             />
-            <input
+            <select
               v-model="userLocation"
-              class="input input-half"
-              type="text"
-              placeholder="거주 지역"
+              class="input input-half select-input"
               required
-            />
+            >
+              <option disabled value="">거주 지역</option>
+              <option
+                v-for="district in seoulDistricts"
+                :key="district"
+                :value="district"
+              >
+                {{ district }}
+              </option>
+            </select>
           </div>
 
           <p v-if="error" class="error-msg">{{ error }}</p>
@@ -98,6 +106,11 @@ const handleSignup = async () => {
             {{ loading ? '가입 중...' : '가입하기' }}
           </button>
         </form>
+
+        <p class="login-link">
+          이미 계정이 있으신가요?
+          <router-link to="/login">로그인하기</router-link>
+        </p>
       </div>
     </main>
   </div>
@@ -106,7 +119,7 @@ const handleSignup = async () => {
 <style scoped>
 .signup-page {
   min-height: 100vh;
-  background: #ffd400;
+  background: #f9f0c9;
   display: flex;
   flex-direction: column;
 }
@@ -119,8 +132,8 @@ const handleSignup = async () => {
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 100px;
+  height: 100px;
 }
 
 .main {
@@ -132,12 +145,9 @@ const handleSignup = async () => {
 }
 
 .card {
-  background: #fff;
-  border-radius: 20px;
   padding: 2.5rem 2rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 .title {
@@ -163,10 +173,20 @@ const handleSignup = async () => {
 }
 
 .input:focus {
-  border-color: #ffd400;
+  border-color: #ebebeb;
 }
 
 .input::placeholder {
+  color: #bbb;
+}
+
+.select-input {
+  appearance: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.select-input:invalid {
   color: #bbb;
 }
 
@@ -190,8 +210,8 @@ const handleSignup = async () => {
   display: block;
   width: 100%;
   padding: 1rem;
-  background: #ff8c00;
-  color: #fff;
+  background: #ffd400;
+  color: #111111;
   font-size: 1rem;
   font-weight: 600;
   border: none;
@@ -203,5 +223,18 @@ const handleSignup = async () => {
 .btn-signup:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.login-link a {
+  color: #d4a200;
+  font-weight: 600;
+  text-decoration: none;
 }
 </style>
