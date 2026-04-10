@@ -62,8 +62,6 @@ const formatCurrency = (value) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FFE99A;
-  color: #FF8C00;
 }
 
 .category {

@@ -149,8 +149,6 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffe99a;
-  color: #ff8c00;
 }
 
 .category-icon {
@@ -160,7 +158,6 @@ h3 {
 .income-icon {
   font-size: 11px;
   font-weight: 800;
-  color: #ff8c00;
 }
 
 .info {
