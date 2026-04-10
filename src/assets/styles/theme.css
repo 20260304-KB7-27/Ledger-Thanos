@@ -1,32 +1,64 @@
+/* 
+  팔레트 토큰: 이 테마가 가진 원색 세트
+  semantic 토큰: UI에서 이 색이 어떤 역할을 하는가
+
+  각 상태에 맞는 팔레트 토큰을 raw hex 값으로 지정
+  --page-bg-home, --accent-primary, --button-danger-bg 같은 semantic 토큰은 전부 팔레트 토큰을 var(...)로 참조
+
+  나중에 팔레트 토큰의 색상을 바꾸더라도 semantic 토큰의 참조는 바꿀 필요 X
+*/
+
 :root,
 #app.theme-neutral {
-  /* Neutral palette - 기본 상태 컬러 */
+  /* Neutral palette - 기본 상태 컬러 팔레트 */
+  --neutral-white: #ffffff;
+  --neutral-black: #000000;
+  --neutral-ink-900: #1a1a1a;
+  --neutral-ink-700: #333333;
+  --neutral-ink-500: #555555;
+  --neutral-ink-300: #bbbbbb;
   --neutral-main-yellow: #ffd400;
   --neutral-light-orange: #ff8c00;
   --neutral-main-orange: #ff5f00;
+  --neutral-plus: #4ce158;
+  --neutral-minus: #ff945f;
+  --neutral-danger: #e53935;
+  --neutral-danger-soft: #ff8578;
+  --neutral-cream-home: #f6efcf;
+  --neutral-cream-register: #fdf8e3;
+  --neutral-cream-stats: #fff8dd;
+  --neutral-cream-map: #fffbf0;
+  --neutral-cream-profile: #f9f0c9;
+  --neutral-surface-soft: #fff8de;
+  --neutral-surface-emphasis: #fff2bf;
+  --neutral-border-soft: #ebebeb;
+  --neutral-border-strong: #d8c9a0;
+  --neutral-nav-start: #f6e3a1;
+  --neutral-nav-end: #efaf9e;
+  --neutral-nav-text: #805b2e;
 
   /* Semantic colors - 각 역할 별 컬러 */
-  --page-bg-home: #f6efcf;
-  --page-bg-register: #fdf8e3;
-  --page-bg-stats: #fff8dd;
-  --page-bg-map: #fffbf0;
-  --page-bg-profile: #f9f0c9;
-  --page-bg-auth: #ffd400;
-  --surface-primary: #ffffff;
-  --surface-secondary: #fff8de;
-  --surface-emphasis: #fff2bf;
-  --text-primary: #1a1a1a;
-  --text-secondary: #333333;
-  --text-muted: #555555;
-  --text-placeholder: #bbbbbb;
-  --border-soft: #ebebeb;
-  --border-strong: #d8c9a0;
-  --accent-primary: #ff8c00;
-  --accent-secondary: #ff5f00;
-  --accent-strong: #ffd400;
-  --amount-plus: #4ce158;
-  --amount-minus: #ff945f;
-  --danger: #e53935;
+  --page-bg-home: var(--neutral-cream-home);
+  --page-bg-register: var(--neutral-cream-register);
+  --page-bg-stats: var(--neutral-cream-stats);
+  --page-bg-map: var(--neutral-cream-map);
+  --page-bg-profile: var(--neutral-cream-profile);
+  --page-bg-auth: var(--neutral-main-yellow);
+  --surface-primary: var(--neutral-white);
+  --surface-secondary: var(--neutral-surface-soft);
+  --surface-emphasis: var(--neutral-surface-emphasis);
+  --text-primary: var(--neutral-ink-900);
+  --text-secondary: var(--neutral-ink-700);
+  --text-muted: var(--neutral-ink-500);
+  --text-placeholder: var(--neutral-ink-300);
+  --border-soft: var(--neutral-border-soft);
+  --border-strong: var(--neutral-border-strong);
+  --accent-primary: var(--neutral-light-orange);
+  --accent-secondary: var(--neutral-main-orange);
+  --accent-strong: var(--neutral-main-yellow);
+  --amount-plus: var(--neutral-plus);
+  --amount-minus: var(--neutral-minus);
+  --danger: var(--neutral-danger);
 
   /* Component roles - 컴포넌트 별 컬러 */
   --card-bg: var(--surface-primary);
@@ -34,16 +66,20 @@
   --input-bg: var(--surface-primary);
   --input-border: var(--border-soft);
   --input-text: var(--text-primary);
-  --nav-bg: linear-gradient(180deg, #f6e3a1 0%, #efaf9e 100%);
-  --nav-text: #805b2e;
-  --nav-active-bg: #ff8c00;
-  --nav-active-text: #ffffff;
+  --nav-bg: linear-gradient(
+    180deg,
+    var(--neutral-nav-start) 0%,
+    var(--neutral-nav-end) 100%
+  );
+  --nav-text: var(--neutral-nav-text);
+  --nav-active-bg: var(--accent-primary);
+  --nav-active-text: var(--neutral-white);
   --button-primary-bg: var(--accent-primary);
-  --button-primary-text: #ffffff;
+  --button-primary-text: var(--neutral-white);
   --button-secondary-bg: var(--accent-strong);
-  --button-secondary-text: #000000;
-  --button-danger-bg: #ff8578;
-  --button-danger-text: #ffffff;
+  --button-secondary-text: var(--neutral-black);
+  --button-danger-bg: var(--neutral-danger-soft);
+  --button-danger-text: var(--neutral-white);
 
   /* Shape and effects -모양과 그림자 효과 등*/
   --radius-card: 20px;
@@ -62,52 +98,73 @@
 }
 
 #app.theme-happy {
-  /* Happy palette - 만족 상태 컬러 */
+  /* Happy palette - 만족 상태 컬러 팔레트 */
+  --happy-white: #ffffff;
   --happy-main-pink: #ff9898;
   --happy-light-pink: #ffaaaa;
   --happy-light-yellow: #ffe99a;
+  --happy-ink-900: #5c3218;
+  --happy-ink-700: #805b2e;
+  --happy-ink-500: #9a6b52;
+  --happy-ink-300: #c8a38d;
+  --happy-orange: #ff8c00;
   --happy-plus: #4ce158;
   --happy-minus: #ff945f;
+  --happy-danger: #d95c5c;
+  --happy-cream-home: #fff4c9;
+  --happy-cream-register: #fff6d7;
+  --happy-cream-stats: #fff0bc;
+  --happy-cream-map: #fff8df;
+  --happy-cream-profile: #ffe4d5;
+  --happy-surface-primary: #fff9f1;
+  --happy-surface-secondary: #ffeccf;
+  --happy-input-bg: #fff6ea;
+  --happy-border-soft: #ffd1bd;
+  --happy-nav-text: #7a4b2d;
 
   /* Semantic colors - 각 역할 별 컬러 */
-  --page-bg-home: #fff4c9;
-  --page-bg-register: #fff6d7;
-  --page-bg-stats: #fff0bc;
-  --page-bg-map: #fff8df;
-  --page-bg-profile: #ffe4d5;
-  --page-bg-auth: #ffe99a;
-  --surface-primary: #fff9f1;
-  --surface-secondary: #ffeccf;
-  --surface-emphasis: #ffe99a;
-  --text-primary: #5c3218;
-  --text-secondary: #805b2e;
-  --text-muted: #9a6b52;
-  --text-placeholder: #c8a38d;
-  --border-soft: #ffd1bd;
-  --border-strong: #ffaaaa;
-  --accent-primary: #ff9898;
-  --accent-secondary: #ff8c00;
-  --accent-strong: #ffe99a;
-  --amount-plus: #4ce158;
-  --amount-minus: #ff945f;
-  --danger: #d95c5c;
+  --page-bg-home: var(--happy-cream-home);
+  --page-bg-register: var(--happy-cream-register);
+  --page-bg-stats: var(--happy-cream-stats);
+  --page-bg-map: var(--happy-cream-map);
+  --page-bg-profile: var(--happy-cream-profile);
+  --page-bg-auth: var(--happy-light-yellow);
+  --surface-primary: var(--happy-surface-primary);
+  --surface-secondary: var(--happy-surface-secondary);
+  --surface-emphasis: var(--happy-light-yellow);
+  --text-primary: var(--happy-ink-900);
+  --text-secondary: var(--happy-ink-700);
+  --text-muted: var(--happy-ink-500);
+  --text-placeholder: var(--happy-ink-300);
+  --border-soft: var(--happy-border-soft);
+  --border-strong: var(--happy-light-pink);
+  --accent-primary: var(--happy-main-pink);
+  --accent-secondary: var(--happy-orange);
+  --accent-strong: var(--happy-light-yellow);
+  --amount-plus: var(--happy-plus);
+  --amount-minus: var(--happy-minus);
+  --danger: var(--happy-danger);
 
   /* Component roles - 컴포넌트 별 컬러 */
   --card-bg: var(--surface-primary);
   --card-border: var(--border-soft);
-  --input-bg: #fff6ea;
+  --input-bg: var(--happy-input-bg);
   --input-border: var(--border-strong);
   --input-text: var(--text-primary);
-  --nav-bg: linear-gradient(180deg, #ffe99a 0%, #ffaaaa 100%);
-  --nav-text: #7a4b2d;
-  --nav-active-bg: #ff9898;
-  --nav-active-text: #ffffff;
+  --nav-bg: linear-gradient(
+    180deg,
+    var(--happy-light-yellow) 0%,
+    var(--happy-light-pink) 100%
+  );
+  --nav-text: var(--happy-nav-text);
+  --nav-active-bg: var(--accent-primary);
+  --nav-active-text: var(--happy-white);
   --button-primary-bg: var(--accent-primary);
-  --button-primary-text: #ffffff;
+  --button-primary-text: var(--happy-white);
   --button-secondary-bg: var(--accent-strong);
-  --button-secondary-text: #5c3218;
-  --button-danger-bg: #ff945f;
-  --button-danger-text: #ffffff;
+  --button-secondary-text: var(--happy-ink-900);
+  --button-danger-bg: var(--happy-minus);
+  --button-danger-text: var(--happy-white);
 
   /* Shape and effects -모양과 그림자 효과 등*/
   --radius-card: 24px;
@@ -126,49 +183,49 @@
 }
 
 #app.theme-regret {
-  /* Regret palette - 후회 상태 컬러 */
+  /* Regret palette - 후회 상태 컬러 팔레트 */
   --regret-black: #000000;
   --regret-white: #ffffff;
 
   /* Semantic colors - 각 역할 별 컬러 */
-  --page-bg-home: #ffffff;
-  --page-bg-register: #ffffff;
-  --page-bg-stats: #ffffff;
-  --page-bg-map: #ffffff;
-  --page-bg-profile: #ffffff;
-  --page-bg-auth: #ffffff;
-  --surface-primary: #ffffff;
-  --surface-secondary: #ffffff;
-  --surface-emphasis: #ffffff;
-  --text-primary: #000000;
-  --text-secondary: #000000;
-  --text-muted: #000000;
-  --text-placeholder: #000000;
-  --border-soft: #000000;
-  --border-strong: #000000;
-  --accent-primary: #000000;
-  --accent-secondary: #ffffff;
-  --accent-strong: #000000;
-  --amount-plus: #000000;
-  --amount-minus: #000000;
-  --danger: #000000;
+  --page-bg-home: var(--regret-white);
+  --page-bg-register: var(--regret-white);
+  --page-bg-stats: var(--regret-white);
+  --page-bg-map: var(--regret-white);
+  --page-bg-profile: var(--regret-white);
+  --page-bg-auth: var(--regret-white);
+  --surface-primary: var(--regret-white);
+  --surface-secondary: var(--regret-white);
+  --surface-emphasis: var(--regret-white);
+  --text-primary: var(--regret-black);
+  --text-secondary: var(--regret-black);
+  --text-muted: var(--regret-black);
+  --text-placeholder: var(--regret-black);
+  --border-soft: var(--regret-black);
+  --border-strong: var(--regret-black);
+  --accent-primary: var(--regret-black);
+  --accent-secondary: var(--regret-white);
+  --accent-strong: var(--regret-black);
+  --amount-plus: var(--regret-black);
+  --amount-minus: var(--regret-black);
+  --danger: var(--regret-black);
 
   /* Component roles - 컴포넌트 별 컬러 */
   --card-bg: var(--surface-primary);
   --card-border: var(--border-strong);
-  --input-bg: #ffffff;
+  --input-bg: var(--regret-white);
   --input-border: var(--border-strong);
   --input-text: var(--text-primary);
-  --nav-bg: #ffffff;
-  --nav-text: #000000;
-  --nav-active-bg: #000000;
-  --nav-active-text: #ffffff;
-  --button-primary-bg: #000000;
-  --button-primary-text: #ffffff;
-  --button-secondary-bg: #ffffff;
-  --button-secondary-text: #000000;
-  --button-danger-bg: #000000;
-  --button-danger-text: #ffffff;
+  --nav-bg: var(--regret-white);
+  --nav-text: var(--regret-black);
+  --nav-active-bg: var(--regret-black);
+  --nav-active-text: var(--regret-white);
+  --button-primary-bg: var(--regret-black);
+  --button-primary-text: var(--regret-white);
+  --button-secondary-bg: var(--regret-white);
+  --button-secondary-text: var(--regret-black);
+  --button-danger-bg: var(--regret-black);
+  --button-danger-text: var(--regret-white);
 
   /* Shape and effects -모양과 그림자 효과 등*/
   --radius-card: 0;
