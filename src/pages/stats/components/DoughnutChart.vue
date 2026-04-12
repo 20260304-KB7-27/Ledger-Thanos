@@ -186,4 +186,9 @@ canvas {
   height: 100%;
   display: block;
 }
+@media (max-width: 1024px) {
+  .chart-wrap {
+    height: 300px;
+  }
+}
 </style>

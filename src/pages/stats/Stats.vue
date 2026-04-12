@@ -129,7 +129,7 @@
         </div>
       </div>
       <div id="theme-stats">
-        <div id="location-spend">
+        <div id="location-spend" :class="{ 'happy-chart-section': isHappy }">
           <Box
             width="custom"
             custom-width="100%"
@@ -140,7 +140,7 @@
               <div class="box-label">지역별 소비</div>
 
               <div v-if="loading" class="status-text">불러오는 중...</div>
-              <div v-else-if="isHappy">
+              <div v-else-if="isHappy" class="happy-chart-wrap">
                 <BarChart :items="localSpendingList" />
               </div>
               <div v-else class="local-list">
@@ -157,7 +157,7 @@
           </Box>
         </div>
 
-        <div id="category-spend">
+        <div id="category-spend" :class="{ 'happy-chart-section': isHappy }">
           <Box
             width="custom"
             custom-width="100%"
@@ -168,7 +168,7 @@
               <div class="box-label">카테고리별 지출</div>
 
               <div v-if="loading" class="status-text">불러오는 중...</div>
-              <div v-else-if="isHappy">
+              <div v-else-if="isHappy" class="happy-chart-wrap">
                 <DoughnutChart :items="categorySpendingList" />
               </div>
               <div v-else class="category-list">
@@ -738,6 +738,39 @@ onMounted(async () => {
 .pdf-button {
   cursor: pointer;
   font-weight: 600;
+  @media (max-width: 1024px) {
+  #theme-stats {
+    gap: 24px;
+    grid-template-rows: auto auto;
+  }
+
+  #location-spend.happy-chart-section .box-custom,
+  #category-spend.happy-chart-section .box-custom {
+    height: auto;
+    max-height: none;
+  }
+
+  #location-spend.happy-chart-section .scroll-box,
+  #category-spend.happy-chart-section .scroll-box {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    padding-bottom: 12px;
+  }
+
+  #location-spend.happy-chart-section .happy-chart-wrap,
+  #category-spend.happy-chart-section .happy-chart-wrap {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #location-spend.happy-chart-section,
+  #category-spend.happy-chart-section {
+    min-height: auto;
+    height: auto;
+  }
+}
 }
 
 /* 반응형 */
@@ -907,5 +940,39 @@ onMounted(async () => {
   .box-label-header {
     font-size: 16px;
   }
+
+  @media (max-width: 1024px) {
+  #theme-stats {
+    gap: 24px;
+    grid-template-rows: auto auto;
+  }
+
+  #location-spend.happy-chart-section .box-custom,
+  #category-spend.happy-chart-section .box-custom {
+    height: auto;
+    max-height: none;
+  }
+
+  #location-spend.happy-chart-section .scroll-box,
+  #category-spend.happy-chart-section .scroll-box {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    padding-bottom: 12px;
+  }
+
+  #location-spend.happy-chart-section .happy-chart-wrap,
+  #category-spend.happy-chart-section .happy-chart-wrap {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #location-spend.happy-chart-section,
+  #category-spend.happy-chart-section {
+    min-height: auto;
+    height: auto;
+  }
+}
 }
 </style>
