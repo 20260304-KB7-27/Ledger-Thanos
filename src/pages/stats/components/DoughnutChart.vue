@@ -20,6 +20,8 @@ const props = defineProps({
 const canvasRef = ref(null);
 let chartInstance = null;
 
+const CHART_FONT_FAMILY = 'NPS, sans-serif';
+
 const formatAmount = (value) => `${Number(value || 0).toLocaleString()}원`;
 
 const makeData = () => {
@@ -33,7 +35,10 @@ const makeData = () => {
     datasets: [
       {
         data: filtered.map((item) => item.amount),
-        backgroundColor: ['#f09a9a', '#f6adad', '#f8bcbc', '#f9caca', '#fad7d7'],
+        backgroundColor: ['#FF9898', '#FFAAAA', '#f8bcbc', '#f9caca', '#fad7d7'].slice(
+          0,
+          filtered.length
+        ),
         borderWidth: 0,
         hoverOffset: 4,
       },
@@ -58,12 +63,26 @@ const createChart = () => {
       layout: {
         padding: 8,
       },
+      font: {
+        family: CHART_FONT_FAMILY,
+      },
       plugins: {
         legend: {
           display: false,
+          labels: {
+            font: {
+              family: CHART_FONT_FAMILY,
+            },
+          },
         },
         tooltip: {
           enabled: false,
+          titleFont: {
+            family: CHART_FONT_FAMILY,
+          },
+          bodyFont: {
+            family: CHART_FONT_FAMILY,
+          },
         },
       },
     },
@@ -83,7 +102,7 @@ const createChart = () => {
           ctx.save();
           ctx.beginPath();
           ctx.lineWidth = 1.2;
-          ctx.strokeStyle = '#cfcfcf';
+          ctx.strokeStyle = '#ffd1bd';
           ctx.arc(x, y, outerRadius, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
@@ -108,8 +127,10 @@ const createChart = () => {
             const x = arc.x + Math.cos(angle) * radius;
             const y = arc.y + Math.sin(angle) * radius;
 
-            ctx.font = '500 11px sans-serif';
+            ctx.font = `700 11px ${CHART_FONT_FAMILY}`;
             ctx.fillText(String(labels[index]), x, y - 8);
+
+            ctx.font = `800 11px ${CHART_FONT_FAMILY}`;
             ctx.fillText(formatAmount(values[index]), x, y + 8);
           });
 

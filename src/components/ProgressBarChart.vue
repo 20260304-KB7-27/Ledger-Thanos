@@ -12,7 +12,7 @@
       :style="{
         height: `${props.height}px`,
         background: resolveCssVarColor(props.backgroundColor),
-        borderRadius: `${props.backgroundRadius}px`,
+        borderRadius: resolvedRadius,
         borderColor: resolveCssVarColor(props.borderColor),
         borderWidth: `${props.borderWidth}px`,
       }"
@@ -23,7 +23,7 @@
 
 <script setup>
 import { Chart, registerables } from 'chart.js';
-import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick, watch, computed } from 'vue';
 
 Chart.register(...registerables);
 
@@ -36,21 +36,17 @@ const props = defineProps({
     type: Number,
     default: 100,
   },
+  themeKey: {
+    type: String,
+    default: '',
+  },
   barColor: {
     type: String,
     default: 'white',
   },
-  barRadius: {
-    type: Number,
-    default: 20,
-  },
   backgroundColor: {
     type: String,
     default: 'white',
-  },
-  backgroundRadius: {
-    type: Number,
-    default: 20,
   },
   width: {
     type: String,
@@ -89,6 +85,24 @@ const resolveCssVarColor = (color) => {
   return trimmed;
 };
 
+const getCssVar = (name, fallback = '') => {
+  const baseEl = chartWrap.value || document.documentElement;
+  const value = getComputedStyle(baseEl).getPropertyValue(name).trim();
+  return value || fallback;
+};
+
+const getRadiusValue = () => {
+  return getCssVar('--radius-card', '20px');
+};
+
+const getRadiusNumber = () => {
+  const radius = getRadiusValue();
+  const parsed = parseFloat(radius);
+  return Number.isNaN(parsed) ? 20 : parsed;
+};
+
+const resolvedRadius = computed(() => getRadiusValue());
+
 const createChart = () => {
   if (!progressBar.value) return;
 
@@ -101,7 +115,7 @@ const createChart = () => {
           label: '만족 지수',
           data: [0],
           backgroundColor: resolveCssVarColor(props.barColor),
-          borderRadius: props.barRadius,
+          borderRadius: getRadiusNumber(),
           borderSkipped: false,
           barThickness: props.height,
         },
@@ -149,7 +163,7 @@ const updateChartValue = () => {
   if (!chartInstance) return;
 
   chartInstance.data.datasets[0].data = [props.value];
-  chartInstance.update(); // 애니메이션 유지
+  chartInstance.update();
 };
 
 const updateChartStyle = () => {
@@ -158,11 +172,11 @@ const updateChartStyle = () => {
   chartInstance.data.datasets[0].backgroundColor = resolveCssVarColor(
     props.barColor
   );
-  chartInstance.data.datasets[0].borderRadius = props.barRadius;
+  chartInstance.data.datasets[0].borderRadius = getRadiusNumber();
   chartInstance.data.datasets[0].barThickness = props.height;
   chartInstance.options.scales.x.max = props.maxValue;
 
-  chartInstance.update('none'); // 스타일만 즉시 반영
+  chartInstance.update('none');
 };
 
 onMounted(async () => {
@@ -200,13 +214,6 @@ watch(
 
 watch(
   () => props.maxValue,
-  () => {
-    updateChartStyle();
-  }
-);
-
-watch(
-  () => props.barRadius,
   () => {
     updateChartStyle();
   }

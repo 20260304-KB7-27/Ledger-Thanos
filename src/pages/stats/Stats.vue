@@ -86,6 +86,8 @@
                   :max-value="100"
                   bar-color="var(--accent-strong)"
                   background-color="var(--surface-primary)"
+                  bar-radius="var(--radius-card)"
+                  background-radius="var(--radius-card)"
                   :height="30"
                   :border-width="1"
                   border-color="var(--border-soft)"
