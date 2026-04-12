@@ -4,7 +4,7 @@
       <div class="grid-layout">
 
         <div class="column left-column">
-          <Box width="custom" customWidth="100%" marginY="8px" :shadow="false">
+          <Box width="custom" customWidth="100%" marginY="8px" class="form-card card-toggle" :shadow="false">
             <div class="toggle-group">
               <button type="button" class="toggle-button expense" :class="{ active: transaction.type === 'expense' }"
                 :aria-pressed="transaction.type === 'expense'" @click="transaction.type = 'expense'">
@@ -20,12 +20,12 @@
             </p>
           </Box>
 
-          <Box width="custom" customWidth="100%" :shadow="false">
+          <Box width="custom" customWidth="100%" class="form-card card-amount" :shadow="false">
             <p class="label">금액</p>
             <input v-model.number="transaction.amount" type="number" placeholder="0원 (입력)" class="transparent-input" />
           </Box>
 
-          <Box width="custom" customWidth="100%" class="date-box" role="button" tabindex="0" @click="openDatePicker"
+          <Box width="custom" customWidth="100%" class="form-card card-date date-box" role="button" tabindex="0" @click="openDatePicker"
             @keydown.enter.prevent="openDatePicker" @keydown.space.prevent="openDatePicker" :shadow="false">
             <p class="label">날짜</p>
             <input ref="dateInput" v-model="transaction.date" type="date" class="transparent-input date-input"
@@ -33,7 +33,7 @@
               @beforeinput.prevent @paste.prevent />
           </Box>
 
-          <Box width="custom" customWidth="100%" :shadow="false">
+          <Box width="custom" customWidth="100%" class="form-card card-category" :shadow="false">
             <p class="label">카테고리</p>
             <div v-if="isExpense">
               <div v-if="isRegretTheme" class="category-text-grid">
@@ -69,7 +69,7 @@
         </div>
 
         <div class="column right-column">
-          <Box width="custom" customWidth="100%" :shadow="false">
+          <Box width="custom" customWidth="100%" class="form-card card-emotion" :shadow="false">
             <p class="label">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
             <div v-if="isExpense">
               <div v-if="isRegretTheme" class="mood-text-group">
@@ -105,7 +105,7 @@
             </div>
           </Box>
 
-          <Box width="custom" customWidth="100%" :shadow="false">
+          <Box width="custom" customWidth="100%" class="form-card card-location" :shadow="false">
             <p class="label">위치</p>
             <div v-if="isExpense" class="select-wrapper">
               <select v-model="transaction.location" class="transparent-input select-input" :disabled="!isExpense">
@@ -122,7 +122,7 @@
             <p v-if="isExpense" class="select-caption">드롭다운 메뉴로 선택</p>
           </Box>
 
-          <Box width="custom" customWidth="100%" :shadow="false">
+          <Box width="custom" customWidth="100%" class="form-card card-memo" :shadow="false">
             <p class="label">메모</p>
             <textarea ref="memoTextarea" v-model="transaction.memo" :placeholder="memoPlaceholder"
               class="transparent-input memo-input" rows="3" @input="handleMemoInput"></textarea>
@@ -518,7 +518,7 @@ const saveTransaction = async () => {
 }
 
 .content {
-  padding: 24px 28px 32px;
+  padding: clamp(16px, 2vw, 24px) clamp(16px, 2.6vw, 32px) clamp(24px, 3vw, 36px);
   width: 100%;
   overflow-y: auto;
   box-sizing: border-box;
@@ -526,21 +526,34 @@ const saveTransaction = async () => {
   transition: all 0.3s ease;
 }
 
-@media (max-width: 768px) {
-  .content {
-    padding: 20px;
+@media (max-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
   }
 
-  .grid-layout {
-    flex-direction: column;
+  .left-column,
+  .right-column {
+    grid-template-rows: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
   }
 
   .category-circles {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
   }
 
   .category-text-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .mood-group,
+  .mood-text-group {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -548,23 +561,141 @@ const saveTransaction = async () => {
   내부 콘텐츠 스타일링
 ========================================== */
 .grid-layout {
-  display: flex;
-  gap: 30px;
-  margin: 0 auto;
-  max-width: 1100px;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 30px);
+  margin: 0;
+  width: 100%;
+  min-height: calc(100vh - clamp(48px, 6vw, 72px));
+  align-items: stretch;
 }
 
 .register-page :deep(.common-box) {
+  width: 100%;
+  min-width: 0;
   border-color: var(--card-border);
   background-color: var(--card-bg);
 }
 
 .column {
-  flex: 1;
+  display: grid;
+  gap: clamp(16px, 1.8vw, 20px);
+  min-width: 0;
+  min-height: 0;
+}
+
+.column > * {
+  width: 100%;
+}
+
+.left-column {
+  grid-template-rows:
+    minmax(0, 1fr)
+    minmax(0, 0.95fr)
+    minmax(0, 0.95fr)
+    minmax(0, 1.45fr);
+}
+
+.right-column {
+  grid-template-rows:
+    minmax(0, 1.15fr)
+    minmax(0, 0.95fr)
+    minmax(0, 1.2fr)
+    auto;
+}
+
+.form-card {
+  min-height: 0;
+}
+
+.form-card:deep(.box-content) {
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(10px, 1.2vw, 14px);
+  justify-content: flex-start;
+}
+
+.card-category .category-circles,
+.card-category .category-text-grid,
+.card-emotion .mood-group,
+.card-emotion .mood-text-group {
+  flex: 1;
+  align-content: start;
+}
+
+.card-toggle .mode-indicator {
+  margin-top: 4px;
+}
+
+.card-location .select-caption {
+  margin-top: 6px;
+}
+
+.card-toggle .toggle-button {
+  min-height: 64px;
+  font-size: clamp(22px, 1.8vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.card-toggle .mode-indicator {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.card-amount .transparent-input,
+.card-date .date-input,
+.card-location .select-wrapper,
+.card-location .fixed-field,
+.card-category .fixed-field,
+.card-emotion .fixed-field {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.card-amount .transparent-input {
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.card-amount .transparent-input::placeholder {
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.card-date .date-input {
+  font-size: clamp(22px, 2.1vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.card-location .select-input {
+  padding: 16px 48px 16px 18px;
+  font-size: clamp(18px, 1.6vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.card-location .select-input:invalid {
+  font-weight: 600;
+}
+
+.card-location .select-caption {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.card-memo .memo-input {
+  flex: 1;
+  height: 100%;
+  min-height: 180px;
 }
 
 .label {
@@ -572,7 +703,7 @@ const saveTransaction = async () => {
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-secondary);
-  margin-bottom: 15px;
+  margin-bottom: 6px;
 }
 
 .transparent-input {
@@ -793,14 +924,14 @@ const saveTransaction = async () => {
 /* 카테고리 원형 마커 */
 .category-circles {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px 12px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: clamp(12px, 1.8vw, 16px);
+  align-items: stretch;
 }
 
 .category-text-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
 }
 
@@ -824,11 +955,11 @@ const saveTransaction = async () => {
 
 .category-option {
   width: 100%;
-  max-width: 92px;
+  max-width: none;
   border: var(--border-width) solid transparent;
   border-radius: calc(var(--radius-card) - 4px);
   background: transparent;
-  padding: 10px 6px 12px;
+  padding: 12px 8px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -922,15 +1053,16 @@ const saveTransaction = async () => {
 
 /* 기분 선택 그룹 */
 .mood-group {
-  display: flex;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.8vw, 16px);
   margin-top: 10px;
 }
 
 .mood-text-group {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: clamp(12px, 1.8vw, 16px);
 }
 
 .mood-text-button {
@@ -951,13 +1083,13 @@ const saveTransaction = async () => {
 }
 
 .mood-item {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-height: 150px;
+  width: 100%;
+  min-height: clamp(136px, 18vw, 150px);
   padding: 18px 16px;
   border-radius: calc(var(--radius-card) - 4px);
 }
@@ -1035,6 +1167,7 @@ const saveTransaction = async () => {
   position: relative;
   overflow: hidden;
   margin-top: auto;
+  width: 100%;
   min-height: 68px;
   background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--button-primary-bg) 100%);
   background-size: 200% 100%;
