@@ -570,7 +570,9 @@ onMounted(async () => {
 .box-content {
   width: 100%;
   font-size: 20px;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   padding-left: 10px;
 }
 
@@ -623,7 +625,7 @@ onMounted(async () => {
 #common-stats {
   height: 100%;
   display: grid;
-  grid-template-rows: 100px minmax(0, 1.4fr) minmax(0, 2fr);
+   grid-template-rows: 100px auto minmax(0, 1fr);
   gap: 18px;
   min-width: 0;
   min-height: 0;
@@ -652,11 +654,13 @@ onMounted(async () => {
 
 #emotion-stats {
   padding: 10px 0px;
+  white-space: normal;
 }
 
 #emotion-ratio {
   padding: 10px 0px;
   font-size: small;
+  white-space: normal;
 }
 
 #theme-stats {
