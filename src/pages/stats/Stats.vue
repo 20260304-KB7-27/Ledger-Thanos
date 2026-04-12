@@ -71,7 +71,43 @@
         </div>
         <div id="emotion-info">
           <Box width="custom" custom-width="100%" :shadow="false">
-            <div class="emotion-content">
+            <div v-if="isHappy" class="emotion-happy-card">
+              <div class="box-label emotion-title">감정 통계</div>
+
+              <div class="emotion-happy-content">
+                <div class="emotion-item">
+                  <img
+                    src="@/assets/icon/ico_sad_orange.svg"
+                    alt="후회 아이콘"
+                    class="emotion-icon"
+                  />
+                  <span class="emotion-count"
+                    >{{ emotionSatisfiedCount }}회 만족</span
+                  >
+                </div>
+
+                <div class="emotion-item">
+                  <img
+                    src="@/assets/icon/ico_happy_green.svg"
+                    alt="만족 아이콘"
+                    class="emotion-icon"
+                  />
+                  <span class="emotion-count"
+                    >{{ emotionRegretCount }}회 후회</span
+                  >
+                </div>
+
+                <div class="emotion-rate-group">
+                  <span class="emotion-rate-value">{{
+                    emotionSatisfiedRate
+                  }}</span>
+                  <span class="emotion-rate-percent">%</span>
+                  <span class="emotion-rate-label">만족 소비 비율</span>
+                </div>
+              </div>
+            </div>
+
+            <div v-else class="emotion-content">
               <div class="box-label">감정 통계</div>
               <div class="box-content">
                 <div id="emotion-stats">
@@ -738,39 +774,81 @@ onMounted(async () => {
 .pdf-button {
   cursor: pointer;
   font-weight: 600;
-  @media (max-width: 1024px) {
-  #theme-stats {
-    gap: 24px;
-    grid-template-rows: auto auto;
-  }
-
-  #location-spend.happy-chart-section .box-custom,
-  #category-spend.happy-chart-section .box-custom {
-    height: auto;
-    max-height: none;
-  }
-
-  #location-spend.happy-chart-section .scroll-box,
-  #category-spend.happy-chart-section .scroll-box {
-    height: auto;
-    min-height: auto;
-    overflow: visible;
-    padding-bottom: 12px;
-  }
-
-  #location-spend.happy-chart-section .happy-chart-wrap,
-  #category-spend.happy-chart-section .happy-chart-wrap {
-    width: 100%;
-    height: auto;
-    overflow: visible;
-  }
-
-  #location-spend.happy-chart-section,
-  #category-spend.happy-chart-section {
-    min-height: auto;
-    height: auto;
-  }
 }
+
+.emotion-happy-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px 18px;
+  box-sizing: border-box;
+}
+
+.emotion-title {
+  padding-left: 0;
+  padding-top: 0;
+  margin-bottom: 10px;
+}
+
+.emotion-happy-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  min-height: 96px;
+}
+
+.emotion-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.emotion-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.emotion-count {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.emotion-rate-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: center;
+  margin-left: 0;
+  white-space: nowrap;
+}
+
+.emotion-rate-value {
+  font-size: 56px;
+  line-height: 1;
+  font-weight: 800;
+  color: #ffd400;
+}
+
+.emotion-rate-percent {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffd400;
+}
+
+.emotion-rate-label {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-left: 4px;
 }
 
 /* 반응형 */
@@ -833,6 +911,55 @@ onMounted(async () => {
     height: auto !important;
     overflow: visible !important;
   }
+  
+  .emotion-happy-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    column-gap: 16px;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .emotion-item,
+  .emotion-rate-group {
+    min-width: 0;
+    justify-self: center;
+  }
+
+  .emotion-item {
+    gap: 10px;
+  }
+
+  .emotion-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .emotion-count {
+    font-size: 18px;
+  }
+
+  .emotion-rate-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .emotion-rate-value {
+    font-size: 42px;
+  }
+
+  .emotion-rate-percent {
+    font-size: 22px;
+  }
+
+  .emotion-rate-label {
+    font-size: 18px;
+    margin-left: 2px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -843,7 +970,7 @@ onMounted(async () => {
 
   .toggle-btn {
     border-radius: 20px;
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .header {
@@ -853,7 +980,7 @@ onMounted(async () => {
   }
 
   .header h3 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   #common-stats,
@@ -941,7 +1068,6 @@ onMounted(async () => {
     font-size: 16px;
   }
 
-  @media (max-width: 1024px) {
   #theme-stats {
     gap: 24px;
     grid-template-rows: auto auto;
@@ -973,6 +1099,55 @@ onMounted(async () => {
     min-height: auto;
     height: auto;
   }
-}
+  .emotion-happy-card {
+    padding: 12px 14px;
+  }
+
+  @media (max-width: 640px) {
+    .emotion-happy-card {
+      padding: 12px 14px;
+    }
+
+    .emotion-happy-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      min-height: auto;
+    }
+
+    .emotion-item {
+      gap: 10px;
+      justify-self: auto;
+    }
+
+    .emotion-icon {
+      width: 52px;
+      height: 52px;
+    }
+
+    .emotion-count {
+      font-size: 20px;
+    }
+
+    .emotion-rate-group {
+      justify-self: auto;
+      margin-left: 0;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .emotion-rate-value {
+      font-size: 42px;
+    }
+
+    .emotion-rate-percent {
+      font-size: 24px;
+    }
+
+    .emotion-rate-label {
+      font-size: 18px;
+    }
+  }
 }
 </style>

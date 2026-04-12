@@ -186,9 +186,11 @@ canvas {
   height: 100%;
   display: block;
 }
-@media (max-width: 1024px) {
+
+@media print {
   .chart-wrap {
-    height: 300px;
+    height: 210px;
+    padding: 0 4px 4px;
   }
 }
 </style>
