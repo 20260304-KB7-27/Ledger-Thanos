@@ -80,7 +80,7 @@ const formatDateTime = (value) => {
 <style scoped>
 .deal-item {
   width: 100%;
-  min-height: 78px;
+  min-height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
