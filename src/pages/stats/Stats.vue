@@ -71,7 +71,43 @@
         </div>
         <div id="emotion-info">
           <Box width="custom" custom-width="100%" :shadow="false">
-            <div class="emotion-content">
+            <div v-if="isHappy" class="emotion-happy-card">
+              <div class="box-label emotion-title">감정 통계</div>
+
+              <div class="emotion-happy-content">
+                <div class="emotion-item">
+                  <img
+                    src="@/assets/icon/ico_sad_orange.svg"
+                    alt="후회 아이콘"
+                    class="emotion-icon"
+                  />
+                  <span class="emotion-count"
+                    >{{ emotionSatisfiedCount }}회 만족</span
+                  >
+                </div>
+
+                <div class="emotion-item">
+                  <img
+                    src="@/assets/icon/ico_happy_green.svg"
+                    alt="만족 아이콘"
+                    class="emotion-icon"
+                  />
+                  <span class="emotion-count"
+                    >{{ emotionRegretCount }}회 후회</span
+                  >
+                </div>
+
+                <div class="emotion-rate-group">
+                  <span class="emotion-rate-value">{{
+                    emotionSatisfiedRate
+                  }}</span>
+                  <span class="emotion-rate-percent">%</span>
+                  <span class="emotion-rate-label">만족 소비 비율</span>
+                </div>
+              </div>
+            </div>
+
+            <div v-else class="emotion-content">
               <div class="box-label">감정 통계</div>
               <div class="box-content">
                 <div id="emotion-stats">
@@ -86,6 +122,8 @@
                   :max-value="100"
                   bar-color="var(--accent-strong)"
                   background-color="var(--surface-primary)"
+                  bar-radius="var(--radius-card)"
+                  background-radius="var(--radius-card)"
                   :height="30"
                   :border-width="1"
                   border-color="var(--border-soft)"
@@ -127,7 +165,7 @@
         </div>
       </div>
       <div id="theme-stats">
-        <div id="location-spend">
+        <div id="location-spend" :class="{ 'happy-chart-section': isHappy }">
           <Box
             width="custom"
             custom-width="100%"
@@ -138,6 +176,9 @@
               <div class="box-label">지역별 소비</div>
 
               <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else-if="isHappy" class="happy-chart-wrap">
+                <BarChart :items="localSpendingList" />
+              </div>
               <div v-else class="local-list">
                 <LocalSpending
                   v-for="item in localSpendingList"
@@ -152,7 +193,7 @@
           </Box>
         </div>
 
-        <div id="category-spend">
+        <div id="category-spend" :class="{ 'happy-chart-section': isHappy }">
           <Box
             width="custom"
             custom-width="100%"
@@ -163,6 +204,9 @@
               <div class="box-label">카테고리별 지출</div>
 
               <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else-if="isHappy" class="happy-chart-wrap">
+                <DoughnutChart :items="categorySpendingList" />
+              </div>
               <div v-else class="category-list">
                 <CategorySpending
                   v-for="item in categorySpendingList"
@@ -201,6 +245,8 @@ import {
   Utensils,
 } from '@lucide/vue';
 import { getUserTransactions } from '@/service/user/userApi';
+import BarChart from './components/BarChart.vue';
+import DoughnutChart from './components/DoughnutChart.vue';
 
 const userStore = useUserStore();
 
@@ -229,6 +275,9 @@ const categoryList = ref([
   { id: 9, label: '병원', value: 'hospital', icon: Cross },
   { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
 ]);
+
+// 테마 '만족' 상태인지 확인
+const isHappy = computed(() => userStore.dominantEmotion === 'happy');
 
 // category value로 label / icon / 정렬순서를 바로 찾기 위한 매핑 객체
 // 예: categoryMetaMap.value['shopping'] => { label: '쇼핑', icon: ..., order: 1 }
@@ -570,13 +619,19 @@ onMounted(async () => {
 .box-content {
   width: 100%;
   font-size: 20px;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   padding-left: 10px;
 }
 
 .box-label-account {
   width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 22px;
   font-weight: 600;
   white-space: nowrap;
@@ -619,7 +674,7 @@ onMounted(async () => {
 #common-stats {
   height: 100%;
   display: grid;
-  grid-template-rows: 100px minmax(0, 1.4fr) minmax(0, 2fr);
+  grid-template-rows: 100px auto minmax(0, 1fr);
   gap: 18px;
   min-width: 0;
   min-height: 0;
@@ -648,11 +703,13 @@ onMounted(async () => {
 
 #emotion-stats {
   padding: 10px 0px;
+  white-space: normal;
 }
 
 #emotion-ratio {
   padding: 10px 0px;
   font-size: small;
+  white-space: normal;
 }
 
 #theme-stats {
@@ -719,6 +776,103 @@ onMounted(async () => {
   font-weight: 600;
 }
 
+.emotion-happy-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px 18px;
+  box-sizing: border-box;
+}
+
+.emotion-title {
+  padding-left: 0;
+  padding-top: 0;
+  margin-bottom: 10px;
+}
+
+.emotion-happy-content {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-height: 96px;
+}
+
+.emotion-item,
+.emotion-rate-group {
+  min-width: 0;
+  justify-self: center;
+}
+
+.emotion-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.emotion-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.emotion-count {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.emotion-rate-value {
+  font-size: 56px;
+  line-height: 1;
+  font-weight: 800;
+  color: #ffd400;
+}
+
+.emotion-rate-percent {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffd400;
+}
+
+.emotion-rate-label {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-left: 4px;
+}
+
+#category-spend .happy-chart-wrap,
+#location-spend .happy-chart-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#category-spend .happy-chart-wrap > *,
+#location-spend .happy-chart-wrap > * {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.emotion-rate-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
 /* 반응형 */
 
 @media print {
@@ -779,6 +933,100 @@ onMounted(async () => {
     height: auto !important;
     overflow: visible !important;
   }
+
+  .emotion-happy-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    column-gap: 16px;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .emotion-item,
+  .emotion-rate-group {
+    min-width: 0;
+    justify-self: center;
+  }
+
+  .emotion-item {
+    gap: 10px;
+  }
+
+  .emotion-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .emotion-count {
+    font-size: 18px;
+  }
+
+  .emotion-rate-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .emotion-rate-value {
+    font-size: 42px;
+  }
+
+  .emotion-rate-percent {
+    font-size: 22px;
+  }
+
+  .emotion-rate-label {
+    font-size: 18px;
+    margin-left: 2px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .emotion-happy-card {
+    padding: 10px 14px;
+  }
+
+  .emotion-title {
+    margin-bottom: 6px;
+  }
+
+  .emotion-happy-content {
+    gap: 12px;
+    min-height: 78px;
+  }
+
+  .emotion-item {
+    gap: 10px;
+  }
+
+  .emotion-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .emotion-count {
+    font-size: 18px;
+  }
+
+  .emotion-rate-group {
+    gap: 4px;
+  }
+
+  .emotion-rate-value {
+    font-size: 40px;
+  }
+
+  .emotion-rate-percent {
+    font-size: 22px;
+  }
+
+  .emotion-rate-label {
+    font-size: 17px;
+    margin-left: 2px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -789,7 +1037,7 @@ onMounted(async () => {
 
   .toggle-btn {
     border-radius: 20px;
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .header {
@@ -799,7 +1047,7 @@ onMounted(async () => {
   }
 
   .header h3 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   #common-stats,
@@ -885,6 +1133,88 @@ onMounted(async () => {
   .box-label-account,
   .box-label-header {
     font-size: 16px;
+  }
+
+  #theme-stats {
+    gap: 24px;
+    grid-template-rows: auto auto;
+  }
+
+  #location-spend.happy-chart-section .box-custom,
+  #category-spend.happy-chart-section .box-custom {
+    height: auto;
+    max-height: none;
+  }
+
+  #location-spend.happy-chart-section .scroll-box,
+  #category-spend.happy-chart-section .scroll-box {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    padding-bottom: 12px;
+  }
+
+  #location-spend.happy-chart-section .happy-chart-wrap,
+  #category-spend.happy-chart-section .happy-chart-wrap {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  #location-spend.happy-chart-section,
+  #category-spend.happy-chart-section {
+    min-height: auto;
+    height: auto;
+  }
+  .emotion-happy-card {
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .emotion-happy-card {
+    padding: 12px 14px;
+  }
+
+  .emotion-happy-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    min-height: auto;
+  }
+
+  .emotion-item {
+    gap: 10px;
+    justify-self: auto;
+  }
+
+  .emotion-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .emotion-count {
+    font-size: 20px;
+  }
+
+  .emotion-rate-group {
+    justify-self: auto;
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .emotion-rate-value {
+    font-size: 42px;
+  }
+
+  .emotion-rate-percent {
+    font-size: 24px;
+  }
+
+  .emotion-rate-label {
+    font-size: 18px;
   }
 }
 </style>
