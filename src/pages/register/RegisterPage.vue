@@ -1268,15 +1268,33 @@ const saveTransaction = async () => {
 }
 
 .register-page.register-theme-neutral .toggle-button.expense.active {
-  background: var(--accent-secondary);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--button-secondary-text);
+  box-shadow: var(--shadow-emphasis);
+}
+
+.register-page.register-theme-neutral .toggle-button.income.active {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--button-secondary-text);
+  box-shadow: var(--shadow-emphasis);
 }
 
 .register-page.register-theme-neutral .circle {
   background: var(--surface-secondary);
 }
 
+.register-page.register-theme-neutral .category-option-active {
+  background: var(--surface-emphasis);
+  border-color: var(--accent-strong);
+}
+
 .register-page.register-theme-neutral .circle-active {
-  background: var(--button-primary-bg);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--button-secondary-text);
+  box-shadow: var(--shadow-emphasis);
 }
 
 .register-page.register-theme-neutral .mood-button {
@@ -1288,7 +1306,10 @@ const saveTransaction = async () => {
 }
 
 .register-page.register-theme-neutral .submit-button {
-  background: var(--button-primary-bg);
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--button-secondary-text);
+  box-shadow: var(--shadow-emphasis);
 }
 
 .register-page.register-theme-neutral .submit-button::before {
