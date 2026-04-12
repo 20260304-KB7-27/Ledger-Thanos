@@ -184,7 +184,8 @@ onBeforeUnmount(() => {
 .chart-wrap {
   position: relative;
   width: 100%;
-  height: 380px;
+  height: 100%;
+  min-height: 0;
   padding: 8px 12px 12px;
   box-sizing: border-box;
 }

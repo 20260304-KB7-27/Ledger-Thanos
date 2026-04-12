@@ -35,10 +35,13 @@ const makeData = () => {
     datasets: [
       {
         data: filtered.map((item) => item.amount),
-        backgroundColor: ['#FF9898', '#FFAAAA', '#f8bcbc', '#f9caca', '#fad7d7'].slice(
-          0,
-          filtered.length
-        ),
+        backgroundColor: [
+          '#FF9898',
+          '#FFAAAA',
+          '#f8bcbc',
+          '#f9caca',
+          '#fad7d7',
+        ].slice(0, filtered.length),
         borderWidth: 0,
         hoverOffset: 4,
       },
@@ -176,7 +179,8 @@ onBeforeUnmount(() => {
 .chart-wrap {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 100%;
+  min-height: 0;
   padding: 0 8px 8px;
   box-sizing: border-box;
 }

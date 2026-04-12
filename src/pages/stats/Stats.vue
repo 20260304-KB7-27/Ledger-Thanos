@@ -793,19 +793,25 @@ onMounted(async () => {
 }
 
 .emotion-happy-content {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
   min-height: 96px;
+}
+
+.emotion-item,
+.emotion-rate-group {
+  min-width: 0;
+  justify-self: center;
 }
 
 .emotion-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 14px;
-  flex-shrink: 0;
 }
 
 .emotion-icon {
@@ -819,15 +825,6 @@ onMounted(async () => {
   font-size: 24px;
   font-weight: 700;
   color: var(--text-primary);
-  white-space: nowrap;
-}
-
-.emotion-rate-group {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  justify-self: center;
-  margin-left: 0;
   white-space: nowrap;
 }
 
@@ -849,6 +846,31 @@ onMounted(async () => {
   font-weight: 700;
   color: var(--text-primary);
   margin-left: 4px;
+}
+
+#category-spend .happy-chart-wrap,
+#location-spend .happy-chart-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#category-spend .happy-chart-wrap > *,
+#location-spend .happy-chart-wrap > * {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.emotion-rate-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 /* 반응형 */
@@ -911,7 +933,7 @@ onMounted(async () => {
     height: auto !important;
     overflow: visible !important;
   }
-  
+
   .emotion-happy-content {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
@@ -958,6 +980,51 @@ onMounted(async () => {
 
   .emotion-rate-label {
     font-size: 18px;
+    margin-left: 2px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .emotion-happy-card {
+    padding: 10px 14px;
+  }
+
+  .emotion-title {
+    margin-bottom: 6px;
+  }
+
+  .emotion-happy-content {
+    gap: 12px;
+    min-height: 78px;
+  }
+
+  .emotion-item {
+    gap: 10px;
+  }
+
+  .emotion-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .emotion-count {
+    font-size: 18px;
+  }
+
+  .emotion-rate-group {
+    gap: 4px;
+  }
+
+  .emotion-rate-value {
+    font-size: 40px;
+  }
+
+  .emotion-rate-percent {
+    font-size: 22px;
+  }
+
+  .emotion-rate-label {
+    font-size: 17px;
     margin-left: 2px;
   }
 }
@@ -1102,52 +1169,52 @@ onMounted(async () => {
   .emotion-happy-card {
     padding: 12px 14px;
   }
+}
 
-  @media (max-width: 640px) {
-    .emotion-happy-card {
-      padding: 12px 14px;
-    }
+@media (max-width: 640px) {
+  .emotion-happy-card {
+    padding: 12px 14px;
+  }
 
-    .emotion-happy-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      min-height: auto;
-    }
+  .emotion-happy-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    min-height: auto;
+  }
 
-    .emotion-item {
-      gap: 10px;
-      justify-self: auto;
-    }
+  .emotion-item {
+    gap: 10px;
+    justify-self: auto;
+  }
 
-    .emotion-icon {
-      width: 52px;
-      height: 52px;
-    }
+  .emotion-icon {
+    width: 52px;
+    height: 52px;
+  }
 
-    .emotion-count {
-      font-size: 20px;
-    }
+  .emotion-count {
+    font-size: 20px;
+  }
 
-    .emotion-rate-group {
-      justify-self: auto;
-      margin-left: 0;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
+  .emotion-rate-group {
+    justify-self: auto;
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
 
-    .emotion-rate-value {
-      font-size: 42px;
-    }
+  .emotion-rate-value {
+    font-size: 42px;
+  }
 
-    .emotion-rate-percent {
-      font-size: 24px;
-    }
+  .emotion-rate-percent {
+    font-size: 24px;
+  }
 
-    .emotion-rate-label {
-      font-size: 18px;
-    }
+  .emotion-rate-label {
+    font-size: 18px;
   }
 }
 </style>
