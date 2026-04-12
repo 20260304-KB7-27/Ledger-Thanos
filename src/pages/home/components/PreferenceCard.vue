@@ -54,6 +54,7 @@ defineProps({
 .card {
   padding: 40px 32px;
   min-height: 220px;
+  height: 100%;
   box-sizing: border-box;
 }
 

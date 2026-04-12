@@ -44,6 +44,7 @@ const props = defineProps({
 .card {
   padding: 24px 16px;
   min-height: 220px;
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

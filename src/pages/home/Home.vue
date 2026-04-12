@@ -170,6 +170,7 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
   background: var(--page-bg-home);
   padding: 32px;
   box-sizing: border-box;
+  display: flex;
 }
 
 /* =========================
@@ -184,9 +185,12 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 */
 .home-dashboard {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* 왼쪽이 더 큼 */
+  width: 100%;
+  grid-template-columns: minmax(0, 2.1fr) minmax(320px, 1fr); /* 왼쪽이 더 큼 */
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 24px;
-  max-width: 1200px;
+  align-items: stretch;
+  min-height: calc(100vh - 64px);
 }
 
 
@@ -200,6 +204,31 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+  min-width: 0;
+}
+
+.satisfaction,
+.stats-group,
+.summary-stat,
+.recent,
+.monthly-summary,
+.add-transaction-box {
+  height: 100%;
+}
+
+.satisfaction :deep(.common-box),
+.satisfaction :deep(.box-content),
+.satisfaction :deep(.card),
+.summary-stat :deep(.common-box),
+.summary-stat :deep(.box-content),
+.summary-stat :deep(.card),
+.recent :deep(.card),
+.monthly-summary :deep(.common-box),
+.monthly-summary :deep(.box-content),
+.monthly-summary :deep(.card),
+.add-transaction-box :deep(.common-box),
+.add-transaction-box :deep(.box-content) {
+  height: 100%;
 }
 
 
@@ -233,14 +262,27 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 }
 
 .add-transaction-box :deep(.common-box) {
-  height: 100%;
   border-radius: 24px;
 }
 
 .add-transaction-box :deep(.box-content) {
   display: flex;
-  height: 100%;
   padding: 0;
+}
+
+@media (min-width: 1500px) {
+  .content {
+    padding: 36px 40px;
+  }
+
+  .home-dashboard {
+    grid-template-columns: minmax(0, 2.2fr) minmax(360px, 1fr);
+    gap: 28px;
+  }
+
+  .stats-group {
+    gap: 24px;
+  }
 }
 
 /* =========================
@@ -259,12 +301,15 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
     padding-top: 5%;
     padding-left: 16px;
     padding-right: 16px;
+    display: block;
   }
 
   /* 전부 세로 스택 */
   .home-dashboard {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
     gap: 16px;
+    min-height: auto;
   }
 
   /* 통계 카드도 세로 */
