@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <EasterEggOverlay :visible="overlayVisible" />
     <div class="header">
       <Box width="custom" custom-width="100%" :shadow="false" margin-y="8px">
         <div class="period-toggle">
@@ -108,29 +109,30 @@
             </div>
 
             <div v-else class="emotion-content">
-              <div class="box-label">감정 통계</div>
+              <div class="box-label" style="cursor: default; user-select: none;" @click="onEmotionLabelClick">감정 통계</div>
               <div class="box-content">
                 <div id="emotion-stats">
                   {{ emotionSatisfiedCount }}회 만족, {{ emotionRegretCount }}회
                   후회
                 </div>
-
-                <ProgressBarChart
-                  v-if="expenseTransactions.length > 0"
-                  :key="`${periodMode}-${periodLabel}`"
-                  :value="emotionSatisfiedRate"
-                  :max-value="100"
-                  bar-color="var(--accent-strong)"
-                  background-color="var(--surface-primary)"
-                  bar-radius="var(--radius-card)"
-                  background-radius="var(--radius-card)"
-                  :height="30"
-                  :border-width="1"
-                  border-color="var(--border-soft)"
-                />
+                <div ref="progressBarRef">
+                  <ProgressBarChart
+                    v-if="expenseTransactions.length > 0"
+                    :key="`${periodMode}-${periodLabel}`"
+                    :value="emotionRateDisplay"
+                    :max-value="100"
+                    bar-color="var(--accent-strong)"
+                    background-color="var(--surface-primary)"
+                    bar-radius="var(--radius-card)"
+                    background-radius="var(--radius-card)"
+                    :height="30"
+                    :border-width="1"
+                    border-color="var(--border-soft)"
+                  />
+                </div>
 
                 <div id="emotion-ratio">
-                  만족한 소비비율: {{ emotionSatisfiedRate }}%
+                  만족한 소비비율: {{ emotionRatioDisplay }}%
                 </div>
               </div>
             </div>
@@ -158,6 +160,7 @@
                   :amount="item.amount"
                   :icon="item.icon"
                   :date="item.date"
+                  :emotion="item.emotion"
                 />
               </div>
             </div>
@@ -230,8 +233,10 @@ import ProgressBarChart from '@/components/ProgressBarChart.vue';
 import Deal from './components/Deal.vue';
 import LocalSpending from './components/LocalSpending.vue';
 import CategorySpending from './components/CategorySpending.vue';
+import EasterEggOverlay from './components/EasterEggOverlay.vue';
 import { useUserStore } from '@/stores/user';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useEasterEggSequence } from '@/composables/useEasterEggSequence';
 import {
   Beer,
   BusFront,
@@ -429,6 +434,47 @@ const emotionSatisfiedRate = computed(() => {
   return Math.round((emotionSatisfiedCount.value / total) * 100);
 });
 
+// 이스터에그: ProgressBar에 바인딩되는 display용 값 (시퀀스 중 override)
+const emotionRateDisplay = ref(emotionSatisfiedRate.value);
+// 이스터에그: 비율 텍스트에 바인딩되는 display용 값 (100000%까지 상승)
+const emotionRatioDisplay = ref(emotionSatisfiedRate.value);
+// emotionSatisfiedRate가 바뀌면 (기간 변경 등) display도 동기화
+watch(emotionSatisfiedRate, (v) => {
+  if (!isPlaying.value) {
+    emotionRateDisplay.value = v;
+    emotionRatioDisplay.value = v;
+  }
+});
+
+// 이스터에그 오버레이 표시 여부
+const overlayVisible = ref(false);
+
+// 이스터에그 트리거: 감정 통계 레이블 5회 클릭
+const labelClickCount = ref(0);
+function onEmotionLabelClick() {
+  labelClickCount.value += 1;
+  if (labelClickCount.value >= 5) {
+    labelClickCount.value = 0;
+    triggerSequence(
+      () => {
+        overlayVisible.value = true;
+      },
+      () => {
+        overlayVisible.value = false;
+      }
+    );
+  }
+}
+
+const progressBarRef = ref(null);
+
+const { isPlaying, triggerSequence } = useEasterEggSequence({
+  emotionRateDisplay,
+  emotionRatioDisplay,
+  emotionSatisfiedRate,
+  progressBarRef,
+});
+
 // 거래 목록 UI용 데이터 변환
 // 카테고리명을 title로, 아이콘도 함께 붙여서 컴포넌트에 넘김
 const dealLists = computed(() => {
@@ -442,6 +488,7 @@ const dealLists = computed(() => {
       amount: tx.amount,
       icon: categoryMetaMap.value[tx.category]?.icon || Ellipsis,
       date: tx.date,
+      emotion: tx.emotion || '',
     }));
 });
 
