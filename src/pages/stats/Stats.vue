@@ -138,6 +138,9 @@
               <div class="box-label">지역별 소비</div>
 
               <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else-if="isHappy">
+                <BarChart :items="localSpendingList" />
+              </div>
               <div v-else class="local-list">
                 <LocalSpending
                   v-for="item in localSpendingList"
@@ -163,6 +166,9 @@
               <div class="box-label">카테고리별 지출</div>
 
               <div v-if="loading" class="status-text">불러오는 중...</div>
+              <div v-else-if="isHappy">
+                <DoughnutChart :items="categorySpendingList" />
+              </div>
               <div v-else class="category-list">
                 <CategorySpending
                   v-for="item in categorySpendingList"
@@ -201,6 +207,8 @@ import {
   Utensils,
 } from '@lucide/vue';
 import { getUserTransactions } from '@/service/user/userApi';
+import BarChart from './components/BarChart.vue';
+import DoughnutChart from './components/DoughnutChart.vue';
 
 const userStore = useUserStore();
 
@@ -229,6 +237,9 @@ const categoryList = ref([
   { id: 9, label: '병원', value: 'hospital', icon: Cross },
   { id: 10, label: '기타', value: 'etc', icon: Ellipsis },
 ]);
+
+// 테마 '만족' 상태인지 확인
+const isHappy = computed(() => userStore.dominantEmotion === 'happy');
 
 // category value로 label / icon / 정렬순서를 바로 찾기 위한 매핑 객체
 // 예: categoryMetaMap.value['shopping'] => { label: '쇼핑', icon: ..., order: 1 }
@@ -625,7 +636,7 @@ onMounted(async () => {
 #common-stats {
   height: 100%;
   display: grid;
-   grid-template-rows: 100px auto minmax(0, 1fr);
+  grid-template-rows: 100px auto minmax(0, 1fr);
   gap: 18px;
   min-width: 0;
   min-height: 0;
