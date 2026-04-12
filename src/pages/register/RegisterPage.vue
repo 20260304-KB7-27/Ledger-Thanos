@@ -37,17 +37,9 @@
             <p class="label">카테고리</p>
             <div v-if="isExpense">
               <div v-if="isRegretTheme" class="category-text-grid">
-                <button
-                  v-for="cat in categoryList"
-                  :key="cat.id"
-                  type="button"
-                  class="category-text-option"
-                  :class="{ active: transaction.category === cat.value }"
-                  :title="cat.label"
-                  :aria-label="cat.label"
-                  :aria-pressed="transaction.category === cat.value"
-                  @click="transaction.category = cat.value"
-                >
+                <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-text-option"
+                  :class="{ active: transaction.category === cat.value }" :title="cat.label" :aria-label="cat.label"
+                  :aria-pressed="transaction.category === cat.value" @click="transaction.category = cat.value">
                   {{ cat.label }}
                 </button>
               </div>
@@ -81,22 +73,12 @@
             <p class="label">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
             <div v-if="isExpense">
               <div v-if="isRegretTheme" class="mood-text-group">
-                <button
-                  type="button"
-                  class="mood-text-button"
-                  :class="{ active: transaction.emotion === 'happy' }"
-                  :aria-pressed="transaction.emotion === 'happy'"
-                  @click="transaction.emotion = 'happy'"
-                >
+                <button type="button" class="mood-text-button" :class="{ active: transaction.emotion === 'happy' }"
+                  :aria-pressed="transaction.emotion === 'happy'" @click="transaction.emotion = 'happy'">
                   만족
                 </button>
-                <button
-                  type="button"
-                  class="mood-text-button"
-                  :class="{ active: transaction.emotion === 'regret' }"
-                  :aria-pressed="transaction.emotion === 'regret'"
-                  @click="transaction.emotion = 'regret'"
-                >
+                <button type="button" class="mood-text-button" :class="{ active: transaction.emotion === 'regret' }"
+                  :aria-pressed="transaction.emotion === 'regret'" @click="transaction.emotion = 'regret'">
                   후회
                 </button>
               </div>
@@ -105,14 +87,14 @@
                   :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
                   :aria-pressed="isExpense && transaction.emotion === 'happy'" :disabled="!isExpense"
                   @click="transaction.emotion = 'happy'">
-                  <img :src="happyIcon" alt="만족" class="face-icon" />
+                  <img :src="displayedHappyIcon" alt="만족" class="face-icon" />
                   <span>만족</span>
                 </button>
                 <button type="button" class="mood-item mood-button mood-regret"
                   :class="{ active: isExpense && transaction.emotion === 'regret', disabled: !isExpense }"
                   :aria-pressed="isExpense && transaction.emotion === 'regret'" :disabled="!isExpense"
                   @click="transaction.emotion = 'regret'">
-                  <img :src="sadIcon" alt="후회" class="face-icon" />
+                  <img :src="displayedSadIcon" alt="후회" class="face-icon" />
                   <span>후회</span>
                 </button>
               </div>
@@ -173,6 +155,8 @@ import {
   Store,
   Utensils,
 } from '@lucide/vue';
+import happyColorIcon from '@/assets/icon/ico_happy_green.svg';
+import sadColorIcon from '@/assets/icon/ico_sad_orange.svg';
 import happyIcon from '@/assets/svg/happy.svg';
 import sadIcon from '@/assets/svg/sad.svg';
 import Box from '@/components/Box.vue';
@@ -191,7 +175,10 @@ const registerThemeClass = computed(() => {
 
   return 'register-theme-neutral';
 });
+const isHappyTheme = computed(() => registerThemeClass.value === 'register-theme-happy');
 const isRegretTheme = computed(() => registerThemeClass.value === 'register-theme-regret');
+const displayedHappyIcon = computed(() => (isHappyTheme.value ? happyColorIcon : happyIcon));
+const displayedSadIcon = computed(() => (isHappyTheme.value ? sadColorIcon : sadIcon));
 
 const normalizeUserId = (value) => {
   const parsed = Number(value);
@@ -514,6 +501,7 @@ const saveTransaction = async () => {
 .register-page.register-theme-neutral {
   --register-panel-highlight: transparent;
   --register-income-button-bg: #3e8c4c;
+  font-family: initial;
 }
 
 .register-page.register-theme-regret {
@@ -1108,6 +1096,31 @@ const saveTransaction = async () => {
 .submit-button:focus-visible {
   outline: none;
   box-shadow: var(--input-focus-shadow);
+}
+
+.register-page.register-theme-happy .submit-button {
+  background: var(--button-primary-bg);
+}
+
+.register-page.register-theme-happy .toggle-button {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 236, 207, 0.92) 100%);
+}
+
+.register-page.register-theme-happy .toggle-button:hover:not(.active) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 228, 196, 0.98) 100%);
+}
+
+.register-page.register-theme-happy .toggle-button.expense.active {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--amount-minus) 100%);
+  border-color: rgba(255, 152, 152, 0.36);
+}
+
+.register-page.register-theme-happy .toggle-button.income.active {
+  background: linear-gradient(135deg, #53cf74 0%, #2f8f5b 100%);
+}
+
+.register-page.register-theme-happy .circle-active {
+  background: var(--button-primary-bg);
 }
 
 .register-page.register-theme-neutral .toggle-group {
