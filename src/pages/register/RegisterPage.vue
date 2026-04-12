@@ -515,6 +515,7 @@ const saveTransaction = async () => {
   --illustration-opacity: 1;
   --register-income-button-bg: var(--accent-primary);
   --register-income-button-border: var(--border-strong);
+  font-family: initial;
 }
 
 .content {
