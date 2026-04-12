@@ -35,18 +35,35 @@
 
           <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">카테고리</p>
-            <div v-if="isExpense" class="category-circles">
-              <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option" :class="{
-                'category-option-active': isExpense && transaction.category === cat.value,
-                'category-option-disabled': !isExpense,
-              }" :title="cat.label" :aria-label="cat.label"
-                :aria-pressed="isExpense && transaction.category === cat.value" :disabled="!isExpense"
-                @click="transaction.category = cat.value">
-                <span class="circle" :class="{ 'circle-active': isExpense && transaction.category === cat.value }">
-                  <component :is="cat.icon" :size="20" class="category-icon" />
-                </span>
-                <span class="category-name">{{ cat.label }}</span>
-              </button>
+            <div v-if="isExpense">
+              <div v-if="isRegretTheme" class="category-text-grid">
+                <button
+                  v-for="cat in categoryList"
+                  :key="cat.id"
+                  type="button"
+                  class="category-text-option"
+                  :class="{ active: transaction.category === cat.value }"
+                  :title="cat.label"
+                  :aria-label="cat.label"
+                  :aria-pressed="transaction.category === cat.value"
+                  @click="transaction.category = cat.value"
+                >
+                  {{ cat.label }}
+                </button>
+              </div>
+              <div v-else class="category-circles">
+                <button v-for="cat in categoryList" :key="cat.id" type="button" class="category-option" :class="{
+                  'category-option-active': isExpense && transaction.category === cat.value,
+                  'category-option-disabled': !isExpense,
+                }" :title="cat.label" :aria-label="cat.label"
+                  :aria-pressed="isExpense && transaction.category === cat.value" :disabled="!isExpense"
+                  @click="transaction.category = cat.value">
+                  <span class="circle" :class="{ 'circle-active': isExpense && transaction.category === cat.value }">
+                    <component :is="cat.icon" :size="20" class="category-icon" />
+                  </span>
+                  <span class="category-name">{{ cat.label }}</span>
+                </button>
+              </div>
             </div>
             <div v-else class="fixed-field">
               <div class="fixed-field-heading">
@@ -62,21 +79,43 @@
         <div class="column right-column">
           <Box width="custom" customWidth="100%" :shadow="false">
             <p class="label">{{ isExpense ? '이 소비에 만족하셨나요?' : '감정' }}</p>
-            <div v-if="isExpense" class="mood-group">
-              <button type="button" class="mood-item mood-button mood-happy"
-                :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
-                :aria-pressed="isExpense && transaction.emotion === 'happy'" :disabled="!isExpense"
-                @click="transaction.emotion = 'happy'">
-                <img :src="happyIcon" alt="만족" class="face-icon" />
-                <span>만족</span>
-              </button>
-              <button type="button" class="mood-item mood-button mood-regret"
-                :class="{ active: isExpense && transaction.emotion === 'regret', disabled: !isExpense }"
-                :aria-pressed="isExpense && transaction.emotion === 'regret'" :disabled="!isExpense"
-                @click="transaction.emotion = 'regret'">
-                <img :src="sadIcon" alt="후회" class="face-icon" />
-                <span>후회</span>
-              </button>
+            <div v-if="isExpense">
+              <div v-if="isRegretTheme" class="mood-text-group">
+                <button
+                  type="button"
+                  class="mood-text-button"
+                  :class="{ active: transaction.emotion === 'happy' }"
+                  :aria-pressed="transaction.emotion === 'happy'"
+                  @click="transaction.emotion = 'happy'"
+                >
+                  만족
+                </button>
+                <button
+                  type="button"
+                  class="mood-text-button"
+                  :class="{ active: transaction.emotion === 'regret' }"
+                  :aria-pressed="transaction.emotion === 'regret'"
+                  @click="transaction.emotion = 'regret'"
+                >
+                  후회
+                </button>
+              </div>
+              <div v-else class="mood-group">
+                <button type="button" class="mood-item mood-button mood-happy"
+                  :class="{ active: isExpense && transaction.emotion === 'happy', disabled: !isExpense }"
+                  :aria-pressed="isExpense && transaction.emotion === 'happy'" :disabled="!isExpense"
+                  @click="transaction.emotion = 'happy'">
+                  <img :src="happyIcon" alt="만족" class="face-icon" />
+                  <span>만족</span>
+                </button>
+                <button type="button" class="mood-item mood-button mood-regret"
+                  :class="{ active: isExpense && transaction.emotion === 'regret', disabled: !isExpense }"
+                  :aria-pressed="isExpense && transaction.emotion === 'regret'" :disabled="!isExpense"
+                  @click="transaction.emotion = 'regret'">
+                  <img :src="sadIcon" alt="후회" class="face-icon" />
+                  <span>후회</span>
+                </button>
+              </div>
             </div>
             <div v-else class="fixed-field">
               <!-- 수입 모드 시 감정 선택 비활성화 -->
@@ -152,6 +191,7 @@ const registerThemeClass = computed(() => {
 
   return 'register-theme-neutral';
 });
+const isRegretTheme = computed(() => registerThemeClass.value === 'register-theme-regret');
 
 const normalizeUserId = (value) => {
   const parsed = Number(value);
@@ -471,6 +511,11 @@ const saveTransaction = async () => {
   --register-income-button-border: rgba(47, 107, 55, 0.44);
 }
 
+.register-page.register-theme-neutral {
+  --register-panel-highlight: transparent;
+  --register-income-button-bg: #3e8c4c;
+}
+
 .register-page.register-theme-regret {
   --register-panel-highlight: rgba(0, 0, 0, 0.04);
   --register-expense-shadow: none;
@@ -504,6 +549,10 @@ const saveTransaction = async () => {
 
   .category-circles {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .category-text-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -761,6 +810,30 @@ const saveTransaction = async () => {
   justify-items: center;
 }
 
+.category-text-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.category-text-option {
+  min-height: 48px;
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  padding: 12px 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--btn-transition);
+}
+
+.category-text-option.active {
+  background: var(--accent-primary);
+  color: var(--button-primary-text);
+}
+
 .category-option {
   width: 100%;
   max-width: 92px;
@@ -864,6 +937,29 @@ const saveTransaction = async () => {
   display: flex;
   gap: 14px;
   margin-top: 10px;
+}
+
+.mood-text-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mood-text-button {
+  min-height: 56px;
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--btn-transition);
+}
+
+.mood-text-button.active {
+  background: var(--accent-primary);
+  color: var(--button-primary-text);
 }
 
 .mood-item {
@@ -1005,11 +1101,45 @@ const saveTransaction = async () => {
 }
 
 .toggle-button:focus-visible,
+.category-text-option:focus-visible,
 .category-option:focus-visible,
+.mood-text-button:focus-visible,
 .mood-button:focus-visible,
 .submit-button:focus-visible {
   outline: none;
   box-shadow: var(--input-focus-shadow);
+}
+
+.register-page.register-theme-neutral .toggle-group {
+  background: var(--surface-emphasis);
+}
+
+.register-page.register-theme-neutral .toggle-button.expense.active {
+  background: var(--accent-secondary);
+}
+
+.register-page.register-theme-neutral .circle {
+  background: var(--surface-secondary);
+}
+
+.register-page.register-theme-neutral .circle-active {
+  background: var(--button-primary-bg);
+}
+
+.register-page.register-theme-neutral .mood-button {
+  background: var(--surface-primary);
+}
+
+.register-page.register-theme-neutral .mood-item.active {
+  background: var(--surface-secondary);
+}
+
+.register-page.register-theme-neutral .submit-button {
+  background: var(--button-primary-bg);
+}
+
+.register-page.register-theme-neutral .submit-button::before {
+  display: none;
 }
 
 .register-page.register-theme-regret .toggle-group,
