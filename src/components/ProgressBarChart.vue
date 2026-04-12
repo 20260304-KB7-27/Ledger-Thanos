@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="chartWrap"
     class="progress-chart-wrap"
     :style="{
       width: props.width,
@@ -10,9 +11,9 @@
       class="progress-bg"
       :style="{
         height: `${props.height}px`,
-        background: props.backgroundColor,
+        background: resolveCssVarColor(props.backgroundColor),
         borderRadius: `${props.backgroundRadius}px`,
-        borderColor: props.borderColor,
+        borderColor: resolveCssVarColor(props.borderColor),
         borderWidth: `${props.borderWidth}px`,
       }"
     ></div>
@@ -22,7 +23,7 @@
 
 <script setup>
 import { Chart, registerables } from 'chart.js';
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
 
 Chart.register(...registerables);
 
@@ -69,12 +70,26 @@ const props = defineProps({
   },
 });
 
+const chartWrap = ref(null);
 const progressBar = ref(null);
 let chartInstance = null;
 
-onMounted(async () => {
-  await nextTick();
+const resolveCssVarColor = (color) => {
+  if (!color) return color;
 
+  const trimmed = String(color).trim();
+
+  if (trimmed.startsWith('var(') && trimmed.endsWith(')')) {
+    const varName = trimmed.slice(4, -1).trim();
+    const baseEl = chartWrap.value || document.documentElement;
+    const resolved = getComputedStyle(baseEl).getPropertyValue(varName).trim();
+    return resolved || trimmed;
+  }
+
+  return trimmed;
+};
+
+const createChart = () => {
   if (!progressBar.value) return;
 
   chartInstance = new Chart(progressBar.value, {
@@ -84,8 +99,8 @@ onMounted(async () => {
       datasets: [
         {
           label: '만족 지수',
-          data: [0], // 처음엔 0
-          backgroundColor: props.barColor,
+          data: [0],
+          backgroundColor: resolveCssVarColor(props.barColor),
           borderRadius: props.barRadius,
           borderSkipped: false,
           barThickness: props.height,
@@ -128,13 +143,81 @@ onMounted(async () => {
       },
     },
   });
+};
+
+const updateChartValue = () => {
+  if (!chartInstance) return;
+
+  chartInstance.data.datasets[0].data = [props.value];
+  chartInstance.update(); // 애니메이션 유지
+};
+
+const updateChartStyle = () => {
+  if (!chartInstance) return;
+
+  chartInstance.data.datasets[0].backgroundColor = resolveCssVarColor(
+    props.barColor
+  );
+  chartInstance.data.datasets[0].borderRadius = props.barRadius;
+  chartInstance.data.datasets[0].barThickness = props.height;
+  chartInstance.options.scales.x.max = props.maxValue;
+
+  chartInstance.update('none'); // 스타일만 즉시 반영
+};
+
+onMounted(async () => {
+  await nextTick();
+
+  if (!progressBar.value) return;
+
+  createChart();
 
   requestAnimationFrame(() => {
-    if (!chartInstance) return;
-    chartInstance.data.datasets[0].data = [props.value];
-    chartInstance.update();
+    updateChartValue();
   });
 });
+
+watch(
+  () => props.value,
+  () => {
+    updateChartValue();
+  }
+);
+
+watch(
+  () => props.themeKey,
+  () => {
+    updateChartStyle();
+  }
+);
+
+watch(
+  () => props.barColor,
+  () => {
+    updateChartStyle();
+  }
+);
+
+watch(
+  () => props.maxValue,
+  () => {
+    updateChartStyle();
+  }
+);
+
+watch(
+  () => props.barRadius,
+  () => {
+    updateChartStyle();
+  }
+);
+
+watch(
+  () => props.height,
+  () => {
+    updateChartStyle();
+  }
+);
 
 onBeforeUnmount(() => {
   if (chartInstance) {
