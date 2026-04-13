@@ -19,7 +19,12 @@
 
         <div class="summary-row">
           <span class="label">만족한 소비</span>
-          <span class="value">{{ satisfiedCount }}건</span>
+          <span
+            class="value"
+            :style="{ color: props.happyCountColor || 'var(--text-primary)' }"
+          >
+            {{ satisfiedCount }}건
+          </span>
         </div>
 
         <div class="summary-row">
@@ -35,7 +40,7 @@
 import Box from "@/components/Box.vue";
 import {getCategoryMeta} from "@/pages/home/home.js";
 
-defineProps({
+const props = defineProps({
   totalCount: {
     type: Number,
     default: 0,
@@ -51,6 +56,10 @@ defineProps({
   topCategoryCount: {
     type: Number,
     default: 0,
+  },
+  happyCountColor: {
+    type: String,
+    default: '',
   },
 });
 </script>
@@ -109,6 +118,12 @@ h3 {
     max-width: 92px;
     text-align: right;
     word-break: keep-all;
+  }
+}
+
+@media (min-width: 1500px) {
+  .card {
+    height: 100%;
   }
 }
 

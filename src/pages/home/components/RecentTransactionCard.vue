@@ -25,21 +25,58 @@
         >
           <div class="item">
             <div class="left">
-              <span class="circle">
+              <span
+                class="circle"
+                :style="{
+                  background: props.isHappy
+                    ? 'var(--border-soft)'
+                    : 'transparent',
+                }"
+              >
                 <template v-if="item.type === 'income'">
-                  <div class="category-icon income-icon">수입</div>
+                  <div
+                    class="category-icon income-icon"
+                    :style="{
+                      color: props.isHappy
+                        ? 'var(--happy-main-pink)'
+                        : 'var(--text-primary)',
+                    }"
+                  >
+                    수입
+                  </div>
                 </template>
                 <template v-else>
-                  <component :is="getCategoryMeta(item.category).icon" :size="20" class="category-icon"/>
+                  <component
+                    :is="getCategoryMeta(item.category).icon"
+                    :size="20"
+                    class="category-icon"
+                    :style="{
+                      color: props.isHappy
+                        ? 'var(--happy-main-pink)'
+                        : 'var(--text-primary)',
+                    }"
+                  />
                 </template>
               </span>
 
               <div class="info">
-                <strong class="name">{{ item.memo || '기록 없음' }}</strong>
+                <div class="name-row">
+                  <strong class="name">{{ item.memo || '기록 없음' }}</strong>
+                  <img
+                    v-if="props.isHappy && item.emotion === 'happy'"
+                    :src="IcoHappy"
+                    alt="만족 소비 아이콘"
+                    class="happy-name-icon"
+                  />
+                </div>
 
                 <div class="meta-row">
                   <div class="location" v-if="item.type === 'expense' && item.location">
-                    <img :src="locationIcon" alt="위치 아이콘" class="location-icon"/>
+                    <img
+                      :src="props.isHappy ? LocationIconHappy : LocationIcon"
+                      alt="위치 아이콘"
+                      class="location-icon"
+                    />
                     <span>{{ item.location }}</span>
                   </div>
                   <div v-else class="location income-meta">
@@ -54,7 +91,32 @@
             </div>
 
             <strong class="price">
-              {{ item.type === 'expense' ? '-' : '+' }}{{ item.amount.toLocaleString() }}원
+              <span
+                class="price-sign"
+                :style="{
+                  color:
+                    props.isHappy && item.type === 'income'
+                      ? 'var(--happy-plus)'
+                      : props.isHappy && item.type === 'expense'
+                        ? 'var(--happy-orange)'
+                        : 'inherit',
+                }"
+              >
+                {{ item.type === 'expense' ? '-' : '+' }}
+              </span>
+              <span
+                class="price-value"
+                :style="{
+                  color:
+                    props.isHappy && item.type === 'income'
+                      ? 'var(--happy-plus)'
+                      : props.isHappy && item.type === 'expense'
+                        ? 'var(--happy-orange)'
+                        : 'inherit',
+                }"
+              >
+                {{ item.amount.toLocaleString() }}원
+              </span>
             </strong>
           </div>
         </Box>
@@ -67,7 +129,9 @@
 
 <script setup>
 import Box from "@/components/Box.vue";
-import locationIcon from '@/assets/icon/ico_location_black.svg';
+import LocationIcon from '@/assets/icon/ico_location_black.svg';
+import LocationIconHappy from '@/assets/icon/ico_pin_yellow.svg';
+import IcoHappy from '@/assets/icon/ico_happy_green.svg';
 import {getCategoryMeta} from '@/pages/home/home.js';
 
 const formatTransactionDate = (dateString) => {
@@ -86,10 +150,14 @@ const formatTransactionDate = (dateString) => {
   return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 
-defineProps({
+const props = defineProps({
   list: {
     type: Array,
     default: () => [],
+  },
+  isHappy: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
@@ -97,9 +165,11 @@ defineProps({
 <style scoped>
 .card {
   padding: 40px 32px;
-  max-height: 220px;
+  min-height: 220px;
   box-sizing: border-box;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 h3 {
@@ -177,10 +247,24 @@ h3 {
   min-width: 0;
 }
 
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .name {
   font-size: 20px;
   font-weight: 700;
   color: var(--text-primary);
+}
+
+.happy-name-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .meta-row {
@@ -215,10 +299,31 @@ h3 {
   color: var(--text-muted);
 }
 
+@media (min-width: 1500px) {
+  .card {
+    height: 100%;
+  }
+
+  .list {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+  }
+}
+
 .price {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
+}
+
+.price-value {
+  color: inherit;
+}
+
+.deal-box:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 </style>

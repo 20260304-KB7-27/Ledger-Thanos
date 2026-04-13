@@ -108,4 +108,10 @@ h3 {
 .locked .badge-rule {
   opacity: 0.22;
 }
+
+@media (min-width: 1500px) {
+  .collection-card {
+    height: 100%;
+  }
+}
 </style>

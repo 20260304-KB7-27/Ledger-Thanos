@@ -6,6 +6,7 @@
   >
     <section
       class="profile-edit-modal"
+      :class="{ happy: isHappy }"
       role="dialog"
       aria-modal="true"
       aria-labelledby="profile-edit-title"
@@ -57,6 +58,7 @@
         <button
           type="button"
           class="profile-edit-primary"
+          :class="{ happy: isHappy }"
           :disabled="isSaving"
           @click="$emit('save')"
         >
@@ -100,6 +102,10 @@ defineProps({
     type: Boolean,
     required: true,
   },
+  isHappy: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
@@ -127,6 +133,14 @@ h3 {
   background: var(--surface-primary);
   box-shadow: var(--shadow-emphasis);
   transition: var(--card-transition);
+}
+
+.profile-edit-modal.happy {
+  background: linear-gradient(
+    180deg,
+    var(--surface-primary) 0%,
+    var(--surface-secondary) 100%
+  );
 }
 
 .profile-edit-header {
@@ -215,6 +229,11 @@ h3 {
 .profile-edit-primary {
   background: var(--button-secondary-bg);
   color: var(--button-secondary-text);
+}
+
+.profile-edit-primary.happy {
+  background: var(--happy-main-pink);
+  color: #ffffff;
 }
 
 .profile-edit-primary:hover:not(:disabled) {

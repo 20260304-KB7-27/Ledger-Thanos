@@ -6,14 +6,24 @@
         :profile="profile"
         :selected-badge="selectedBadge"
         :member-since-text="memberSinceText"
+        :is-happy="isHappy"
         @open-edit="openProfileEditor"
       />
 
       <!-- 활동요약 -->
-      <ProfileSummaryCard :summary="summary" />
+      <ProfileSummaryCard
+        class="profile-summary-slot"
+        :summary="summary"
+        :is-happy="isHappy"
+      />
 
       <!-- 로그아웃버튼 -->
-      <button type="button" class="logout-button" @click="handleLogout">
+      <button
+        type="button"
+        class="logout-button"
+        :class="{ happy: isHappy, regret: isRegret }"
+        @click="handleLogout"
+      >
         로그아웃
       </button>
     </section>
@@ -21,6 +31,7 @@
     <section class="right-column">
       <!-- 칭호 선택 -->
       <ProfileTitleCard
+        class="profile-title-slot"
         :earned-badges="earnedBadgeCatalog"
         :selected-title-keys="normalizedSelectedTitleKeys"
         @toggle-title="toggleTitle"
@@ -42,6 +53,7 @@
     :districts="seoulDistricts"
     :error-message="profileEditError"
     :is-saving="isSavingProfile"
+    :is-happy="isHappy"
     @update:nickname="profileEditForm.nickname = $event"
     @update:user-location="profileEditForm.userLocation = $event"
     @close="closeProfileEditor"
@@ -83,6 +95,8 @@ import {
  */
 const router = useRouter();
 const userStore = useUserStore();
+const isHappy = computed(() => userStore.dominantEmotion === 'happy');
+const isRegret = computed(() => userStore.dominantEmotion === 'regret');
 
 /*
  * 사용자 / 거래 기본 데이터
@@ -217,7 +231,9 @@ const handleLogout = () => {
 <style scoped>
 .profile-page {
   min-height: 100vh;
-  display: flex;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.88fr) minmax(0, 1.62fr);
   align-items: flex-start;
   gap: 34px;
   padding: 32px 38px;
@@ -226,8 +242,8 @@ const handleLogout = () => {
 }
 
 .left-column {
-  width: 324px;
-  flex: 0 0 324px;
+  width: auto;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -235,14 +251,31 @@ const handleLogout = () => {
 
 .right-column {
   min-width: 0;
-  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 22px;
 }
 
+.profile-summary-slot,
+.profile-title-slot,
+.profile-badge-slot {
+  min-height: 0;
+}
+
+.profile-summary-slot {
+  flex: 0 0 auto;
+}
+
+.profile-title-slot {
+  flex: 0 0 auto;
+}
+
 .profile-badge-slot :deep(.common-box),
-.profile-badge-slot :deep(.box-content) {
+.profile-badge-slot :deep(.box-content),
+.profile-badge-slot :deep(.collection-card),
+.profile-summary-slot :deep(.common-box),
+.profile-summary-slot :deep(.box-content),
+.profile-summary-slot :deep(.summary-card) {
   height: 100%;
 }
 
@@ -251,11 +284,16 @@ const handleLogout = () => {
   box-sizing: border-box;
 }
 
+.profile-badge-slot {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .logout-button {
   width: 100%;
   border: var(--border-width) solid transparent;
   border-radius: var(--radius-button);
-  background: var(--button-danger-bg);
+  background: var(--neutral-danger);
   color: var(--button-danger-text);
   font-size: 28px;
   font-weight: 800;
@@ -263,6 +301,16 @@ const handleLogout = () => {
   cursor: pointer;
   box-shadow: var(--shadow-button);
   transition: var(--btn-transition);
+}
+
+.logout-button.happy {
+  background: var(--happy-main-pink);
+  color: #ffffff;
+}
+
+.logout-button.regret {
+  background: #111111;
+  color: #ffffff;
 }
 
 .logout-button:hover {
@@ -273,8 +321,26 @@ const handleLogout = () => {
   transform: var(--btn-active-lift);
 }
 
+@media (min-width: 1500px) {
+  .profile-page {
+    grid-template-columns: minmax(340px, 0.9fr) minmax(0, 1.7fr);
+    gap: 36px;
+    padding: 36px 40px;
+  }
+
+  .left-column,
+  .right-column {
+    min-height: calc(100vh - 72px);
+  }
+
+  .profile-summary-slot {
+    flex: 1 1 auto;
+  }
+}
+
 @media (max-width: 1024px) {
   .profile-page {
+    display: flex;
     flex-direction: column;
     padding: 24px;
   }
@@ -282,7 +348,7 @@ const handleLogout = () => {
   .left-column,
   .right-column {
     width: 100%;
-    flex-basis: auto;
+    min-height: auto;
   }
 }
 

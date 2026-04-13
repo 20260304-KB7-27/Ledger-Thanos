@@ -32,7 +32,11 @@
             <ellipse cx="40" cy="72" rx="28" ry="18" fill="#b0b0b0" />
           </svg>
         </div>
-        <div v-if="selectedBadge" class="selected-badge-chip">
+        <div
+          v-if="selectedBadge"
+          class="selected-badge-chip"
+          :class="{ happy: isHappy }"
+        >
           <span>{{ selectedBadge.name }}</span>
         </div>
         <div v-else class="selected-badge-empty">선택한 칭호가 없어요</div>
@@ -65,10 +69,18 @@ defineProps({
     type: String,
     required: true,
   },
+  isHappy: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
 <style scoped>
+.card-box :deep(.box-content) {
+  padding: 0;
+}
+
 .profile-card-button {
   width: 100%;
   border: none;
@@ -87,9 +99,11 @@ defineProps({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(circle at top, rgba(255, 199, 173, 0.16), transparent 40%),
-    linear-gradient(180deg, var(--surface-primary) 0%, var(--surface-secondary) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--surface-primary) 0%,
+    var(--surface-secondary) 100%
+  );
   transition: var(--card-transition);
 }
 
@@ -129,6 +143,11 @@ defineProps({
   font-size: 17px;
   font-weight: 700;
   line-height: 1;
+}
+
+.selected-badge-chip.happy {
+  background: var(--happy-light-pink);
+  color: #ffffff;
 }
 
 .selected-badge-empty {
@@ -187,8 +206,10 @@ defineProps({
 .profile-card-button:hover .profile-card {
   transform: var(--card-hover-lift);
   box-shadow: var(--card-hover-shadow);
-  background:
-    radial-gradient(circle at top, rgba(255, 199, 173, 0.22), transparent 44%),
-    linear-gradient(180deg, var(--surface-primary) 0%, var(--surface-emphasis) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--surface-primary) 0%,
+    var(--surface-emphasis) 100%
+  );
 }
 </style>
