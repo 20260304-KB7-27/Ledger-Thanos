@@ -60,11 +60,23 @@
               </span>
 
               <div class="info">
-                <strong class="name">{{ item.memo || '기록 없음' }}</strong>
+                <div class="name-row">
+                  <strong class="name">{{ item.memo || '기록 없음' }}</strong>
+                  <img
+                    v-if="props.isHappy && item.emotion === 'happy'"
+                    :src="IcoHappy"
+                    alt="만족 소비 아이콘"
+                    class="happy-name-icon"
+                  />
+                </div>
 
                 <div class="meta-row">
                   <div class="location" v-if="item.type === 'expense' && item.location">
-                    <img :src="locationIcon" alt="위치 아이콘" class="location-icon"/>
+                    <img
+                      :src="props.isHappy ? LocationIconHappy : LocationIcon"
+                      alt="위치 아이콘"
+                      class="location-icon"
+                    />
                     <span>{{ item.location }}</span>
                   </div>
                   <div v-else class="location income-meta">
@@ -117,7 +129,9 @@
 
 <script setup>
 import Box from "@/components/Box.vue";
-import locationIcon from '@/assets/icon/ico_location_black.svg';
+import LocationIcon from '@/assets/icon/ico_location_black.svg';
+import LocationIconHappy from '@/assets/icon/ico_pin_yellow.svg';
+import IcoHappy from '@/assets/icon/ico_happy_green.svg';
 import {getCategoryMeta} from '@/pages/home/home.js';
 
 const formatTransactionDate = (dateString) => {
@@ -233,10 +247,24 @@ h3 {
   min-width: 0;
 }
 
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .name {
   font-size: 20px;
   font-weight: 700;
   color: var(--text-primary);
+}
+
+.happy-name-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .meta-row {
