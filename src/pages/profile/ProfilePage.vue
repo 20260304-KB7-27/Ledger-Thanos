@@ -10,10 +10,19 @@
       />
 
       <!-- 활동요약 -->
-      <ProfileSummaryCard class="profile-summary-slot" :summary="summary" />
+      <ProfileSummaryCard
+        class="profile-summary-slot"
+        :summary="summary"
+        :is-happy="isHappy"
+      />
 
       <!-- 로그아웃버튼 -->
-      <button type="button" class="logout-button" @click="handleLogout">
+      <button
+        type="button"
+        class="logout-button"
+        :class="{ happy: isHappy }"
+        @click="handleLogout"
+      >
         로그아웃
       </button>
     </section>
@@ -84,6 +93,7 @@ import {
  */
 const router = useRouter();
 const userStore = useUserStore();
+const isHappy = computed(() => userStore.dominantEmotion === 'happy');
 
 /*
  * 사용자 / 거래 기본 데이터
@@ -288,6 +298,11 @@ const handleLogout = () => {
   cursor: pointer;
   box-shadow: var(--shadow-button);
   transition: var(--btn-transition);
+}
+
+.logout-button.happy {
+  background: var(--happy-main-pink);
+  color: #ffffff;
 }
 
 .logout-button:hover {

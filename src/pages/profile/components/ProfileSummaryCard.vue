@@ -12,15 +12,15 @@
       <h3>활동 요약</h3>
 
       <div class="summary-list">
-        <div class="summary-item">
+        <div class="summary-item" :class="{ happy: isHappy }">
           <span class="summary-label">총 기록</span>
           <strong class="summary-value">{{ summary.totalCount }}</strong>
         </div>
-        <div class="summary-item">
+        <div class="summary-item" :class="{ happy: isHappy }">
           <span class="summary-label">기록 일수</span>
           <strong class="summary-value">{{ summary.activeDays }}</strong>
         </div>
-        <div class="summary-item">
+        <div class="summary-item" :class="{ happy: isHappy }">
           <span class="summary-label">만족 비율</span>
           <strong class="summary-value">{{ summary.satisfactionRate }}</strong>
         </div>
@@ -36,6 +36,10 @@ defineProps({
   summary: {
     type: Object,
     required: true,
+  },
+  isHappy: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
@@ -71,6 +75,15 @@ h3 {
   transition: var(--card-transition);
 }
 
+.summary-item.happy {
+  background: var(--happy-main-pink);
+  color: #111111;
+}
+
+.summary-item.happy .summary-label {
+  color: #111111;
+}
+
 .summary-item:hover {
   transform: var(--card-hover-lift);
   box-shadow: var(--card-hover-shadow);
@@ -85,6 +98,14 @@ h3 {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.summary-item.happy .summary-value {
+  color: var(--happy-ink-700);
+}
+
+.summary-item.happy:last-child .summary-value {
+  color: var(--happy-light-yellow);
 }
 
 @media (min-width: 1500px) {
