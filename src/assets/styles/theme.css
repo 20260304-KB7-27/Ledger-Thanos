@@ -24,11 +24,11 @@
   --neutral-minus: #ff945f;
   --neutral-danger: #e53935;
   --neutral-danger-soft: #ff8578;
-  --neutral-cream-home: #f6efcf;
+  --neutral-cream-home: #fff8dd;
   --neutral-cream-register: #fdf8e3;
   --neutral-cream-stats: #fff8dd;
   --neutral-cream-map: #fffbf0;
-  --neutral-cream-profile: #f9f0c9;
+  --neutral-cream-profile: #fff8dd;
   --neutral-surface-soft: #fff8de;
   --neutral-surface-emphasis: #fff2bf;
   --neutral-border-soft: #ebebeb;
@@ -133,11 +133,11 @@
   --happy-plus: #4ce158;
   --happy-minus: #ff945f;
   --happy-danger: #d95c5c;
-  --happy-cream-home: #fff4c9;
+  --happy-cream-home: #fff8df;
   --happy-cream-register: #fff6d7;
   --happy-cream-stats: #fff0bc;
   --happy-cream-map: #fff8df;
-  --happy-cream-profile: #ffe4d5;
+  --happy-cream-profile: #fff8df;
   --happy-surface-primary: #fff9f1;
   --happy-surface-secondary: #ffeccf;
   --happy-input-bg: #fff6ea;

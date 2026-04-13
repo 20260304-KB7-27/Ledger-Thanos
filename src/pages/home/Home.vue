@@ -286,6 +286,10 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
     height: 100%;
   }
 
+  .happy-icon {
+    margin-right: 5px;
+  }
+
   .satisfaction :deep(.common-box),
   .satisfaction :deep(.box-content),
   .satisfaction :deep(.card),
