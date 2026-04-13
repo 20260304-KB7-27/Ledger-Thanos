@@ -17,6 +17,7 @@
       <div class="score-wrap">
         <strong class="score">{{ score }}</strong>
         <span class="percent">%</span>
+        <p v-if="isHappy" class="happy-message">만족한 소비가 더 많아요!</p>
       </div>
 
       <div class="progress-bar">
@@ -85,6 +86,14 @@ h3 {
   align-items: baseline;
   gap: 8px;
   margin-bottom: 24px;
+}
+
+.happy-message {
+  margin: 0 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--neutral-nav-text);
+  line-height: 1.2;
 }
 
 .score {

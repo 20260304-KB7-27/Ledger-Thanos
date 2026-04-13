@@ -51,10 +51,25 @@
         </div>
 
         <!-- 오른쪽: 거래 추가 버튼 -->
-        <button class="add-transaction-card" :class="{ 'happy': isHappy, 'regret':isRegret }" @click="goToAddTransaction">
-          <img v-if="isHappy" :src="IcoPlus" alt="happy icon" class="happy-icon" />
-          새로운 거래 추가
-        </button>
+        <Box
+          class="add-transaction-box"
+          :class="{ regret: isRegret }"
+          width="custom"
+          custom-width="100%"
+          margin-y="0"
+          border="none"
+          bg-color="transparent"
+          :shadow="false"
+        >
+          <button
+            class="add-transaction-card"
+            :class="{ happy: isHappy, regret: isRegret }"
+            @click="goToAddTransaction"
+          >
+            <img v-if="isHappy" :src="IcoPlus" alt="happy icon" class="happy-icon" />
+            새로운 거래 추가
+          </button>
+        </Box>
 
         <!-- 3행: 최근 거래 -->
         <RecentTransactionCard
@@ -257,8 +272,12 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
 .add-transaction-card.regret {
   background: var(--button-primary-bg);
   border: solid 1px var(--button-primary-bg);
-  border-radius: 15px;
+  border-radius: 0;
   color: var(--regret-white);
+}
+
+.add-transaction-box.regret :deep(.common-box) {
+  border-radius: 0;
 }
 
 @media (min-width: 1500px) {

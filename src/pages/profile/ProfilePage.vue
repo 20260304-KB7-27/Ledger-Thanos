@@ -21,7 +21,7 @@
       <button
         type="button"
         class="logout-button"
-        :class="{ happy: isHappy }"
+        :class="{ happy: isHappy, regret: isRegret }"
         @click="handleLogout"
       >
         로그아웃
@@ -96,6 +96,7 @@ import {
 const router = useRouter();
 const userStore = useUserStore();
 const isHappy = computed(() => userStore.dominantEmotion === 'happy');
+const isRegret = computed(() => userStore.dominantEmotion === 'regret');
 
 /*
  * 사용자 / 거래 기본 데이터
@@ -304,6 +305,11 @@ const handleLogout = () => {
 
 .logout-button.happy {
   background: var(--happy-main-pink);
+  color: #ffffff;
+}
+
+.logout-button.regret {
+  background: #111111;
   color: #ffffff;
 }
 
