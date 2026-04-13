@@ -25,6 +25,7 @@
             :src="getDisplayImage('title', title)"
             alt="획득한 칭호 이미지"
             class="title-image"
+            :class="{ 'regret': isRegret }"
           />
           <p v-else class="title-text">{{ title }}</p>
         </div>
@@ -57,6 +58,7 @@ defineProps({
 const userStore = useUserStore();
 // 테마 '만족' 상태인지 확인
 const isHappy = computed(() => userStore.dominantEmotion === 'happy');
+const isRegret = computed(() => userStore.dominantEmotion === 'regret');
 </script>
 
 <style scoped>
@@ -99,6 +101,11 @@ h3 {
   border: var(--border-width) solid var(--border-soft);
   background: var(--card-bg);
   opacity: var(--illustration-opacity);
+}
+
+.title-image.regret {
+  border: none;
+  opacity: 100;
 }
 
 .title-text,

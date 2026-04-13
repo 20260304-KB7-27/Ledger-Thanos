@@ -51,7 +51,7 @@
         </div>
 
         <!-- 오른쪽: 거래 추가 버튼 -->
-        <button class="add-transaction-card" :class="{ 'happy': isHappy }" @click="goToAddTransaction">
+        <button class="add-transaction-card" :class="{ 'happy': isHappy, 'regret':isRegret }" @click="goToAddTransaction">
           <img v-if="isHappy" :src="IcoPlus" alt="happy icon" class="happy-icon" />
           새로운 거래 추가
         </button>
@@ -121,7 +121,7 @@ const transactions = ref([]);
 const selectedTitles = ref([]);
 // 테마 '만족' 상태인지 확인
 const isHappy = computed(() => userStore.dominantEmotion === 'happy');
-
+const isRegret = computed(() => userStore.dominantEmotion === 'regret');
 // 거래 등록 화면으로 이동
 const goToAddTransaction = () => {
   router.push("/register");
@@ -252,6 +252,13 @@ const monthlySummary = computed(() => getMonthlySummary(transactions.value));
   background: var(--button-primary-bg);
   border: solid 1px var(--button-primary-bg);
   border-radius: 15px;
+}
+
+.add-transaction-card.regret {
+  background: var(--button-primary-bg);
+  border: solid 1px var(--button-primary-bg);
+  border-radius: 15px;
+  color: var(--regret-white);
 }
 
 @media (min-width: 1500px) {
