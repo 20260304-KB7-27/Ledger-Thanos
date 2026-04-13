@@ -9,7 +9,10 @@
     :shadow="false"
   >
     <section class="card">
-      <h3>나의 칭호</h3>
+      <div class="title-row">
+        <img v-if="isHappy" :src="IcoLabel" alt="happy icon" class="happy-icon" />
+        <h3>나의 칭호</h3>
+      </div>
 
       <div v-if="titles.length > 0">
         <div
@@ -37,7 +40,9 @@
 <script setup>
 import Box from "@/components/Box.vue";
 import { getDisplayImage } from '@/pages/home/home.js';
-
+import IcoLabel from "@/assets/icon/ico_label.svg";
+import {useUserStore} from "@/stores/user.js";
+import {computed} from "vue";
 defineProps({
   titles: {
     type: Array,
@@ -48,20 +53,36 @@ defineProps({
     default: '아직 칭호가 없어요.',
   },
 });
+
+const userStore = useUserStore();
+// 테마 '만족' 상태인지 확인
+const isHappy = computed(() => userStore.dominantEmotion === 'happy');
 </script>
 
 <style scoped>
 .card {
   padding: 40px 32px;
   min-height: 220px;
-  height: 100%;
   box-sizing: border-box;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
 h3 {
-  margin: 0 0 36px;
+  margin: 0;
   font-size: 22px;
   font-weight: 600;
+}
+
+.happy-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
 .title-item {
@@ -105,5 +126,11 @@ h3 {
   line-height: 1.4;
   color: var(--text-muted);
   text-align: center;
+}
+
+@media (min-width: 1500px) {
+  .card {
+    height: 100%;
+  }
 }
 </style>

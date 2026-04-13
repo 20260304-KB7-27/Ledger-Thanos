@@ -9,7 +9,10 @@
     :shadow="false"
   >
     <section class="card">
-      <h3>이번달 만족 지수</h3>
+      <div class="title-row">
+        <img v-if="isHappy" :src="IcoHappyYellow" alt="happy icon" class="happy-icon" />
+        <h3>이번달 만족 지수</h3>
+      </div>
 
       <div class="score-wrap">
         <strong class="score">{{ score }}</strong>
@@ -20,7 +23,7 @@
         <ProgressBarChart
           :key="score"
           :value="score"
-          bar-color="var(--accent-strong)"
+          :bar-color="isHappy ? 'var(--button-primary-bg)' : 'var(--accent-strong)'"
         />
       </div>
     </section>
@@ -30,26 +33,51 @@
 <script setup>
 import Box from "@/components/Box.vue";
 import ProgressBarChart from "@/components/ProgressBarChart.vue";
+import IcoHappyYellow from "@/assets/icon/ico_happy_yellow.svg"
+
+import {computed} from "vue";
+import {useUserStore} from "@/stores/user.js";
 defineProps({
   score: {
     type: Number,
     default: 75,
   },
 });
+const userStore = useUserStore();
+// 테마 '만족' 상태인지 확인
+const isHappy = computed(() => userStore.dominantEmotion === 'happy');
 </script>
 
 <style scoped>
 .card {
   padding: 40px 32px;
   min-height: 220px;
-  height: 100%;
   box-sizing: border-box;
 }
 
+@media (min-width: 1500px) {
+  .card {
+    height: 100%;
+  }
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
 h3 {
-  margin: 0 0 36px;
+  margin: 0;
   font-size: 22px;
   font-weight: 600;
+}
+
+.happy-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
 .score-wrap {

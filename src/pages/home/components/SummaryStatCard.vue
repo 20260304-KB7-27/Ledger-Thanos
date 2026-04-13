@@ -4,7 +4,7 @@
       width="custom"
       custom-width="100%"
       margin-y="0"
-      border="var(--border-width) solid var(--card-border)"
+      :border="resolvedBorder"
       bg-color="var(--card-bg)"
       :shadow="false"
   >
@@ -13,7 +13,7 @@
 
       <strong
           class="amount"
-          :style="{ color: 'var(--text-primary)' }"
+          :style="{ color: props.amountColor || 'var(--text-primary)' }"
       >
         {{ props.sign }}{{ amount }}
       </strong>
@@ -37,14 +37,25 @@ const props = defineProps({
     type: String,
     default: '+',
   },
+  borderColor: {
+    type: String,
+    default: '',
+  },
+  amountColor: {
+    type: String,
+    default: '',
+  },
 });
+
+const resolvedBorder = props.borderColor
+  ? `var(--border-width) solid ${props.borderColor}`
+  : 'var(--border-width) solid var(--card-border)';
 </script>
 
 <style scoped>
 .card {
   padding: 24px 16px;
   min-height: 220px;
-  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -87,4 +98,10 @@ h3 {
     word-break: keep-all;
   }
 }
+@media (min-width: 1500px) {
+  .card {
+    height: 100%;
+  }
+}
+
 </style>

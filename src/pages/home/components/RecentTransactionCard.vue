@@ -25,12 +25,37 @@
         >
           <div class="item">
             <div class="left">
-              <span class="circle">
+              <span
+                class="circle"
+                :style="{
+                  background: props.isHappy
+                    ? 'var(--border-soft)'
+                    : 'transparent',
+                }"
+              >
                 <template v-if="item.type === 'income'">
-                  <div class="category-icon income-icon">수입</div>
+                  <div
+                    class="category-icon income-icon"
+                    :style="{
+                      color: props.isHappy
+                        ? 'var(--happy-main-pink)'
+                        : 'var(--text-primary)',
+                    }"
+                  >
+                    수입
+                  </div>
                 </template>
                 <template v-else>
-                  <component :is="getCategoryMeta(item.category).icon" :size="20" class="category-icon"/>
+                  <component
+                    :is="getCategoryMeta(item.category).icon"
+                    :size="20"
+                    class="category-icon"
+                    :style="{
+                      color: props.isHappy
+                        ? 'var(--happy-main-pink)'
+                        : 'var(--text-primary)',
+                    }"
+                  />
                 </template>
               </span>
 
@@ -54,7 +79,32 @@
             </div>
 
             <strong class="price">
-              {{ item.type === 'expense' ? '-' : '+' }}{{ item.amount.toLocaleString() }}원
+              <span
+                class="price-sign"
+                :style="{
+                  color:
+                    props.isHappy && item.type === 'income'
+                      ? 'var(--happy-plus)'
+                      : props.isHappy && item.type === 'expense'
+                        ? 'var(--happy-orange)'
+                        : 'inherit',
+                }"
+              >
+                {{ item.type === 'expense' ? '-' : '+' }}
+              </span>
+              <span
+                class="price-value"
+                :style="{
+                  color:
+                    props.isHappy && item.type === 'income'
+                      ? 'var(--happy-plus)'
+                      : props.isHappy && item.type === 'expense'
+                        ? 'var(--happy-orange)'
+                        : 'inherit',
+                }"
+              >
+                {{ item.amount.toLocaleString() }}원
+              </span>
             </strong>
           </div>
         </Box>
@@ -86,10 +136,14 @@ const formatTransactionDate = (dateString) => {
   return `${year}.${month}.${day} ${hours}:${minutes}`;
 };
 
-defineProps({
+const props = defineProps({
   list: {
     type: Array,
     default: () => [],
+  },
+  isHappy: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>
@@ -98,7 +152,6 @@ defineProps({
 .card {
   padding: 40px 32px;
   min-height: 220px;
-  height: 100%;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
@@ -115,8 +168,7 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  flex: 1 1 auto;
-  min-height: 0;
+  max-height: 122px;
   overflow-y: auto;
   padding-right: 4px;
   scrollbar-width: thin;
@@ -219,10 +271,31 @@ h3 {
   color: var(--text-muted);
 }
 
+@media (min-width: 1500px) {
+  .card {
+    height: 100%;
+  }
+
+  .list {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+  }
+}
+
 .price {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
+}
+
+.price-value {
+  color: inherit;
+}
+
+.deal-box:hover {
+  transform: var(--card-hover-lift);
+  box-shadow: var(--card-hover-shadow);
 }
 </style>
