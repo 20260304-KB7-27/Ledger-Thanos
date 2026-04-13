@@ -180,14 +180,10 @@ const isRegretTheme = computed(() => registerThemeClass.value === 'register-them
 const displayedHappyIcon = computed(() => (isHappyTheme.value ? happyColorIcon : happyIcon));
 const displayedSadIcon = computed(() => (isHappyTheme.value ? sadColorIcon : sadIcon));
 
-const normalizeUserId = (value) => {
-  const parsed = Number(value);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
-};
-
-const currentUserId = computed(() =>
-  normalizeUserId(userStore.user?.id ?? localStorage.getItem('userId'))
-);
+const currentUserId = computed(() => {
+  const id = userStore.user?.id ?? localStorage.getItem('userId');
+  return id != null && id !== '' ? id : null;
+});
 
 // ==========================================
 // 가계부 폼 상태 생성 및 관리
