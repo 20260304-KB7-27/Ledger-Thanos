@@ -6,6 +6,7 @@
         :profile="profile"
         :selected-badge="selectedBadge"
         :member-since-text="memberSinceText"
+        :is-happy="isHappy"
         @open-edit="openProfileEditor"
       />
 
@@ -52,6 +53,7 @@
     :districts="seoulDistricts"
     :error-message="profileEditError"
     :is-saving="isSavingProfile"
+    :is-happy="isHappy"
     @update:nickname="profileEditForm.nickname = $event"
     @update:user-location="profileEditForm.userLocation = $event"
     @close="closeProfileEditor"
