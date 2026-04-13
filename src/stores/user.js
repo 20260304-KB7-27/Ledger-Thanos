@@ -28,16 +28,27 @@ export const useUserStore = defineStore('user', () => {
     transactions.value.filter((transaction) => transaction.type === 'expense')
   );
 
+  // 이번 달 지출만 추출 (테마 계산 기준)
+  const currentMonthExpenseTransactions = computed(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    return expenseTransactions.value.filter((transaction) => {
+      const d = new Date(transaction.date);
+      return d.getFullYear() === year && d.getMonth() === month;
+    });
+  });
+
   const happyCount = computed(
     () =>
-      expenseTransactions.value.filter(
+      currentMonthExpenseTransactions.value.filter(
         (transaction) => transaction.emotion === 'happy'
       ).length
   );
 
   const regretCount = computed(
     () =>
-      expenseTransactions.value.filter(
+      currentMonthExpenseTransactions.value.filter(
         (transaction) => transaction.emotion === 'regret'
       ).length
   );
@@ -111,6 +122,7 @@ export const useUserStore = defineStore('user', () => {
     user,
     transactions,
     expenseTransactions,
+    currentMonthExpenseTransactions,
     happyCount,
     regretCount,
     happyRatio,
