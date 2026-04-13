@@ -10,6 +10,7 @@
 
 :root,
 #app.theme-neutral {
+  font-family: initial;
   /* Neutral palette - 기본 상태 컬러 팔레트 */
   --neutral-white: #ffffff;
   --neutral-black: #000000;
@@ -227,6 +228,8 @@
 }
 
 #app.theme-regret {
+  font-family: initial;
+
   /* Regret palette - 후회 상태 컬러 팔레트 */
   --regret-black: #000000;
   --regret-white: #ffffff;
