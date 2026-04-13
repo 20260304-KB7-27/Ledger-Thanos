@@ -449,9 +449,10 @@ watch(emotionSatisfiedRate, (v) => {
 // 이스터에그 오버레이 표시 여부
 const overlayVisible = ref(false);
 
-// 이스터에그 트리거: 감정 통계 레이블 5회 클릭
+// 이스터에그 트리거: regret 테마일 때만, 감정 통계 레이블 5회 클릭
 const labelClickCount = ref(0);
 function onEmotionLabelClick() {
+  if (userStore.appThemeClass !== 'theme-regret') return;
   labelClickCount.value += 1;
   if (labelClickCount.value >= 5) {
     labelClickCount.value = 0;
