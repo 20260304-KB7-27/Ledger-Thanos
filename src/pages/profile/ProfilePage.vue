@@ -292,7 +292,7 @@ const handleLogout = () => {
   width: 100%;
   border: var(--border-width) solid transparent;
   border-radius: var(--radius-button);
-  background: var(--button-danger-bg);
+  background: var(--neutral-danger);
   color: var(--button-danger-text);
   font-size: 28px;
   font-weight: 800;
