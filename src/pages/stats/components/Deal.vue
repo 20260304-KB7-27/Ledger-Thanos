@@ -1,5 +1,5 @@
 <template>
-  <div class="deal-item">
+  <div class="deal-item" :data-emotion="emotion">
     <div class="left">
       <div class="icon">
         <component :is="icon" />
@@ -51,6 +51,10 @@ const props = defineProps({
     default: Ellipsis,
   },
   date: {
+    type: String,
+    default: '',
+  },
+  emotion: {
     type: String,
     default: '',
   },

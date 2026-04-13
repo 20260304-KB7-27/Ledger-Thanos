@@ -34,13 +34,7 @@ export const signupUser = async ({
   const exists = users.find((u) => u.userId === userId);
   if (exists) throw new Error('이미 사용 중인 아이디입니다.');
 
-  const maxId = users.reduce((max, u) => {
-    const n = parseInt(u.id, 10);
-    return isNaN(n) ? max : Math.max(max, n);
-  }, 0);
-
   return api.post('/users', {
-    id: String(maxId + 1),
     userId,
     userPassword,
     nickname,

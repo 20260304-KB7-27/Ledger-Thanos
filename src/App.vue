@@ -4,6 +4,17 @@ import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import Nav from '@/components/Nav.vue';
 import { useUserStore } from '@/stores/user';
+import logoSvg from '@/assets/icon/logo.svg';
+import icoHomeUnselected from '@/assets/icon/ico_home_unselected.svg';
+import icoHomeSelected from '@/assets/icon/ico_home_selected.svg';
+import icoRegisterUnselected from '@/assets/icon/ico_register_unselected.svg';
+import icoRegisterSelected from '@/assets/icon/ico_register_selected.svg';
+import icoStaticsUnselected from '@/assets/icon/ico_statics_unselected.svg';
+import icoStaticsSelected from '@/assets/icon/ico_statics_selected.svg';
+import icoMapUnselected from '@/assets/icon/ico_map_unselected.svg';
+import icoMapSelected from '@/assets/icon/ico_map_selected.svg';
+import icoProfileUnselected from '@/assets/icon/ico_profile_unselected.svg';
+import icoProfileSelected from '@/assets/icon/ico_profile_selected.svg';
 
 const route = useRoute();
 const userStore = useUserStore();
@@ -41,42 +52,42 @@ watch(
   { immediate: true }
 );
 
-const logoSrc = '/src/assets/icon/logo.svg';
+const logoSrc = logoSvg;
 const menus = [
   {
     key: 'home',
     label: '홈',
     path: '/',
-    icon: '/src/assets/icon/ico_home_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_home_selected.svg',
+    icon: icoHomeUnselected,
+    activeIcon: icoHomeSelected,
   },
   {
     key: 'register',
     label: '등록',
     path: '/register',
-    icon: '/src/assets/icon/ico_register_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_register_selected.svg',
+    icon: icoRegisterUnselected,
+    activeIcon: icoRegisterSelected,
   },
   {
     key: 'stats',
     label: '통계',
     path: '/stats',
-    icon: '/src/assets/icon/ico_statics_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_statics_selected.svg',
+    icon: icoStaticsUnselected,
+    activeIcon: icoStaticsSelected,
   },
   {
     key: 'map',
     label: '지도',
     path: '/map',
-    icon: '/src/assets/icon/ico_map_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_map_selected.svg',
+    icon: icoMapUnselected,
+    activeIcon: icoMapSelected,
   },
   {
     key: 'profile',
     label: '프로필',
     path: '/profile',
-    icon: '/src/assets/icon/ico_profile_unselected.svg',
-    activeIcon: '/src/assets/icon/ico_profile_selected.svg',
+    icon: icoProfileUnselected,
+    activeIcon: icoProfileSelected,
   },
 ];
 </script>

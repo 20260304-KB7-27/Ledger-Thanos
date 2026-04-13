@@ -3,7 +3,15 @@
     <div class="map-grid">
       <!-- 지도 영역 (좌측 전체 높이) -->
       <div class="map-area">
+        <SeoulMapView
+          v-if="dominantEmotion === 'regret'"
+          :gu-summary="guSummary"
+          :selected-gu="selectedGu"
+          @select-gu="selectedGu = $event"
+          @map-ready="isMapReady = true"
+        />
         <NaverMapView
+          v-else
           :gu-summary="guSummary"
           :selected-gu="selectedGu"
           @select-gu="selectedGu = $event"
@@ -40,11 +48,12 @@ import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
 import NaverMapView from './components/NaverMapView.vue';
+import SeoulMapView from './components/SeoulMapView.vue';
 import RegionalSummary from './components/RegionalSummary.vue';
 import TransactionDetail from './components/TransactionDetail.vue';
 import RegionalStats from './components/RegionalStats.vue';
 
-const { transactions } = storeToRefs(useUserStore());
+const { transactions, dominantEmotion } = storeToRefs(useUserStore());
 const selectedGu = ref(null);
 const isMapReady = ref(false);
 
