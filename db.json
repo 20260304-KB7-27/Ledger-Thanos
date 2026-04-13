@@ -6,82 +6,198 @@
       "userId": "test",
       "userPassword": "1234",
       "userLocation": "강남구",
-      "selectedTitle": [],
-      "earnedBadges": [
-        "Coffee Zombie",
-        "Home Potato",
-        "Money Splash"
-      ],
+      "selectedTitle": ["Home Potato"],
+      "earnedBadges": ["Coffee Zombie", "Home Potato", "Money Splash"],
       "createdAt": "2026-03-09"
     }
   ],
   "transactions": [
     {
       "id": "1",
-      "user_id": 1,
-      "type": "expense",
-      "amount": 45000,
-      "category": "restaurant",
-      "memo": "친구들과 점심",
+      "user_id": "1",
+      "type": "income",
+      "amount": 3200000,
+      "category": "salary",
+      "memo": "3월 급여",
       "emotion": "happy",
-      "location": "강남구",
-      "date": "2026-04-07"
+      "location": "온라인",
+      "date": "2026-03-05T10:00:00+09:00"
     },
     {
       "id": "2",
-      "user_id": 1,
+      "user_id": "1",
+      "type": "expense",
+      "amount": 120000,
+      "category": "grocery",
+      "memo": "이마트 장보기",
+      "emotion": "happy",
+      "location": "서초구",
+      "date": "2026-03-08T15:30:00+09:00"
+    },
+    {
+      "id": "3",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 24000,
+      "category": "delivery",
+      "memo": "야식 치킨",
+      "emotion": "regret",
+      "location": "강남구",
+      "date": "2026-03-12T23:15:00+09:00"
+    },
+    {
+      "id": "4",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 5500,
+      "category": "cafe",
+      "memo": "새로운 카페 도전",
+      "emotion": "happy",
+      "location": "마포구",
+      "date": "2026-03-15T13:00:00+09:00"
+    },
+    {
+      "id": "5",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 150000,
+      "category": "shopping",
+      "memo": "충동구매 한정판 스니커즈",
+      "emotion": "regret",
+      "location": "온라인",
+      "date": "2026-03-20T21:40:00+09:00"
+    },
+    {
+      "id": "6",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 50000,
+      "category": "transport",
+      "memo": "교통카드 충전",
+      "emotion": "happy",
+      "location": "종로구",
+      "date": "2026-03-25T08:20:00+09:00"
+    },
+    {
+      "id": "7",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 35000,
+      "category": "entertainment",
+      "memo": "게임 스팀 결제",
+      "emotion": "happy",
+      "location": "온라인",
+      "date": "2026-03-28T20:10:00+09:00"
+    },
+    {
+      "id": "8",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 9000,
+      "category": "cafe",
+      "memo": "비싼 디저트",
+      "emotion": "regret",
+      "location": "용산구",
+      "date": "2026-04-02T14:50:00+09:00"
+    },
+    {
+      "id": "9",
+      "user_id": "1",
       "type": "income",
       "amount": 3200000,
       "category": "salary",
       "memo": "4월 급여",
       "emotion": "happy",
       "location": "온라인",
-      "date": "2026-04-05"
+      "date": "2026-04-05T10:00:00+09:00"
     },
     {
-      "id": "3",
-      "user_id": 1,
+      "id": "10",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 45000,
+      "category": "restaurant",
+      "memo": "친구들과 점심",
+      "emotion": "happy",
+      "location": "강남구",
+      "date": "2026-04-07T12:30:00+09:00"
+    },
+    {
+      "id": "11",
+      "user_id": "1",
       "type": "expense",
       "amount": 4500,
       "category": "cafe",
       "memo": "출근길 아메리카노",
       "emotion": "regret",
       "location": "서초구",
-      "date": "2026-04-08"
+      "date": "2026-04-08T08:45:00+09:00"
     },
     {
-      "id": "4",
-      "user_id": 1,
+      "id": "12",
+      "user_id": "1",
       "type": "expense",
       "amount": 85000,
       "category": "shopping",
       "memo": "봄맞이 셔츠 구매",
       "emotion": "happy",
       "location": "마포구",
-      "date": "2026-04-08"
+      "date": "2026-04-08T19:20:00+09:00"
     },
     {
-      "id": "5",
-      "user_id": 1,
+      "id": "13",
+      "user_id": "1",
       "type": "expense",
       "amount": 50000,
       "category": "transport",
       "memo": "지하철 정기권 충전",
       "emotion": "regret",
       "location": "종로구",
-      "date": "2026-04-09"
+      "date": "2026-04-09T08:15:00+09:00"
     },
     {
-      "id": "6",
-      "user_id": 1,
+      "id": "14",
+      "user_id": "1",
       "type": "expense",
-      "amount": 25000,
-      "category": "entertainment",
-      "memo": "영화 관람",
+      "amount": 30000,
+      "category": "delivery",
+      "memo": "스트레스 받아서 마라탕",
+      "emotion": "regret",
+      "location": "중구",
+      "date": "2026-04-10T20:00:00+09:00"
+    },
+    {
+      "id": "15",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 12000,
+      "category": "health",
+      "memo": "약국 텐텐 구매",
       "emotion": "happy",
-      "location": "용산구",
-      "date": "2026-04-09"
+      "location": "서초구",
+      "date": "2026-04-12T11:30:00+09:00"
+    },
+    {
+      "id": "J-YDde3uQUg",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 5555,
+      "category": "delivery",
+      "memo": "gffdfdh",
+      "emotion": "regret",
+      "location": "중구",
+      "date": "2026-04-13T11:07:00+09:00"
+    },
+    {
+      "id": "xshvt11v4h8",
+      "user_id": "1",
+      "type": "expense",
+      "amount": 445325,
+      "category": "shopping",
+      "memo": "eger",
+      "emotion": "happy",
+      "location": "동대문구",
+      "date": "2026-04-13T11:17:00+09:00"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
