@@ -44,6 +44,8 @@ defineProps({
 .summary-card {
   min-height: 340px;
   padding: 28px 22px 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 h3 {
@@ -83,5 +85,16 @@ h3 {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+@media (min-width: 1500px) {
+  .summary-card {
+    height: 100%;
+  }
+
+  .summary-list {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
 }
 </style>
