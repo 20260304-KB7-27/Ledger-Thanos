@@ -9,8 +9,9 @@ export const getUserById = async (id) => {
 };
 
 export const getUserTransactions = async (userId) => {
-  const result = await api.get('/transactions', { user_id: userId });
-  return Array.isArray(result) ? result : (result.data ?? []);
+  const result = await api.get('/transactions');
+  const all = Array.isArray(result) ? result : (result.data ?? []);
+  return all.filter((t) => String(t.user_id) === String(userId));
 };
 
 export const loginUser = async (userId, userPassword) => {
