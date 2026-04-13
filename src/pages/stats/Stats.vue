@@ -78,8 +78,8 @@
               <div class="emotion-happy-content">
                 <div class="emotion-item">
                   <img
-                    src="@/assets/icon/ico_sad_orange.svg"
-                    alt="후회 아이콘"
+                    src="@/assets/icon/ico_happy_green.svg"
+                    alt="만족 아이콘"
                     class="emotion-icon"
                   />
                   <span class="emotion-count"
@@ -89,8 +89,8 @@
 
                 <div class="emotion-item">
                   <img
-                    src="@/assets/icon/ico_happy_green.svg"
-                    alt="만족 아이콘"
+                    src="@/assets/icon/ico_sad_orange.svg"
+                    alt="후회 아이콘"
                     class="emotion-icon"
                   />
                   <span class="emotion-count"
@@ -109,7 +109,13 @@
             </div>
 
             <div v-else class="emotion-content">
-              <div class="box-label" style="cursor: default; user-select: none;" @click="onEmotionLabelClick">감정 통계</div>
+              <div
+                class="box-label"
+                style="cursor: default; user-select: none"
+                @click="onEmotionLabelClick"
+              >
+                감정 통계
+              </div>
               <div class="box-content">
                 <div id="emotion-stats">
                   {{ emotionSatisfiedCount }}회 만족, {{ emotionRegretCount }}회
